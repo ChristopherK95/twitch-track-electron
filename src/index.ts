@@ -34,9 +34,9 @@ autoUpdater.on("error", (err) => {
   log.info(err);
 });
 
-// autoUpdater.on("checking-for-update", () => {
-//   log.info("Checking for updates");
-// });
+autoUpdater.on("checking-for-update", () => {
+  log.info("Checking for updates");
+});
 
 interface Settings {
   Token: string;
