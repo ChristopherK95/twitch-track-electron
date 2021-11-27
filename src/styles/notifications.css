@@ -1,0 +1,110 @@
+.notifications {
+  width: 100%;
+  height: 0px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  transition: opacity 0.5s ease, height 0.8s ease;
+  opacity: 0;
+  /* overflow: hidden; */
+}
+
+.notifications::after {
+  content: attr(data-title);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 10px 0px inset black;
+  text-align: left;
+  font-family: sans-serif;
+  color: #fff;
+  text-shadow: 1px 1px 1px black;
+  font-weight: bold;
+  font-size: 14px;
+  padding-left: 6px;
+  padding-top: 5px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.notifications-enter {
+  opacity: 1 !important;
+  height: 50px !important;
+}
+
+.notifications .container {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  width: max-content;
+  height: 0px;
+  align-items: center;
+  transform: translateX(0);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease, height 0.8s ease;
+}
+
+.container .notification {
+  width: 100vw;
+  height: 100%;
+  background-size: 400%;
+  animation: moving-background 1s linear infinite;
+}
+
+.notification div {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+}
+
+.notification .name {
+  color: white;
+  font-family: system-ui;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0;
+  text-align: center;
+  text-shadow: 1px 1px 2px black;
+}
+
+.notifications .container .live-bg {
+  background: linear-gradient(
+    to right,
+    rgb(2, 233, 125),
+    rgb(4, 236, 178),
+    rgb(2, 233, 125)
+  );
+  background-size: 400%;
+}
+
+.notifications .container .offline-bg {
+  background: linear-gradient(to right, #f33030, rgb(255, 98, 6), #f33030);
+  background-size: 400%;
+}
+
+@keyframes move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes go-right {
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes moving-background {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}

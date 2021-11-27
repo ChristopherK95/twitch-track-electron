@@ -1,0 +1,37 @@
+.context-menu {
+  position: fixed;
+  width: 100px;
+  background: #3f3f40;
+  padding: 10px 5px;
+  color: white;
+  z-index: 10;
+  border-radius: 5px;
+  box-shadow: 4px 4px 10px 3px rgb(0 0 0 / 30%);
+}
+
+.context-menu:focus {
+  outline: none;
+}
+
+.context-menu .name {
+  font-size: 16px !important;
+  border-bottom: 2px solid rgb(87, 87, 87);
+  margin: 0 5px 5px 5px;
+}
+
+.context-menu p {
+  color: white;
+  font-family: system-ui;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: default;
+  user-select: none;
+  margin: 0 5px;
+  padding: 5px;
+  border-radius: 3px;
+  text-align: left;
+}
+
+.context-menu .delete:hover {
+  background: #ce3434;
+}

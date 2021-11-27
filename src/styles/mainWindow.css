@@ -1,0 +1,62 @@
+.main-window {
+  text-align: center;
+  background-color: #262626;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+#contentArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.left {
+  transform: translateX(-100%);
+}
+
+.right {
+  transform: translateX(100%);
+}
+
+.up {
+  transform: translateY(-100%);
+}
+
+.down {
+  transform: translateY(100%);
+}
+
+.token-missing {
+  background-color: #313232;
+  position: absolute;
+  top: 0;
+  color: white;
+  font-size: 18px;
+  font-family: sans-serif;
+  font-weight: bold;
+  width: 100%;
+  padding: 8px 0;
+  user-select: none;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.token-missing:hover {
+  filter: brightness(1.2);
+}
+
+.token-missing span {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #dd0000;
+}
+
+.token-missing span:hover {
+  color: #f33030;
+}

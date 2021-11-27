@@ -1,0 +1,322 @@
+.search-bar {
+  width: 100%;
+  border-radius: 3px;
+  position: relative;
+  display: flex;
+  transition: background-color 0.3s, transform 0.5s ease-in-out;
+  justify-content: flex-start;
+  flex-direction: column;
+  transform: translateX(0);
+  z-index: 1;
+}
+
+.search-bar .settings {
+  height: 0;
+  width: 100%;
+  transition: height 0.5s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.search-bar .settings div {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar .show {
+  height: 60px;
+}
+
+.search-bar form {
+  display: flex;
+  width: 90%;
+  align-self: center;
+  z-index: 1;
+  margin-top: 10px;
+  position: relative;
+  box-shadow: 0px 4px 5px 0px rgb(0 0 0 / 40%);
+  border-radius: 3px;
+}
+
+.search-bar .search-button {
+  border: none;
+  cursor: pointer;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  padding: 0 15px;
+  background-color: #202020;
+  position: relative;
+  z-index: 1;
+}
+
+.search-bar button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.search-bar .search-button:disabled {
+  cursor: default;
+  filter: brightness(0.5);
+  pointer-events: none;
+}
+
+.search-bar i {
+  display: flex;
+  width: 20px;
+}
+
+.search-bar .search {
+  box-sizing: border-box;
+  outline: none;
+  color: white;
+  padding: 5px 10px 5px 10px;
+  background-color: #202020;
+  border: none;
+  width: inherit;
+  height: 45px;
+  font-size: 25px;
+  border-radius: 0 3px 3px 0;
+  font-family: system-ui;
+}
+
+.search-bar input:focus {
+  background-color: #3a3a3a;
+}
+
+.search-bar input:disabled {
+  filter: brightness(0.5);
+}
+
+.cross {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+}
+
+.cross:hover {
+  background: #7777775d;
+}
+
+.cross:hover > div {
+  background-color: white;
+}
+
+.cross div {
+  background-color: rgba(255, 255, 255, 0.644);
+  width: 20px;
+  height: 2px;
+  position: absolute;
+  top: 50%;
+}
+
+.cross div:first-child {
+  transform: rotate(45deg);
+}
+
+.cross div:last-child {
+  transform: rotate(-45deg);
+}
+
+.search-bar .misc {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  width: fit-content;
+  align-items: center;
+  transition: background-color 0.3s;
+  position: relative;
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
+.search-bar .misc i {
+  width: 20px;
+  height: 20px;
+  fill: rgba(255, 255, 255, 0.507);
+  transition: fill 0.5s ease;
+}
+
+.search-bar .misc i:hover {
+  animation: spin 3s ease infinite;
+  fill: white;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  50%,
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.search-bar .misc:hover > .dot {
+  box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.203);
+}
+
+.search-bar .misc .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 5px;
+  background-color: white;
+  margin: 0 2px;
+}
+
+.drop-down {
+  position: absolute;
+  top: 0px;
+  left: 50px;
+  width: max-content;
+  height: fit-content;
+  background-color: #202020;
+  z-index: 10;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+  overflow: hidden;
+  height: 5px;
+  width: 0;
+  visibility: hidden;
+  box-shadow: 0px 6px 8px 2px rgb(0 0 0 / 45%);
+  transition: visibility 0s 0.6s, width 0.3s 0.3s, height 0.3s;
+}
+
+.drop-down-enter {
+  height: 132px;
+  width: 190px;
+  transition: visibility 0s, width 0.3s, height 0.3s 0.3s;
+  visibility: visible;
+}
+
+.drop-down-leave {
+  animation: drop-up 0.3s ease-in forwards;
+}
+
+@keyframes drop-down {
+  0% {
+    height: 5px;
+    width: 0;
+    visibility: visible;
+  }
+  20% {
+    height: 5px;
+    width: 175px;
+    visibility: visible;
+  }
+  100% {
+    height: 66px;
+    width: 175px;
+    visibility: visible;
+  }
+}
+
+@keyframes drop-up {
+  0% {
+    height: 66px;
+    width: 175px;
+    visibility: visible;
+  }
+  20% {
+    height: 5px;
+    width: 175px;
+    visibility: visible;
+  }
+  100% {
+    height: 0px;
+    width: 0px;
+  }
+}
+
+.drop-down div {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.toggle-button {
+  font-family: system-ui;
+  font-weight: bold;
+  font-size: 15px;
+  color: white;
+  user-select: none;
+}
+
+.skewed {
+  background-color: rgb(39, 39, 39);
+  width: 40px;
+  height: 25px;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  padding: 2px;
+  appearance: none;
+  border: 2px solid rgb(46, 46, 46);
+  transition: background-color 0.3s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+  box-shadow: inset 0 0 5px 1px rgb(0 0 0 / 40%);
+  border-radius: 12px;
+  outline: none;
+}
+
+.skewed::after {
+  position: relative;
+  display: block;
+  width: 50%;
+  left: 0;
+  content: "";
+  background-color: rgb(78, 78, 78);
+  transition: left 0.3s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+  box-shadow: 0 0 4px 2px rgb(0 0 0 / 35%);
+  border-radius: 10px;
+  height: 100%;
+}
+
+.skewed:hover::after {
+  background-color: rgb(85, 85, 85);
+  animation: wiggle 0.4s;
+}
+
+@keyframes wiggle {
+  50% {
+    transform: translateX(3%);
+  }
+  100% {
+    transform: translateX(-3%);
+  }
+}
+
+.skewed:active::after {
+  left: 5%;
+}
+
+.skewed:checked:active:after {
+  left: 45%;
+}
+
+.skewed:checked {
+  background-color: rgb(71, 253, 153) !important;
+}
+
+.skewed:checked:after {
+  left: 50%;
+}
+
+.right {
+  transform: translateX(100%);
+}
+
+.left {
+  transform: translateX(-100%);
+}
