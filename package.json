@@ -1,15 +1,16 @@
 {
   "name": "twitch-track",
   "productName": "TwitchTrack",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make", 
+    "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "dist": "electron-builder"
   },
   "keywords": [],
   "author": {
@@ -17,20 +18,6 @@
     "email": "christopherkarlsson95@gmail.com"
   },
   "license": "MIT",
-  "build": {
-    "appId": "com.ckarlsson.app",
-    "productName": "TwitchTrack",
-    "target": "NSIS",
-    "directory": {
-      "output": "build"
-    },
-    "nsis": {"oneClick": true},
-    "publish": [{
-      "provider": "github",
-      "owner": "ChristopherK95",
-      "repo": "twitch-track-electron"
-    }]
-  },
   "config": {
     "forge": {
       "packagerConfig": {},
@@ -54,6 +41,18 @@
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "ChristopherK95",
+              "name": "twitch-track-electron"
+            },
+            "prerelease": true
+          }
         }
       ],
       "plugins": [
@@ -86,6 +85,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.61",
+    "@electron-forge/publisher-github": "^6.0.0-beta.61",
     "@svgr/webpack": "^5.5.0",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
@@ -94,6 +94,7 @@
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "css-loader": "^6.5.0",
     "electron": "15.3.0",
+    "electron-builder": "^22.14.5",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.25.2",
     "fork-ts-checker-webpack-plugin": "^6.4.0",
@@ -104,9 +105,12 @@
   },
   "dependencies": {
     "electron-fetch": "^1.7.4",
+    "electron-log": "^4.4.1",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^4.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "^4.0.3"
+    "react-scripts": "^4.0.3",
+    "update-electron-app": "^2.0.1"
   }
 }
