@@ -11,7 +11,6 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import log from "electron-log";
-import ChildProcess from "child_process";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -19,24 +18,37 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-// if(handleSquirrelEvent()) {
-//   return;
-// }
+let mainWindow: BrowserWindow;
+let splash: BrowserWindow;
 
-const server = "https://twitch-track-vercel.vercel.app";
-const url = `${server}/update/${process.platform}/${app.getVersion()}`;
-console.log(url);
+if (app.isPackaged) {
+  const server = "https://twitch-track-vercel.vercel.app";
+  const url = `${server}/update/${process.platform}/${app.getVersion()}`;
 
-autoUpdater.setFeedURL({ url });
-autoUpdater.checkForUpdates();
+  autoUpdater.setFeedURL({ url });
 
-autoUpdater.on("error", (err) => {
-  log.info(err);
-});
+  autoUpdater.on("error", (err) => {
+    log.info("autoUpdaterError:", err);
+    createWindow();
+  });
 
-autoUpdater.on("checking-for-update", () => {
-  log.info("Checking for updates");
-});
+  autoUpdater.on("checking-for-update", () => {
+    splash.webContents.send("looking-for-updates", "Looking for updates...");
+  });
+
+  autoUpdater.on("update-not-available", () => {
+    createWindow();
+  });
+
+  autoUpdater.on("update-available", () => {
+    splash.webContents.send("update-available", "New update found!");
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    splash.webContents.send("update-completed", "Update completed!");
+    autoUpdater.quitAndInstall();
+  });
+}
 
 interface Settings {
   Token: string;
@@ -57,9 +69,6 @@ log.transports.file.resolvePath = () => path.join(fullPath, "log.log");
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-let mainWindow: BrowserWindow;
-let splash: BrowserWindow;
-
 const createWindow = (): void => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -79,20 +88,11 @@ const createWindow = (): void => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
-  splash = new BrowserWindow({
-    width: 300,
-    height: 300,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-    webPreferences: {
-      devTools: false,
-    },
-  });
-  splash.loadFile("./src/splash.html");
   checkFiles();
   // and load the index.html of the app.
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.loadURL(
+    MAIN_WINDOW_WEBPACK_ENTRY + `${app.isPackaged ? "#/App" : "/#/App"}`
+  );
 
   mainWindow.webContents.once("did-finish-load", () => {
     splash.destroy();
@@ -100,10 +100,37 @@ const createWindow = (): void => {
   });
 };
 
+const createSplash = (): void => {
+  splash = new BrowserWindow({
+    width: 300,
+    height: 300,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      devTools: false,
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+    },
+  });
+  splash.loadURL(
+    MAIN_WINDOW_WEBPACK_ENTRY + `${app.isPackaged ? "#/Splash" : "/#/Splash"}`
+  );
+
+  if (app.isPackaged) {
+    autoUpdater.checkForUpdates();
+  } else {
+    setTimeout(() => {
+      createWindow();
+    }, 4000);
+  }
+};
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", createSplash);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -118,85 +145,24 @@ app.on("activate", () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    createSplash();
   }
 });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-function handleSquirrelEvent() {
-  if (process.argv.length === 1) {
-    return false;
-  }
-
-  const appFolder = path.resolve(process.execPath, "..");
-  const rootAtomFolder = path.resolve(appFolder, "..");
-  const updateDotExe = path.resolve(path.join(rootAtomFolder, "Update.exe"));
-  const exeName = path.basename(process.execPath);
-
-  const spawn = function (command: any, args: any) {
-    let spawnedProcess, error;
-
-    try {
-      spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
-    } catch (error) {
-      log.info(error.message);
-    }
-
-    return spawnedProcess;
-  };
-
-  const spawnUpdate = function (args: any) {
-    return spawn(updateDotExe, args);
-  };
-
-  const squirrelEvent = process.argv[1];
-  switch (squirrelEvent) {
-    case "--squirrel-install":
-    case "--squirrel-updated":
-      // Optionally do things such as:
-      // - Add your .exe to the PATH
-      // - Write to the registry for things like file associations and
-      //   explorer context menus
-
-      // Install desktop and start menu shortcuts
-      spawnUpdate(["--createShortcut", exeName]);
-
-      setTimeout(app.quit, 1000);
-      return true;
-
-    case "--squirrel-uninstall":
-      // Undo anything you did in the --squirrel-install and
-      // --squirrel-updated handlers
-
-      // Remove desktop and start menu shortcuts
-      spawnUpdate(["--removeShortcut", exeName]);
-
-      setTimeout(app.quit, 1000);
-      return true;
-
-    case "--squirrel-obsolete":
-      // This is called on the outgoing version of your app before
-      // we update to the new version - it's the opposite of
-      // --squirrel-updated
-
-      app.quit();
-      return true;
-  }
-}
-
 function checkFiles() {
   if (!fs.existsSync(fullPath)) {
     fs.mkdir(fullPath, (err) => {
       if (err) {
-        console.log(err);
+        log.info("mkDirError:", err);
       }
     });
   }
   if (!fs.existsSync(path.join(fullPath, "\\", "streamers.json"))) {
     fs.writeFile(path.join(fullPath, "\\", "streamers.json"), "[]", (err) => {
-      console.log(err);
+      log.info("writeFileError:", err);
     });
   }
 
@@ -224,7 +190,6 @@ async function continousUpdate() {
   setInterval(async () => {
     if (streamers.length === 0) return;
     const response: StreamResponse = await getStreamerStatus(streamers);
-    console.log("Player status updated");
     if (response.data.length > 0) {
       mainWindow.webContents.send("awaitStatus", response);
     }
@@ -246,7 +211,7 @@ async function fetchStreamers(name: string): Promise<ChannelResponse> {
       result = res;
     })
     .catch((err) => {
-      console.log(err);
+      log.info("FetchStreamersError:", err);
     });
 
   return result;
@@ -282,10 +247,10 @@ async function getStreamerStatus(
         result = res;
       })
       .catch((err) => {
-        console.log("Error:", err);
+        log.info("FetchError:", err);
       });
   } catch (error) {
-    console.error("ERROR HERE:", error);
+    log.info("GetStreamerStatusError:", error);
   }
 
   return result;
@@ -344,7 +309,7 @@ ipcMain.on("saveStreamer", async (event, data: StreamerResult[]) => {
   if (!fs.existsSync(fullPath)) {
     fs.mkdir(fullPath, (err) => {
       if (err) {
-        console.log(err);
+        log.info("makeDirError:", err);
       }
     });
   }
@@ -356,7 +321,7 @@ ipcMain.on("saveStreamer", async (event, data: StreamerResult[]) => {
 
   fs.writeFile(path.join(fullPath, "\\", "streamers.json"), json, (err) => {
     if (err) {
-      console.log(err);
+      log.info("writeFileError:", err);
     }
   });
 });
@@ -372,7 +337,7 @@ ipcMain.on("deleteStreamer", async (event, data: StreamerResult) => {
 
   fs.writeFile(path.join(fullPath, "\\", "streamers.json"), json, (err) => {
     if (err) {
-      console.log(err);
+      log.info("writeFileError:", err);
     }
   });
 });
@@ -405,10 +370,11 @@ ipcMain.on("rendererReady", async () => {
       streamers.push(arr[i]);
     }
     mainWindow.webContents.send("loadStreamers", streamers);
-    const response: any = await getStreamerStatus(streamers);
+    const response: any = await getStreamerStatus(streamers).catch((err) => {
+      log.info("FetchError:", err);
+    });
 
     if (response.status && response.status === 401) {
-      console.log("Error", 401);
       mainWindow.webContents.send("tokenMissing");
       return;
     }

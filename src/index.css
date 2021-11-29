@@ -3,9 +3,9 @@ body {
   margin: 0;
 }
 
-html {
+/* html {
   background: #262626;
-}
+} */
 
 .topBar {
   display: flex;

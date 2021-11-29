@@ -2,6 +2,12 @@ import { contextBridge, ipcRenderer } from "electron";
 import { StreamerResult } from "./interfaces/StreamerContext";
 
 contextBridge.exposeInMainWorld("api", {
+  splashUpdates: (channel: string, func: any) => {
+    const validChannels = ["splash-update"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (event, ...args) => func(...args));
+    }
+  },
   send: (channel: string, data: string) => {
     const validChannels = ["toMain"];
     if (validChannels.includes(channel)) {
