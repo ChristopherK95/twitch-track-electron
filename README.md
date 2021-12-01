@@ -28,7 +28,7 @@ TwitchTrack is an application which purpose is to help keeping track on if your 
 It does so by: 
 - showing a feed of which of your choosen streamers are currently live :heavy_check_mark:
 - what category they're currently under :heavy_check_mark:
-- what they're title is :heavy_check_mark:
+- what their title is :heavy_check_mark:
 - how many viewers they have :heavy_check_mark:
 - how long they've been live for :heavy_check_mark:
 <br/>
