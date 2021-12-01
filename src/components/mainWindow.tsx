@@ -6,6 +6,7 @@ import {
   StreamerResult,
   Notif,
   LiveStreamer,
+  Pages,
 } from "../interfaces/StreamerContext";
 import { StreamerContainer } from "./streamerContainer";
 import { NotificationsView } from "./NotificationsView";
@@ -13,10 +14,12 @@ import { ContextMenu } from "./ContextMenu";
 import { Notifications } from "./Notifications";
 import { SidePanel } from "./SidePanel";
 import { TokenView } from "./TokenView";
+import { VersionView } from "./VersionView";
+import Logo from "../svg/TwitchTrackSVG.svg";
 import Alert from "../svg/Alert.svg";
 
 export function MainWindow() {
-  const [sidePanel, setSidePanel] = useState<boolean>(false);
+  const [sidePanel, setSidePanel] = useState<boolean>(true);
   const [resultArr, setResultArr] = useState<StreamerResult[]>([]);
   const [toggleSearch, setToggleSearch] = useState<boolean>(false);
   const [hideOffline, toggleOffline] = useState(false);
@@ -33,26 +36,22 @@ export function MainWindow() {
   const [tokenMissing, setTokenMissing] = useState<boolean>(false);
   const [showTokenView, toggleTokenView] = useState<boolean>(false);
 
-  function fetchStreamers(name: string) {
-    window.api.send("toMain", name);
+  const [pages, setPages] = useState<Pages>({
+    mainPage: true,
+    notificationsPage: false,
+    tokenPage: false,
+    versionPage: false,
+  });
+
+  async function fetchStreamers(name: string) {
+    const response = await window.api.fetchChannels("fetchChannels", name);
+    setResultArr([]);
+    setResultArr(response);
+    setToggleSearch(true);
+    // window.api.send("toMain", name);
   }
 
   useEffect(() => {
-    window.api.receive("fromMain", (event: StreamerResult[]) => {
-      const arr: StreamerResult[] = [];
-      for (let i = 0; i < event.length; i++) {
-        const result: StreamerResult = {
-          id: event[i].id,
-          name: event[i].name,
-          imgUrl: event[i].imgUrl,
-        };
-        arr.push(result);
-      }
-      setResultArr([]);
-      setResultArr(arr);
-      setToggleSearch(true);
-    });
-
     window.api.tokenMissing("tokenMissing", () => {
       setTokenMissing(true);
     });
@@ -60,60 +59,49 @@ export function MainWindow() {
 
   return (
     <div className="main-window">
-      <div className="topBar">
-        <div className="titleBar">
-          <button
-            id="showHideMenus"
-            className="toggleButton"
-            onClick={() => setSidePanel(!sidePanel)}
-          >
-            <div></div>
-            <div></div>
-            <div></div>
-            {unseenNotif && (
-              <i className="notif-bubble">
-                <Alert />
+      <div className="title">
+        <div className="topBar">
+          <div className="titleBar">
+            <button
+              id="showHideMenus"
+              className="toggleButton"
+              onClick={() => setSidePanel(!sidePanel)}
+            >
+              <div></div>
+              <div></div>
+              <div></div>
+              {unseenNotif && (
+                <i className="notif-bubble">
+                  <Alert />
+                </i>
+              )}
+            </button>
+            <div className="handle">
+              <i className="logo">
+                <Logo />
               </i>
-            )}
-          </button>
-          <h1>TwitchTrack</h1>
-        </div>
-        <div className="titleBarBtns">
-          <button
-            id="minimizeBtn"
-            className="topBtn"
-            onClick={() => window.api.minimizeApp("minimizeApp")}
-          >
-            <div></div>
-          </button>
-          <button
-            id="closeBtn"
-            className="topBtn"
-            onClick={() => window.api.closeApp("closeApp")}
-          >
-            <div></div>
-            <div></div>
-          </button>
+            </div>
+          </div>
+          <div className="titleBarBtns">
+            <button
+              id="minimizeBtn"
+              className="topBtn"
+              onClick={() => window.api.minimizeApp("minimizeApp")}
+            >
+              <div></div>
+            </button>
+            <button
+              id="closeBtn"
+              className="topBtn"
+              onClick={() => window.api.closeApp("closeApp")}
+            >
+              <div></div>
+              <div></div>
+            </button>
+          </div>
         </div>
       </div>
-      <div id="contentArea">
-        {tokenMissing && !showTokenView && (
-          <div onClick={() => toggleTokenView(true)} className="token-missing">
-            {`OAuth token is either empty or expired`}
-          </div>
-        )}
-        <TokenView
-          showTokenView={showTokenView}
-          toggleTokenView={toggleTokenView}
-          setTokenMissing={setTokenMissing}
-        />
-        <NotificationsView
-          notifs={notifs}
-          showNotifications={showNotifications}
-          toggleNotifications={toggleNotifications}
-          unseenNotif={unseenNotif}
-          setUnseenNotif={setUnseenNotif}
-        />
+      <div className="main">
         <SidePanel
           sidePanel={sidePanel}
           setSidePanel={setSidePanel}
@@ -122,43 +110,80 @@ export function MainWindow() {
           unseenNotif={unseenNotif}
           showTokenView={showTokenView}
           toggleTokenView={toggleTokenView}
+          setPages={setPages}
         />
-        <ContextMenu
-          context={contextMenu}
-          setContext={toggleContextMenu}
-          setSavedStreamers={setSavedStreamers}
-          savedStreamers={savedStreamers}
-          liveStreamers={liveStreamers}
-          setLiveStreamers={setLiveStreamers}
-        />
-        <Notifications notifs={notifs} setNotifs={setNotifs} />
-        <SearchBar
-          fetch={fetchStreamers}
-          setToggleSearch={setToggleSearch}
-          hideOffline={hideOffline}
-          toggleOffline={toggleOffline}
-          show={showNotifications ? "right" : ""}
-          tokenMissing={tokenMissing}
-        />
-        <StreamerContainer
-          savedStreamers={savedStreamers}
-          setSavedStreamers={setSavedStreamers}
-          liveStreamers={liveStreamers}
-          setLiveStreamers={setLiveStreamers}
-          toggleSearch={toggleSearch}
-          hideOffline={hideOffline}
-          context={toggleContextMenu}
-          setNotifs={setNotifs}
-          show={showNotifications ? "right" : ""}
-        />
-        <SearchResults
-          searchResults={resultArr}
-          toggleSearch={toggleSearch}
-          setToggleSearch={setToggleSearch}
-          setArr={setResultArr}
-          savedStreamers={savedStreamers}
-          saveStreamer={setSavedStreamers}
-        />
+        <div
+          id="contentArea"
+          style={{ borderTopLeftRadius: `${sidePanel ? "" : 0}` }}
+        >
+          {tokenMissing && !showTokenView && (
+            <div
+              onClick={() => toggleTokenView(true)}
+              className="token-missing"
+            >
+              {`OAuth token is either empty or expired`}
+            </div>
+          )}
+          <VersionView pages={pages} setPages={setPages} />
+          <TokenView
+            showTokenView={showTokenView}
+            toggleTokenView={toggleTokenView}
+            setTokenMissing={setTokenMissing}
+            pages={pages}
+            setPages={setPages}
+          />
+          <NotificationsView
+            notifs={notifs}
+            showNotifications={showNotifications}
+            toggleNotifications={toggleNotifications}
+            unseenNotif={unseenNotif}
+            setUnseenNotif={setUnseenNotif}
+            pages={pages}
+            setPages={setPages}
+          />
+          <ContextMenu
+            context={contextMenu}
+            setContext={toggleContextMenu}
+            setSavedStreamers={setSavedStreamers}
+            savedStreamers={savedStreamers}
+            liveStreamers={liveStreamers}
+            setLiveStreamers={setLiveStreamers}
+          />
+          <Notifications notifs={notifs} setNotifs={setNotifs} />
+          <div
+            className={`main-page ${
+              pages.mainPage ? "show-page" : "hide-page"
+            }`}
+          >
+            <SearchBar
+              fetch={fetchStreamers}
+              setToggleSearch={setToggleSearch}
+              hideOffline={hideOffline}
+              toggleOffline={toggleOffline}
+              show={showNotifications ? "right" : ""}
+              tokenMissing={tokenMissing}
+            />
+            <StreamerContainer
+              savedStreamers={savedStreamers}
+              setSavedStreamers={setSavedStreamers}
+              liveStreamers={liveStreamers}
+              setLiveStreamers={setLiveStreamers}
+              toggleSearch={toggleSearch}
+              hideOffline={hideOffline}
+              context={toggleContextMenu}
+              setNotifs={setNotifs}
+              show={showNotifications ? "right" : ""}
+            />
+            <SearchResults
+              searchResults={resultArr}
+              toggleSearch={toggleSearch}
+              setToggleSearch={setToggleSearch}
+              setArr={setResultArr}
+              savedStreamers={savedStreamers}
+              saveStreamer={setSavedStreamers}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

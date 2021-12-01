@@ -15,7 +15,6 @@ export function SearchBar(props: {
   const [search, setSearch] = useState("");
   const [hideSearch, toggleHideSearch] = useState(false);
   const [showMisc, toggleShowMisc] = useState(false);
-  const dropDown = useRef(null);
 
   function onChange(e: React.FormEvent<HTMLInputElement>) {
     setSearch(e.currentTarget.value);
@@ -45,9 +44,6 @@ export function SearchBar(props: {
         <i>
           <Cog />
         </i>
-        {/* <div className="dot"></div>
-        <div className="dot"></div>
-        <div className="dot"></div> */}
       </div>
       <div className={`settings ${showMisc ? "show" : ""}`}>
         <div>
@@ -73,35 +69,6 @@ export function SearchBar(props: {
           />
         </div>
       </div>
-      {/* <div
-        // style={{ visibility: `${showMisc ? "visible" : "hidden"}` }}
-        className={`drop-down ${showMisc ? "drop-down-enter" : ""}`}
-        ref={dropDown}
-        tabIndex={0}
-      >
-        <div>
-          <label className="toggle-button">Hide search</label>
-          <input
-            className="skewed"
-            type="checkbox"
-            name="hide-search"
-            id="hide-search"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={toggleSearch}
-          />
-        </div>
-        <div>
-          <label className="toggle-button">Hide offline</label>
-          <input
-            className="skewed"
-            type="checkbox"
-            name="hide-search"
-            id="hide-search"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={toggleOffline}
-          />
-        </div>
-      </div> */}
       <form
         style={{ display: `${hideSearch ? "none" : "flex"}` }}
         onSubmit={submit}

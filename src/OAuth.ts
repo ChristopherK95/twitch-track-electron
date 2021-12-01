@@ -5,12 +5,15 @@ export async function OAuth(): Promise<string> {
   const win = new BrowserWindow({
     width: 400,
     height: 600,
-    frame: false,
-    resizable: false,
+    useContentSize: true,
+    frame: true,
+    resizable: true,
     webPreferences: {
       nodeIntegration: false,
     },
   });
+
+  win.removeMenu();
 
   win.loadURL(getAuthenticationURL());
   const {

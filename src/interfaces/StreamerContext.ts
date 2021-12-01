@@ -63,3 +63,10 @@ export interface Notif {
   name: string;
   live: boolean;
 }
+
+export interface Pages {
+  mainPage: boolean;
+  notificationsPage: boolean;
+  tokenPage: boolean;
+  versionPage: boolean;
+}

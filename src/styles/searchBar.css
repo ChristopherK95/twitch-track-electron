@@ -75,11 +75,12 @@
   padding: 5px 10px 5px 10px;
   background-color: #202020;
   border: none;
-  width: inherit;
+  width: -webkit-fill-available;
   height: 45px;
   font-size: 25px;
   border-radius: 0 3px 3px 0;
   font-family: system-ui;
+  min-width: 0;
 }
 
 .search-bar input:focus {
@@ -135,7 +136,7 @@
   transition: background-color 0.3s;
   position: relative;
   margin-left: 15px;
-  margin-top: 5px;
+  margin-top: 15px;
 }
 
 .search-bar .misc i {

@@ -1,7 +1,7 @@
 {
   "name": "twitch-track",
   "productName": "TwitchTrack",
-  "version": "0.0.3",
+  "version": "1.0.2",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -20,7 +20,9 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "src/images/Logo.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -104,11 +106,10 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "electron-fetch": "^1.7.4",
-    "electron-is-dev": "^0.3.0",
     "electron-log": "^4.4.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^4.6.1",
+    "node-fetch": "^3.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.0.2",

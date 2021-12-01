@@ -1,5 +1,5 @@
-import { app, BrowserWindow, ipcMain, autoUpdater } from "electron";
-import fetch from "electron-fetch";
+import { app, BrowserWindow, ipcMain, autoUpdater, shell } from "electron";
+import fetch from "node-fetch";
 import {
   StreamerResult,
   ChannelResponse,
@@ -79,24 +79,28 @@ const createWindow = (): void => {
     minHeight: 600,
     show: false,
     backgroundColor: "#262626",
-    icon: "../images/icon.png",
+    icon: "./images/Logo.ico",
     frame: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      devTools: false,
+      devTools: app.isPackaged ? false : true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
   checkFiles();
   // and load the index.html of the app.
   mainWindow.loadURL(
     MAIN_WINDOW_WEBPACK_ENTRY + `${app.isPackaged ? "#/App" : "/#/App"}`
   );
 
-  mainWindow.webContents.once("did-finish-load", () => {
+  mainWindow.webContents.once("did-finish-load", async () => {
     splash.destroy();
     mainWindow.show();
+    mainWindow.webContents.send("get-version", app.getVersion());
   });
 };
 
@@ -110,7 +114,7 @@ const createSplash = (): void => {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      devTools: false,
+      devTools: app.isPackaged ? false : true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
@@ -121,9 +125,10 @@ const createSplash = (): void => {
   if (app.isPackaged) {
     autoUpdater.checkForUpdates();
   } else {
+    splash.webContents.openDevTools();
     setTimeout(() => {
       createWindow();
-    }, 4000);
+    }, 10000);
   }
 };
 
@@ -152,6 +157,7 @@ app.on("activate", () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
+// Checks and makes sure that all necessary files are either present or created.
 function checkFiles() {
   if (!fs.existsSync(fullPath)) {
     fs.mkdir(fullPath, (err) => {
@@ -176,6 +182,7 @@ function checkFiles() {
   APItoken = Settings.Token;
 }
 
+// Saves changes to settings (currently only APItoken).
 function saveSettings() {
   const settingsPath = path.join(fullPath, "\\", "settings.json");
   if (!fs.existsSync(settingsPath)) {
@@ -280,7 +287,15 @@ function getImages(url: string) {
 // ----------> IPCMAIN EVENTS <---------- //
 //*************************************** //
 
-ipcMain.on("toMain", async (event, data) => {
+///////////////////////
+// Handle events. //
+///////////////////////
+
+ipcMain.handle("aquireToken", async () => {
+  return APItoken;
+});
+
+ipcMain.handle("fetchChannels", async (event, data) => {
   const result: ChannelResponse = await fetchStreamers(data);
   const streamerArr: StreamerResult[] = [];
 
@@ -289,12 +304,15 @@ ipcMain.on("toMain", async (event, data) => {
   const responses = await Promise.all(
     result.data.map((streamer: Channel) => {
       return getImages(streamer.thumbnail_url).then((res) => {
-        event.reply("progress", { progress: currentProgress++, max: max });
+        mainWindow.webContents.send("progress", {
+          progress: currentProgress++,
+          max: max,
+        });
         return Promise.resolve(res);
       });
     })
   );
-  responses.forEach((res: any, index) => {
+  responses.forEach((res: { body: string }, index) => {
     const streamer: StreamerResult = {
       id: result.data[index].id,
       name: result.data[index].display_name,
@@ -302,7 +320,30 @@ ipcMain.on("toMain", async (event, data) => {
     };
     streamerArr.push(streamer);
   });
-  event.reply("fromMain", streamerArr);
+  return streamerArr;
+});
+
+ipcMain.handle("getNewToken", async () => {
+  APItoken = await OAuth();
+  Settings.Token = APItoken;
+  saveSettings();
+  // event.reply("awaitToken", APItoken);
+  if (streamers.length > 0) {
+    const response = await getStreamerStatus(streamers);
+    response.data.length > 0 &&
+      mainWindow.webContents.send("awaitStatus", response);
+  }
+
+  continousUpdate();
+  return APItoken;
+});
+
+////////////////
+// On events. //
+////////////////
+
+ipcMain.on("openStream", (_, name: string) => {
+  shell.openExternal(`https://twitch.tv/${name}`);
 });
 
 ipcMain.on("saveStreamer", async (event, data: StreamerResult[]) => {
@@ -342,21 +383,6 @@ ipcMain.on("deleteStreamer", async (event, data: StreamerResult) => {
   });
 });
 
-ipcMain.on("getToken", async (event) => {
-  APItoken = await OAuth();
-  console.log("Token", APItoken);
-  Settings.Token = APItoken;
-  saveSettings();
-  event.reply("awaitToken", APItoken);
-  if (streamers.length > 0) {
-    const response = await getStreamerStatus(streamers);
-    response.data.length > 0 &&
-      mainWindow.webContents.send("awaitStatus", response);
-  }
-
-  continousUpdate();
-});
-
 // Waits for the renderer to call it. Then loads saved streamers and
 // fetches their live status which are then sent to the renderer.
 ipcMain.on("rendererReady", async () => {
@@ -394,4 +420,5 @@ ipcMain.on("minimizeApp", () => {
 
 ipcMain.on("closeApp", () => {
   mainWindow.close();
+  app.quit();
 });

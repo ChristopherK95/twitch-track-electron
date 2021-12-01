@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StreamerResult, LiveStreamer } from "../interfaces/StreamerContext";
 import Viewers from "../svg/Viewers.svg";
 import "../styles/streamer.css";
@@ -12,6 +12,8 @@ export function Streamer(props: {
     pos: { x: number; y: number };
   }) => void;
 }) {
+  const [viewers, setViewers] = useState<string>();
+
   let time;
 
   if (props.liveStreamer !== undefined) {
@@ -45,6 +47,19 @@ export function Streamer(props: {
     });
   }
 
+  function openStream() {
+    window.api.openStream("openStream", props.streamer.name);
+  }
+
+  useEffect(() => {
+    if (props.liveStreamer === undefined) return;
+    if (props.liveStreamer.viewers > 999) {
+      setViewers(Math.ceil(props.liveStreamer.viewers / 1000) + "k");
+    } else {
+      setViewers(`${props.liveStreamer.viewers}`);
+    }
+  }, [props.liveStreamer]);
+
   return (
     <div
       className={`streamer ${
@@ -54,7 +69,9 @@ export function Streamer(props: {
     >
       <img src={props.streamer.imgUrl} alt="" />
       <div className="container">
-        <h1 className="name">{props.streamer.name}</h1>
+        <h1 className="name" onClick={openStream}>
+          {props.streamer.name}
+        </h1>
         <h2
           className="category"
           title={props.liveStreamer && props.liveStreamer.title}
@@ -75,9 +92,7 @@ export function Streamer(props: {
           }}
           className="dot"
         ></div>
-        <p className="viewers">
-          {props.liveStreamer !== undefined ? props.liveStreamer.viewers : ""}
-        </p>
+        <p className="viewers">{viewers !== undefined ? viewers : ""}</p>
         {props.liveStreamer !== undefined && (
           <i className="viewer-icon">
             <Viewers />

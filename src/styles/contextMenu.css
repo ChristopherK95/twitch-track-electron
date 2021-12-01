@@ -4,7 +4,7 @@
   background: #3f3f40;
   padding: 10px 5px;
   color: white;
-  z-index: 10;
+  z-index: 15;
   border-radius: 5px;
   box-shadow: 4px 4px 10px 3px rgb(0 0 0 / 30%);
 }

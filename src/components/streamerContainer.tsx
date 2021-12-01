@@ -60,13 +60,11 @@ export function StreamerContainer(props: {
       setStarted(true);
       const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
       props.setLiveStreamers(sortedArr);
-      console.log("Sorting");
       return;
     }
     getDiff();
     const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
     props.setLiveStreamers(sortedArr);
-    console.log("Sorting");
   }, [updatedStreamers]);
 
   useEffect(() => {

@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
   overflow-y: auto;
   transform: translateX(0);
   transition: transform 0.5s ease-in-out;
@@ -26,6 +26,7 @@
   width: max-content;
   position: relative;
   margin-bottom: 5px;
+  margin-top: 10px;
   user-select: none;
 }
 

@@ -6,6 +6,9 @@ module.exports = {
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
    */
+  output: {
+    publicPath: "",
+  },
   entry: "./src/index.ts",
   target: "electron-renderer",
   // Put your normal webpack config below here

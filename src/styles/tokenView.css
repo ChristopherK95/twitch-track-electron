@@ -2,36 +2,54 @@
   height: 100%;
   width: 100%;
   position: absolute;
-  background: #2c2c2c;
-  z-index: 15;
+  background: #262626;
+  z-index: 10;
   flex-direction: column;
   top: 0;
+  transition: transform 0.5s ease, opacity 0.3s ease;
 }
 
-.token-view .exit {
+.exit {
   position: absolute;
-  top: 15px;
+  top: 20px;
   left: 15px;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: #211e1e;
+  width: 30px;
+  height: 30px;
+  border-radius: 26px;
+  background: #6969692e;
+  border: 2px solid #878787;
 }
 
-.token-view .exit:hover {
-  filter: brightness(1.2);
+.exit::after {
+  content: "ESC";
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  color: #ffffff94;
+  font-family: sans-serif;
+  font-weight: normal;
+  font-size: 12px;
 }
 
-.token-view .exit div:first-child {
+.exit:hover {
+  border-color: white;
+}
+
+.exit:hover > div {
+  background-color: white;
+}
+
+.exit div:first-child {
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
-.token-view .exit div:last-child {
+.exit div:last-child {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.token-view .exit div {
-  background-color: white;
+.exit div {
+  background-color: #878787;
   width: 3px;
   height: 20px;
   position: absolute;
@@ -75,9 +93,10 @@
   border-radius: 3px;
   font-family: consolas;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
   cursor: pointer;
+  z-index: 1;
 }
 
 .token-view .token-div .token:hover {
@@ -91,6 +110,16 @@
   font-family: sans-serif;
   position: relative;
   margin-top: 40px;
+  transform: translateY(-300%);
+  opacity: 0;
+  transition: all 0.5s ease;
+  pointer-events: none;
+  cursor: default;
+}
+
+.token-view .token-div .token:hover ~ .hint {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .token-view .token-div .hint::before,

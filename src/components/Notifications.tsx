@@ -21,12 +21,10 @@ export function Notifications(props: {
       setNotifCount(`1/${props.notifs.length}`);
     }, 100);
     for (let i = 0; i < props.notifs.length + 1; i++) {
-      console.log("start");
       setTimeout(
         () => {
           if (i === props.notifs.length) {
             setShow(false);
-            console.log("hide");
           } else {
             setContainerRight(100 * i);
             setNotifCount(`${i + 1}/${props.notifs.length}`);

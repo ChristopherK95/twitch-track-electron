@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Notif } from "../interfaces/StreamerContext";
+import { Notif, Pages } from "../interfaces/StreamerContext";
 import "../styles/notificationsView.css";
 
 interface SavedNotif {
@@ -14,6 +14,8 @@ export function NotificationsView(props: {
   toggleNotifications: (bool: boolean) => void;
   unseenNotif: boolean;
   setUnseenNotif: (bool: boolean) => void;
+  pages: Pages;
+  setPages: (pages: Pages) => void;
 }) {
   const [notifHistory, setNotifHistory] = useState<SavedNotif[]>([]);
   const [onStartUp, setOnStartUp] = useState(true);
@@ -51,7 +53,9 @@ export function NotificationsView(props: {
     }
     setNotifHistory(arr);
     setNewNotifs(newNotifArr);
-    props.setUnseenNotif(true);
+    if (document.hidden && props.notifs.length > 0) {
+      props.setUnseenNotif(true);
+    }
   }, [props.notifs]);
 
   // Checks if there are any unseen notifications when opening
@@ -61,15 +65,28 @@ export function NotificationsView(props: {
       props.setUnseenNotif(false);
       setNewNotifs([]);
     }
-  }, [props.showNotifications]);
+  }, [props.pages.notificationsPage]);
 
   return (
     <div
-      className={`notifications-view ${props.showNotifications ? "show" : ""}`}
+      className={`notifications-view ${
+        props.pages.notificationsPage ? "show-page" : "hide-page"
+      }`}
     >
-      <p className="return" onClick={() => props.toggleNotifications(false)}>
-        Back
-      </p>
+      <div
+        onClick={() =>
+          props.setPages({
+            mainPage: true,
+            notificationsPage: false,
+            tokenPage: false,
+            versionPage: false,
+          })
+        }
+        className="exit"
+      >
+        <div></div>
+        <div></div>
+      </div>
       <h1 className="notif-history">History</h1>
       {notifHistory.map((notif, index) => {
         return (

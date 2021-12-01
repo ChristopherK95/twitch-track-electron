@@ -59,7 +59,7 @@ body {
   border-radius: 5px;
   animation: move 3s linear infinite;
   transform: translateX(-100%);
-  background: linear-gradient(90deg, #ff046c, #fda608);
+  background: linear-gradient(90deg, #0cff8a, #67ffb6);
 }
 
 @keyframes move {
@@ -69,5 +69,44 @@ body {
   70%,
   100% {
     left: 130%;
+  }
+}
+
+#logo {
+  width: 80px;
+}
+
+#Bubble {
+  animation: hover 3s linear infinite;
+}
+
+#EyeGroup {
+  animation: blink 2s linear infinite;
+  transform-origin: center 35%;
+}
+
+@keyframes hover {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(30px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes blink {
+  0%,
+  30% {
+    transform: scaleY(100%);
+  }
+  50% {
+    transform: scaleY(10%);
+  }
+  70%,
+  100% {
+    transform: scaleY(100%);
   }
 }

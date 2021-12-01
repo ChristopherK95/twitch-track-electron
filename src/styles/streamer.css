@@ -79,13 +79,14 @@
   margin: 0;
   font-weight: bold;
   cursor: default;
+  font-size: 14px;
 }
 
 .status .viewer-icon {
-  width: 13px;
-  height: 15px;
+  width: 10px;
+  height: 16px;
   fill: rgb(255, 86, 56);
-  margin-right: 5px;
+  margin-right: 3px;
 }
 
 .time-streaming {

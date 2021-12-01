@@ -1,0 +1,25 @@
+.version-view {
+  width: 100%;
+  background: #262626;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 10;
+  transition: transform 0.5s ease, opacity 0.3s ease;
+}
+
+.version-view h1 {
+  margin: 0;
+  font-family: sans-serif;
+  font-weight: 900;
+  color: #d3d3d3;
+}
+
+.version-view p {
+  color: #d3d3d3;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}

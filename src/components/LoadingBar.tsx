@@ -21,10 +21,11 @@ export function LoadingBar() {
 
   const progressBar = {
     height: "100%",
-    width: progress + "%",
+    width: loading ? progress + "%" : "0%",
     borderRadius: "5px",
     backgroundColor: "aquamarine",
     opacity: `${loading ? "1" : "0"}`,
+    transition: "width 0.3s linear",
   };
 
   return (

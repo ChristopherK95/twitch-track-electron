@@ -1,11 +1,16 @@
 .main-window {
   text-align: center;
-  background-color: #262626;
+  background-color: #121212;
   height: 100vh;
   width: 100vw;
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.main-window .main {
+  display: flex;
+  overflow-y: hidden;
 }
 
 #contentArea {
@@ -14,22 +19,34 @@
   align-items: center;
   height: 100%;
   position: relative;
+  width: -webkit-fill-available;
+  overflow-x: hidden;
+  border-top-left-radius: 10px;
+  background: #262626;
 }
 
-.left {
-  transform: translateX(-100%);
+#contentArea .main-page {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 11;
+  background: #262626;
+  transition: transform 0.5s ease, opacity 0.3s ease;
+  overflow-x: hidden;
 }
 
-.right {
+.title .topBar .titleBar .handle {
+  width: 100%;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+.logo {
+  width: 25px;
+  position: absolute;
   transform: translateX(100%);
-}
-
-.up {
-  transform: translateY(-100%);
-}
-
-.down {
-  transform: translateY(100%);
+  left: 30px;
+  top: 5px;
 }
 
 .token-missing {
@@ -59,4 +76,26 @@
 
 .token-missing span:hover {
   color: #f33030;
+}
+
+.show-page {
+  animation: show 0s 0.7s forwards;
+}
+
+.hide-page {
+  transform: scale(0.8);
+  opacity: 0;
+  animation: hide 0s 0.7s forwards;
+}
+
+@keyframes show {
+  to {
+    z-index: 11;
+  }
+}
+
+@keyframes hide {
+  to {
+    z-index: 10;
+  }
 }
