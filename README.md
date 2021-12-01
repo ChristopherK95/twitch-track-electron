@@ -7,15 +7,18 @@
 
 <div align="center">
   <a href="https://github.com/ChristopherK95/twitch-track-electron">
-  <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <img src="images/Logo.svg" alt="Logo" width="200" height="200">
   </a>
  
-  <h3 align="center">TwitchTrack</h3>
+  <h1 align="center">TWITCHTRACK</h1>
  
   <p align="center">
     An Electron application that helps with keeping track on your favourite Twitch streamers!
   </p> 
  </div>
+<br/>
+<br/>
+<br/>
 
 ## About TwitchTrack
 ![Application Name Screen Shot][app-screenshot]
