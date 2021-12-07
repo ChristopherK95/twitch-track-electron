@@ -81,4 +81,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [downloads-shield]: https://img.shields.io/github/downloads/ChristopherK95/twitch-track-electron/total?color=%230fffb3&style=for-the-badge
 [latest-version-shield]: https://img.shields.io/github/v/release/ChristopherK95/twitch-track-electron?style=for-the-badge
 [latest-version-url]: https://github.com/ChristopherK95/twitch-track-electron/releases/latest
-[app-screenshot]: images/Twitch-Track-Electron1.png
+[app-screenshot]: images/GifPreview.gif
