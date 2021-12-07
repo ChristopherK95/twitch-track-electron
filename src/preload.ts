@@ -85,6 +85,20 @@ contextBridge.exposeInMainWorld("api", {
   // Send functions. //
   /////////////////////
 
+  openVersion: (channel: string) => {
+    const validChannels = ["openVersion"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  showInfo: (channel: string) => {
+    const validChannels = ["showInfo"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
   openStream: (channel: string, data: string) => {
     const validChannels = ["openStream"];
     if (validChannels.includes(channel)) {

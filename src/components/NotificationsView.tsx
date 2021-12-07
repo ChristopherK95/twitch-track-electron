@@ -78,8 +78,6 @@ export function NotificationsView(props: {
           props.setPages({
             mainPage: true,
             notificationsPage: false,
-            tokenPage: false,
-            versionPage: false,
           })
         }
         className="exit"

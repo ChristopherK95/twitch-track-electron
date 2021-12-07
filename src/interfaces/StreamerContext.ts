@@ -1,3 +1,5 @@
+import { createContext } from "react";
+
 export interface LiveStreamer {
   id: string;
   name: string;
@@ -67,6 +69,4 @@ export interface Notif {
 export interface Pages {
   mainPage: boolean;
   notificationsPage: boolean;
-  tokenPage: boolean;
-  versionPage: boolean;
 }

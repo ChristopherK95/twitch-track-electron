@@ -38,7 +38,7 @@
   position: relative;
   display: flex;
   flex-direction: row-reverse;
-  width: max-content;
+  width: fit-content;
   height: 0px;
   align-items: center;
   transform: translateX(0);

@@ -9,7 +9,7 @@ body {
 
 .topBar {
   display: flex;
-  height: 40px;
+  height: 30px;
   background: #121212;
   position: relative;
   justify-content: space-between;
@@ -86,7 +86,7 @@ body {
 }
 
 #minimizeBtn div {
-  width: 20px;
+  width: 15px;
   height: 3px;
   background-color: white;
 }
@@ -100,11 +100,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px;
 }
 
 #closeBtn div {
-  width: 20px;
+  width: 15px;
   height: 3px;
   background: white;
   transform: rotate(-45deg);

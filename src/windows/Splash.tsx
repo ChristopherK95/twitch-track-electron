@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Splash.css";
-import Logo from "../svg/SplashLogo.svg";
 
 export function Splash() {
-  const [loadingText, setLoadingText] = useState("Loading...");
+  const [loadingText, setLoadingText] = useState("Checking for updates...");
 
   useEffect(() => {
     window.api.splashUpdates("splash-update", (data: string) => {

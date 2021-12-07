@@ -3,7 +3,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { MainWindow } from "./components/mainWindow";
-import { Splash } from "./splash/Splash";
+import { Info } from "./windows/Info";
+import { Splash } from "./windows/Splash";
 
 function render() {
   ReactDOM.render(
@@ -12,6 +13,7 @@ function render() {
         <Routes>
           <Route path="/App" element={<MainWindow />} />
           <Route path="/Splash" element={<Splash />} />
+          <Route path="/Info" element={<Info />} />
         </Routes>
       </Router>
     </React.StrictMode>,

@@ -8,6 +8,8 @@ import {
 import { Streamer } from "./Streamer";
 import "../styles/streamerContainer.css";
 import NotifFx from "../audio/NotificationSound.wav";
+import Plus from "../svg/Plus.svg";
+import Dash from "../svg/Dash.svg";
 
 export function StreamerContainer(props: {
   savedStreamers: StreamerResult[];
@@ -16,6 +18,7 @@ export function StreamerContainer(props: {
   setLiveStreamers: (streamers: LiveStreamer[]) => void;
   toggleSearch: boolean;
   hideOffline: boolean;
+  toggleOffline: (hideOffline: boolean) => void;
   context: (context: {
     show: boolean;
     name: string;
@@ -47,6 +50,10 @@ export function StreamerContainer(props: {
     if (notifArr.length === 0) return;
     notifFx.play();
     props.setNotifs(notifArr);
+  }
+
+  function hideOffline() {
+    props.toggleOffline(!props.hideOffline);
   }
 
   useEffect(() => {
@@ -98,7 +105,8 @@ export function StreamerContainer(props: {
     >
       <div className="online">
         <h2 className="section">
-          Online <span>{`(${props.liveStreamers.length})`}</span>
+          Online{" "}
+          <span className="count">{`(${props.liveStreamers.length})`}</span>
         </h2>
         {props.liveStreamers.length > 0 &&
           props.liveStreamers.map((streamer: LiveStreamer, index: number) => {
@@ -114,30 +122,33 @@ export function StreamerContainer(props: {
             );
           })}
       </div>
-      <div
-        style={{ display: `${props.hideOffline ? "none" : "block"}` }}
-        className="offline"
-      >
+      <div className="offline">
         <h2 className="section">
           Offline{" "}
-          <span>{`(${
-            props.savedStreamers.length - props.liveStreamers.length
-          })`}</span>
+          <span className="count" onClick={hideOffline}>
+            {`(${props.savedStreamers.length - props.liveStreamers.length})`}
+            <i className="toggle">{props.hideOffline ? <Plus /> : <Dash />}</i>
+          </span>
         </h2>
-        {props.savedStreamers.map((streamer: StreamerResult, index: number) => {
-          if (!props.liveStreamers.some((live) => live.id === streamer.id)) {
-            return (
-              <Streamer
-                key={index}
-                streamer={streamer}
-                liveStreamer={props.liveStreamers.find(
-                  (item) => item.id === streamer.id
-                )}
-                context={props.context}
-              />
-            );
-          }
-        })}
+        {!props.hideOffline &&
+          props.savedStreamers.map(
+            (streamer: StreamerResult, index: number) => {
+              if (
+                !props.liveStreamers.some((live) => live.id === streamer.id)
+              ) {
+                return (
+                  <Streamer
+                    key={index}
+                    streamer={streamer}
+                    liveStreamer={props.liveStreamers.find(
+                      (item) => item.id === streamer.id
+                    )}
+                    context={props.context}
+                  />
+                );
+              }
+            }
+          )}
       </div>
     </div>
   );

@@ -10,10 +10,12 @@ export function SearchResults(props: {
   setArr: (arr: StreamerResult[]) => void;
   savedStreamers: StreamerResult[];
   saveStreamer: (arr: StreamerResult[]) => void;
+  setSearch: (val: string) => void;
 }) {
   function back() {
     props.setToggleSearch(false);
     props.setArr([]);
+    props.setSearch("");
   }
 
   return (

@@ -1,8 +1,8 @@
 {
   "name": "twitch-track",
   "productName": "TwitchTrack",
-  "version": "1.0.2",
-  "description": "My Electron application description",
+  "version": "1.0.3",
+  "description": "TwitchTrack, an application made to prevent you from missing when your favourite streamers go live, and more.",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",

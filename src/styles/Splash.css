@@ -10,7 +10,7 @@ body {
   margin: 5px;
   height: 290px;
   width: 290px;
-  background-color: #262626;
+  background: linear-gradient(131deg, #e7e7e7bd -71%, #1d2226eb 25%);
   overflow: hidden;
   border-radius: 5px;
   box-shadow: 0 0 5px 2px #0000008c;

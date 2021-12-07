@@ -11,17 +11,24 @@
 .main-window .main {
   display: flex;
   overflow-y: hidden;
+  position: relative;
+}
+
+.shade {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0 0 0 / 42%);
+  position: absolute;
+  z-index: 12;
 }
 
 #contentArea {
   display: flex;
   flex-direction: column;
-  align-items: center;
   height: 100%;
   position: relative;
   width: -webkit-fill-available;
   overflow-x: hidden;
-  border-top-left-radius: 10px;
   background: #262626;
 }
 
@@ -42,11 +49,48 @@
 }
 
 .logo {
-  width: 25px;
-  position: absolute;
-  transform: translateX(100%);
-  left: 30px;
-  top: 5px;
+  width: 20px;
+  position: relative;
+  left: 6px;
+  top: 4px;
+  display: flex;
+}
+
+.misc {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  width: fit-content;
+  align-items: center;
+  transition: background-color 0.3s;
+  position: relative;
+  margin-left: 15px;
+  margin-top: 15px;
+}
+
+.misc .cog {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  fill: rgba(255, 255, 255, 0.507);
+  transition: fill 0.5s ease;
+}
+
+.misc .bell {
+  width: 20px;
+  height: 23px;
+  fill: rgba(255, 255, 255, 0.507);
+  transition: fill 0.5s ease;
+}
+
+.misc .cog:hover {
+  animation: spin 3s ease infinite;
+  fill: white;
+}
+
+.misc .bell:hover {
+  animation: shake 1.2s ease infinite;
+  fill: white;
 }
 
 .token-missing {
@@ -97,5 +141,40 @@
 @keyframes hide {
   to {
     z-index: 10;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  50%,
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(10deg);
+  }
+  20% {
+    transform: rotate(-10deg);
+  }
+  30% {
+    transform: rotate(10deg);
+  }
+  40% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60%,
+  100% {
+    transform: rotate(0deg);
   }
 }

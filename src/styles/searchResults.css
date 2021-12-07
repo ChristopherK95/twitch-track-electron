@@ -38,24 +38,24 @@
 
 ::-webkit-scrollbar {
   width: 10px;
-  background: #222426;
-  border-radius: 5px;
+  background: #1c1d1e;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-track {
-  border: 5px solid #222426;
-  border-radius: 5px;
+  border: 5px solid #1c1d1e;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #535353;
-  border-radius: 5px;
+  background: #00eb89;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #7c7c7c;
+  background: #00b66a;
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: #3b3b3b;
+  background: rgb(0, 156, 91);
 }

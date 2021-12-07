@@ -1,6 +1,5 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import Search from "../svg/Search.svg";
-import Cog from "../svg/Cog.svg";
 import { LoadingBar } from "./LoadingBar";
 import "../styles/searchBar.css";
 
@@ -11,66 +10,25 @@ export function SearchBar(props: {
   toggleOffline: (bool: boolean) => void;
   show: string;
   tokenMissing: boolean;
+  toggleSettings: (settings: boolean) => void;
+  hideSearchBar: boolean;
+  search: string;
+  setSearch: (search: string) => void;
 }) {
-  const [search, setSearch] = useState("");
-  const [hideSearch, toggleHideSearch] = useState(false);
-  const [showMisc, toggleShowMisc] = useState(false);
-
   function onChange(e: React.FormEvent<HTMLInputElement>) {
-    setSearch(e.currentTarget.value);
+    props.setSearch(e.currentTarget.value);
   }
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (search === "") return;
-    props.fetch(search);
-  }
-
-  function toggleMisc() {
-    toggleShowMisc(!showMisc);
-  }
-
-  function toggleSearch() {
-    toggleHideSearch(!hideSearch);
-  }
-
-  function toggleOffline() {
-    props.toggleOffline(!props.hideOffline);
+    if (props.search === "") return;
+    props.fetch(props.search);
   }
 
   return (
     <div className={`search-bar ${props.show}`}>
-      <div className="misc" onClick={toggleMisc}>
-        <i>
-          <Cog />
-        </i>
-      </div>
-      <div className={`settings ${showMisc ? "show" : ""}`}>
-        <div>
-          <label className="toggle-button">Hide search</label>
-          <input
-            className="skewed"
-            type="checkbox"
-            name="hide-search"
-            id="hide-search"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={toggleSearch}
-          />
-        </div>
-        <div>
-          <label className="toggle-button">Hide offline</label>
-          <input
-            className="skewed"
-            type="checkbox"
-            name="hide-search"
-            id="hide-search"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={toggleOffline}
-          />
-        </div>
-      </div>
       <form
-        style={{ display: `${hideSearch ? "none" : "flex"}` }}
+        style={{ display: `${props.hideSearchBar ? "none" : "flex"}` }}
         onSubmit={submit}
       >
         <button
@@ -86,15 +44,17 @@ export function SearchBar(props: {
           className="search"
           type="text"
           placeholder="Search"
-          value={search}
+          value={props.search}
           onChange={onChange}
           disabled={props.tokenMissing}
         />
         <div
-          style={{ visibility: `${search.length > 0 ? "visible" : "hidden"}` }}
+          style={{
+            visibility: `${props.search.length > 0 ? "visible" : "hidden"}`,
+          }}
           className="cross"
           onClick={() => {
-            setSearch("");
+            props.setSearch("");
           }}
         >
           <div></div>

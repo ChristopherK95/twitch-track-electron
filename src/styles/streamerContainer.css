@@ -6,7 +6,6 @@
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 10px;
-  overflow-y: auto;
   transform: translateX(0);
   transition: transform 0.5s ease-in-out;
 }
@@ -30,16 +29,25 @@
   user-select: none;
 }
 
-.section span {
+.section .count {
   font-size: 14px;
   font-family: consolas;
   color: aquamarine;
+  position: relative;
+  cursor: pointer;
 }
 
-.right {
-  transform: translateX(100%);
+.section .count .toggle {
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  transform: translate(100%, -50%);
+  cursor: pointer;
+  width: 15px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.3);
 }
 
-.left {
-  transform: translateX(-100%);
+.section .count .toggle:hover {
+  color: aquamarine;
 }

@@ -33,7 +33,7 @@ export function SearchResult(props: {
       <h2
         className={`${saved ? "saved" : "add"}`}
         onClick={() => {
-          saveStreamer(props.result);
+          !saved && saveStreamer(props.result);
         }}
       >
         {saved ? "Added" : "Add"}

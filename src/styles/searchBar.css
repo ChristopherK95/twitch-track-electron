@@ -7,24 +7,6 @@
   justify-content: flex-start;
   flex-direction: column;
   transform: translateX(0);
-  z-index: 1;
-}
-
-.search-bar .settings {
-  height: 0;
-  width: 100%;
-  transition: height 0.5s ease;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  padding-left: 10px;
-  padding-top: 5px;
-}
-
-.search-bar .settings div {
-  display: flex;
-  align-items: center;
 }
 
 .search-bar .show {
@@ -125,40 +107,6 @@
 
 .cross div:last-child {
   transform: rotate(-45deg);
-}
-
-.search-bar .misc {
-  display: flex;
-  flex-direction: row;
-  cursor: pointer;
-  width: fit-content;
-  align-items: center;
-  transition: background-color 0.3s;
-  position: relative;
-  margin-left: 15px;
-  margin-top: 15px;
-}
-
-.search-bar .misc i {
-  width: 20px;
-  height: 20px;
-  fill: rgba(255, 255, 255, 0.507);
-  transition: fill 0.5s ease;
-}
-
-.search-bar .misc i:hover {
-  animation: spin 3s ease infinite;
-  fill: white;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0);
-  }
-  50%,
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .search-bar .misc:hover > .dot {

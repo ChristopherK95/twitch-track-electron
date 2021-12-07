@@ -54,7 +54,16 @@ export function Streamer(props: {
   useEffect(() => {
     if (props.liveStreamer === undefined) return;
     if (props.liveStreamer.viewers > 999) {
-      setViewers(Math.ceil(props.liveStreamer.viewers / 1000) + "k");
+      let string = `${props.liveStreamer.viewers / 1000}`;
+      const decimals = string.split(".")[1];
+      string = string.replace(".", ",");
+      if (string.includes(",")) {
+        setViewers(
+          string.slice(0, string.length - (decimals.length - 1)) + "k"
+        );
+      } else {
+        setViewers(string + "k");
+      }
     } else {
       setViewers(`${props.liveStreamer.viewers}`);
     }

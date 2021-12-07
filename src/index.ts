@@ -128,8 +128,36 @@ const createSplash = (): void => {
     splash.webContents.openDevTools();
     setTimeout(() => {
       createWindow();
-    }, 10000);
+    }, 3000);
   }
+};
+
+const createInfo = () => {
+  const info = new BrowserWindow({
+    width: 300,
+    height: 300,
+    alwaysOnTop: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      devTools: app.isPackaged ? false : true,
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+    },
+  });
+
+  info.removeMenu();
+
+  info.loadURL(
+    MAIN_WINDOW_WEBPACK_ENTRY + `${app.isPackaged ? "#/Info" : "/#/Info"}`
+  );
+
+  // info.webContents.openDevTools();
+  info.webContents.once("did-finish-load", () => {
+    info.webContents.send("get-version", app.getVersion());
+  });
+
+  info.focus();
 };
 
 // This method will be called when Electron has finished
@@ -341,6 +369,16 @@ ipcMain.handle("getNewToken", async () => {
 ////////////////
 // On events. //
 ////////////////
+
+ipcMain.on("openVersion", () => {
+  shell.openExternal(
+    `https://github.com/ChristopherK95/twitch-track-electron/releases/tag/v${app.getVersion()}`
+  );
+});
+
+ipcMain.on("showInfo", () => {
+  createInfo();
+});
 
 ipcMain.on("openStream", (_, name: string) => {
   shell.openExternal(`https://twitch.tv/${name}`);
