@@ -103,53 +103,74 @@ export function StreamerContainer(props: {
       style={{ display: `${!props.toggleSearch ? "flex" : "none"}` }}
       className={`streamer-container ${props.show}`}
     >
-      <div className="online">
-        <h2 className="section">
-          Online{" "}
-          <span className="count">{`(${props.liveStreamers.length})`}</span>
-        </h2>
-        {props.liveStreamers.length > 0 &&
-          props.liveStreamers.map((streamer: LiveStreamer, index: number) => {
-            return (
-              <Streamer
-                key={index}
-                streamer={props.savedStreamers.find(
-                  (item) => item.id === streamer.id
-                )}
-                liveStreamer={streamer}
-                context={props.context}
-              />
-            );
-          })}
-      </div>
-      <div className="offline">
-        <h2 className="section">
-          Offline{" "}
-          <span className="count" onClick={hideOffline}>
-            {`(${props.savedStreamers.length - props.liveStreamers.length})`}
-            <i className="toggle">{props.hideOffline ? <Plus /> : <Dash />}</i>
-          </span>
-        </h2>
-        {!props.hideOffline &&
-          props.savedStreamers.map(
-            (streamer: StreamerResult, index: number) => {
-              if (
-                !props.liveStreamers.some((live) => live.id === streamer.id)
-              ) {
-                return (
-                  <Streamer
-                    key={index}
-                    streamer={streamer}
-                    liveStreamer={props.liveStreamers.find(
-                      (item) => item.id === streamer.id
-                    )}
-                    context={props.context}
-                  />
-                );
-              }
-            }
-          )}
-      </div>
+      {props.savedStreamers.length > 0 ? (
+        <div className="section-container">
+          <div className="online">
+            <h2 className="section">
+              Online{" "}
+              <span className="count">{`(${props.liveStreamers.length})`}</span>
+            </h2>
+            {props.liveStreamers.length > 0 &&
+              props.liveStreamers.map(
+                (streamer: LiveStreamer, index: number) => {
+                  return (
+                    <Streamer
+                      key={index}
+                      streamer={props.savedStreamers.find(
+                        (item) => item.id === streamer.id
+                      )}
+                      liveStreamer={streamer}
+                      context={props.context}
+                    />
+                  );
+                }
+              )}
+          </div>
+          <div className="offline">
+            <h2 className="section">
+              Offline{" "}
+              <span className="count" onClick={hideOffline}>
+                {`(${
+                  props.savedStreamers.length - props.liveStreamers.length
+                })`}
+                <i className="toggle">
+                  {props.hideOffline ? <Plus /> : <Dash />}
+                </i>
+              </span>
+            </h2>
+            {!props.hideOffline &&
+              props.savedStreamers.map(
+                (streamer: StreamerResult, index: number) => {
+                  if (
+                    !props.liveStreamers.some((live) => live.id === streamer.id)
+                  ) {
+                    return (
+                      <Streamer
+                        key={index}
+                        streamer={streamer}
+                        liveStreamer={props.liveStreamers.find(
+                          (item) => item.id === streamer.id
+                        )}
+                        context={props.context}
+                      />
+                    );
+                  }
+                }
+              )}
+          </div>
+        </div>
+      ) : (
+        <div className="guide-div">
+          <p className="text1">
+            This is where your favourite streamers will be shown once you have
+            added them.
+          </p>
+          <p className="text2">
+            Use the search box above to search for your streamers and add them
+            to your selection of streamers to keep track of.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

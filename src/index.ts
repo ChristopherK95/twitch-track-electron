@@ -97,7 +97,7 @@ const createWindow = (): void => {
     MAIN_WINDOW_WEBPACK_ENTRY + `${app.isPackaged ? "#/App" : "/#/App"}`
   );
 
-  mainWindow.webContents.once("did-finish-load", async () => {
+  mainWindow.on("ready-to-show", async () => {
     splash.destroy();
     mainWindow.show();
     mainWindow.webContents.send("get-version", app.getVersion());
