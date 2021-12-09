@@ -1,7 +1,7 @@
 {
   "name": "twitch-track",
   "productName": "TwitchTrack",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "TwitchTrack, an application made to prevent you from missing when your favourite streamers go live, and more.",
   "main": ".webpack/main",
   "scripts": {

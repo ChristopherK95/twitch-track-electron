@@ -97,7 +97,7 @@ const createWindow = (): void => {
     MAIN_WINDOW_WEBPACK_ENTRY + `${app.isPackaged ? "#/App" : "/#/App"}`
   );
 
-  mainWindow.on("ready-to-show", async () => {
+  mainWindow.on("ready-to-show", () => {
     splash.destroy();
     mainWindow.show();
     mainWindow.webContents.send("get-version", app.getVersion());
@@ -195,9 +195,7 @@ function checkFiles() {
     });
   }
   if (!fs.existsSync(path.join(fullPath, "\\", "streamers.json"))) {
-    fs.writeFile(path.join(fullPath, "\\", "streamers.json"), "[]", (err) => {
-      log.info("writeFileError:", err);
-    });
+    fs.writeFileSync(path.join(fullPath, "\\", "streamers.json"), "[]");
   }
 
   if (!fs.existsSync(path.join(fullPath, "\\", "settings.json"))) {
@@ -226,7 +224,10 @@ async function continousUpdate() {
     if (streamers.length === 0) return;
     const response: StreamResponse = await getStreamerStatus(streamers);
     if (response.data.length > 0) {
-      mainWindow.webContents.send("awaitStatus", response);
+      mainWindow.webContents.send("awaitStatus", {
+        tag: "update",
+        data: response,
+      });
     }
   }, 60000);
 }
@@ -355,11 +356,13 @@ ipcMain.handle("getNewToken", async () => {
   APItoken = await OAuth();
   Settings.Token = APItoken;
   saveSettings();
-  // event.reply("awaitToken", APItoken);
   if (streamers.length > 0) {
     const response = await getStreamerStatus(streamers);
     response.data.length > 0 &&
-      mainWindow.webContents.send("awaitStatus", response);
+      mainWindow.webContents.send("awaitStatus", {
+        tag: "!update",
+        data: response,
+      });
   }
 
   continousUpdate();
@@ -394,13 +397,16 @@ ipcMain.on("saveStreamer", async (event, data: StreamerResult[]) => {
   }
   streamers.push(data[data.length - 1]);
   const response = await getStreamerStatus(streamers);
-  mainWindow.webContents.send("awaitStatus", response);
+  mainWindow.webContents.send("awaitStatus", {
+    tag: "!update",
+    data: response,
+  });
 
   const json = JSON.stringify(data);
 
   fs.writeFile(path.join(fullPath, "\\", "streamers.json"), json, (err) => {
     if (err) {
-      log.info("writeFileError:", err);
+      log.info("writeFileError2:", err);
     }
   });
 });
@@ -416,7 +422,7 @@ ipcMain.on("deleteStreamer", async (event, data: StreamerResult) => {
 
   fs.writeFile(path.join(fullPath, "\\", "streamers.json"), json, (err) => {
     if (err) {
-      log.info("writeFileError:", err);
+      log.info("writeFileError3:", err);
     }
   });
 });
@@ -443,7 +449,10 @@ ipcMain.on("rendererReady", async () => {
       return;
     }
     if (response.data.length > 0) {
-      mainWindow.webContents.send("awaitStatus", response);
+      mainWindow.webContents.send("awaitStatus", {
+        tag: "!update",
+        data: response,
+      });
     }
   }
   if (APItoken === "") {

@@ -29,6 +29,7 @@ export function StreamerContainer(props: {
 }) {
   const [updatedStreamers, setUpdatedStreamers] = useState<LiveStreamer[]>([]);
   const [started, setStarted] = useState(false);
+  const [notify, toggleNotify] = useState(false);
   const notifFx = new Audio(NotifFx);
 
   function getDiff() {
@@ -57,39 +58,41 @@ export function StreamerContainer(props: {
   }
 
   useEffect(() => {
-    if (
-      !started &&
-      props.liveStreamers.length === 0 &&
-      updatedStreamers.length === 0
-    )
-      return;
-    if (!started) {
-      setStarted(true);
+    if (notify) {
+      if (props.liveStreamers.length === 0 && updatedStreamers.length === 0)
+        return;
+      getDiff();
       const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
       props.setLiveStreamers(sortedArr);
-      return;
+      toggleNotify(false);
+    } else {
+      const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
+      props.setLiveStreamers(sortedArr);
     }
-    getDiff();
-    const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
-    props.setLiveStreamers(sortedArr);
   }, [updatedStreamers]);
 
   useEffect(() => {
-    window.api.awaitStatus("awaitStatus", (event: StreamResponse) => {
-      const arr: LiveStreamer[] = [];
-      for (let i = 0; i < event.data.length; i++) {
-        const streamer: LiveStreamer = {
-          id: event.data[i].user_id,
-          name: event.data[i].user_login,
-          category: event.data[i].game_name,
-          title: event.data[i].title,
-          started: event.data[i].started_at,
-          viewers: event.data[i].viewer_count,
-        };
-        arr.push(streamer);
+    window.api.awaitStatus(
+      "awaitStatus",
+      (event: { tag: string; data: StreamResponse }) => {
+        const arr: LiveStreamer[] = [];
+        for (let i = 0; i < event.data.data.length; i++) {
+          const streamer: LiveStreamer = {
+            id: event.data.data[i].user_id,
+            name: event.data.data[i].user_login,
+            category: event.data.data[i].game_name,
+            title: event.data.data[i].title,
+            started: event.data.data[i].started_at,
+            viewers: event.data.data[i].viewer_count,
+          };
+          arr.push(streamer);
+        }
+        if (event.tag === "update") {
+          toggleNotify(true);
+        }
+        setUpdatedStreamers(arr);
       }
-      setUpdatedStreamers(arr);
-    });
+    );
 
     window.api.loadStreamers("loadStreamers", (event: StreamerResult[]) => {
       props.setSavedStreamers(event);
