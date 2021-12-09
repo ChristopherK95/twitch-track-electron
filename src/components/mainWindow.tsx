@@ -108,6 +108,7 @@ export function MainWindow() {
             hideOffline={hideOffline}
             toggleOffline={toggleOffline}
             toggleSettings={toggleSettings}
+            setTokenMissing={setTokenMissing}
           />
         )}
         <div id="contentArea">
