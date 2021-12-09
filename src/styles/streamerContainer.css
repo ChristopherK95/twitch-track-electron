@@ -10,8 +10,37 @@
   transition: transform 0.5s ease-in-out;
 }
 
-.streamer-container .online,
-.streamer-container .offline {
+.streamer-container .section-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.streamer-container .guide-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 75vh;
+  padding: 0 10px;
+}
+
+.streamer-container .guide-div .text1 {
+  font-family: sans-serif;
+  font-weight: bold;
+  color: #ffffff9c;
+  margin: 0;
+  font-size: 18px;
+}
+
+.streamer-container .guide-div .text2 {
+  font-family: sans-serif;
+  color: #ffffff9c;
+}
+
+.streamer-container .section-container .online,
+.streamer-container .section-container .offline {
   width: 90%;
   overflow-x: clip;
   padding: 0 10px;

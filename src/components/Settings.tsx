@@ -84,7 +84,7 @@ export function Settings(props: {
           Token
         </p>
         <p className="token" onClick={getToken}>
-          {token !== "" ? token : "Token not found"}
+          {token === "" ? "No OAuth token found" : token}
         </p>
       </div>
       <div className="info" onClick={showInfo}>
