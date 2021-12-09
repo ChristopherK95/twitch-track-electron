@@ -7,6 +7,7 @@ export function Settings(props: {
   hideOffline: boolean;
   toggleOffline: (hideOffline: boolean) => void;
   toggleSettings: (settings: boolean) => void;
+  setTokenMissing: (bool: boolean) => void;
 }) {
   const [token, setToken] = useState<string>("");
 
@@ -18,11 +19,14 @@ export function Settings(props: {
   async function getToken() {
     const response = await window.api.getNewToken("getNewToken");
     setToken(response);
+    props.setTokenMissing(false);
   }
 
   async function aquireToken() {
     const res = await window.api.aquireToken("aquireToken");
     setToken(res);
+    if (res === "") return;
+    props.setTokenMissing(false);
   }
 
   useEffect(() => {
@@ -80,7 +84,7 @@ export function Settings(props: {
           Token
         </p>
         <p className="token" onClick={getToken}>
-          {token}
+          {token !== "" ? token : "Token not found"}
         </p>
       </div>
       <div className="info" onClick={showInfo}>
