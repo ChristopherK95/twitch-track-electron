@@ -1,5 +1,3 @@
-import { createContext } from "react";
-
 export interface LiveStreamer {
   id: string;
   name: string;

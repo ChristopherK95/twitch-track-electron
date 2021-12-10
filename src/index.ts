@@ -17,7 +17,9 @@ if (require("electron-squirrel-startup")) {
   // eslint-disable-line global-require
   app.quit();
 }
-
+if (process.platform === "win32") {
+  app.setAppUserModelId(app.name);
+}
 let mainWindow: BrowserWindow;
 let splash: BrowserWindow;
 
