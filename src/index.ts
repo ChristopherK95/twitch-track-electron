@@ -104,7 +104,6 @@ const createWindow = (): void => {
     mainWindow.show();
     mainWindow.webContents.send("get-version", app.getVersion());
   });
-  console.log(app.getAppPath());
 };
 
 const createSplash = (): void => {
