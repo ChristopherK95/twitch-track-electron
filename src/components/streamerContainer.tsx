@@ -28,7 +28,6 @@ export function StreamerContainer(props: {
   show: string;
 }) {
   const [updatedStreamers, setUpdatedStreamers] = useState<LiveStreamer[]>([]);
-  const [started, setStarted] = useState(false);
   const [notify, toggleNotify] = useState(false);
   const notifFx = new Audio(NotifFx);
 
@@ -43,10 +42,32 @@ export function StreamerContainer(props: {
     for (let i = 0; i < onlineDiff.length; i++) {
       const notif = { name: onlineDiff[i].name, live: true };
       notifArr.push(notif);
+      const notifNative = new Notification(onlineDiff[i].name, {
+        body: "went live!",
+        icon: props.savedStreamers.find(
+          (x) =>
+            x.name.toLocaleLowerCase() ===
+            onlineDiff[i].name.toLocaleLowerCase()
+        ).imgUrl,
+        silent: true,
+      });
+      notifNative.onclick = (event) => {
+        event.preventDefault();
+        window.api.openStream("openStream", onlineDiff[i].name);
+      };
     }
     for (let i = 0; i < offlineDiff.length; i++) {
       const notif = { name: offlineDiff[i].name, live: false };
       notifArr.push(notif);
+      new Notification(offlineDiff[i].name, {
+        body: "went offline",
+        icon: props.savedStreamers.find(
+          (x) =>
+            x.name.toLocaleLowerCase() ===
+            offlineDiff[i].name.toLocaleLowerCase()
+        ).imgUrl,
+        silent: true,
+      });
     }
     if (notifArr.length === 0) return;
     notifFx.play();
