@@ -3,10 +3,6 @@ body {
   margin: 0;
 }
 
-/* html {
-  background: #262626;
-} */
-
 .topBar {
   display: flex;
   height: 30px;

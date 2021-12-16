@@ -1,4 +1,7 @@
-import { createContext } from "react";
+export interface Settings {
+  Token: string;
+  AutoStart: boolean;
+}
 
 export interface LiveStreamer {
   id: string;

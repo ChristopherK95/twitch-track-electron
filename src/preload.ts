@@ -6,8 +6,8 @@ contextBridge.exposeInMainWorld("api", {
   // Invoke functions. //
   ///////////////////////
 
-  aquireToken: async (channel: string) => {
-    const validChannels = ["aquireToken"];
+  getSettings: async (channel: string) => {
+    const validChannels = ["getSettings"];
     if (validChannels.includes(channel)) {
       return await ipcRenderer.invoke(channel);
     }
@@ -84,6 +84,13 @@ contextBridge.exposeInMainWorld("api", {
   /////////////////////
   // Send functions. //
   /////////////////////
+
+  toggleAutoStart: (channel: string) => {
+    const validChannels = ["toggleAutoStart"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
 
   openVersion: (channel: string) => {
     const validChannels = ["openVersion"];

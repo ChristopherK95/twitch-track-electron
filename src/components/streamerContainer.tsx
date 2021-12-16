@@ -28,7 +28,7 @@ export function StreamerContainer(props: {
   show: string;
 }) {
   const [updatedStreamers, setUpdatedStreamers] = useState<LiveStreamer[]>([]);
-  const [started, setStarted] = useState(false);
+  const [notify, toggleNotify] = useState(false);
   const notifFx = new Audio(NotifFx);
 
   function getDiff() {
@@ -42,10 +42,32 @@ export function StreamerContainer(props: {
     for (let i = 0; i < onlineDiff.length; i++) {
       const notif = { name: onlineDiff[i].name, live: true };
       notifArr.push(notif);
+      const notifNative = new Notification(onlineDiff[i].name, {
+        body: "went live!",
+        icon: props.savedStreamers.find(
+          (x) =>
+            x.name.toLocaleLowerCase() ===
+            onlineDiff[i].name.toLocaleLowerCase()
+        ).imgUrl,
+        silent: true,
+      });
+      notifNative.onclick = (event) => {
+        event.preventDefault();
+        window.api.openStream("openStream", onlineDiff[i].name);
+      };
     }
     for (let i = 0; i < offlineDiff.length; i++) {
       const notif = { name: offlineDiff[i].name, live: false };
       notifArr.push(notif);
+      new Notification(offlineDiff[i].name, {
+        body: "went offline",
+        icon: props.savedStreamers.find(
+          (x) =>
+            x.name.toLocaleLowerCase() ===
+            offlineDiff[i].name.toLocaleLowerCase()
+        ).imgUrl,
+        silent: true,
+      });
     }
     if (notifArr.length === 0) return;
     notifFx.play();
@@ -57,39 +79,41 @@ export function StreamerContainer(props: {
   }
 
   useEffect(() => {
-    if (
-      !started &&
-      props.liveStreamers.length === 0 &&
-      updatedStreamers.length === 0
-    )
-      return;
-    if (!started) {
-      setStarted(true);
+    if (notify) {
+      if (props.liveStreamers.length === 0 && updatedStreamers.length === 0)
+        return;
+      getDiff();
       const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
       props.setLiveStreamers(sortedArr);
-      return;
+      toggleNotify(false);
+    } else {
+      const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
+      props.setLiveStreamers(sortedArr);
     }
-    getDiff();
-    const sortedArr = updatedStreamers.sort((a, b) => b.viewers - a.viewers);
-    props.setLiveStreamers(sortedArr);
   }, [updatedStreamers]);
 
   useEffect(() => {
-    window.api.awaitStatus("awaitStatus", (event: StreamResponse) => {
-      const arr: LiveStreamer[] = [];
-      for (let i = 0; i < event.data.length; i++) {
-        const streamer: LiveStreamer = {
-          id: event.data[i].user_id,
-          name: event.data[i].user_login,
-          category: event.data[i].game_name,
-          title: event.data[i].title,
-          started: event.data[i].started_at,
-          viewers: event.data[i].viewer_count,
-        };
-        arr.push(streamer);
+    window.api.awaitStatus(
+      "awaitStatus",
+      (event: { tag: string; data: StreamResponse }) => {
+        const arr: LiveStreamer[] = [];
+        for (let i = 0; i < event.data.data.length; i++) {
+          const streamer: LiveStreamer = {
+            id: event.data.data[i].user_id,
+            name: event.data.data[i].user_login,
+            category: event.data.data[i].game_name,
+            title: event.data.data[i].title,
+            started: event.data.data[i].started_at,
+            viewers: event.data.data[i].viewer_count,
+          };
+          arr.push(streamer);
+        }
+        if (event.tag === "update") {
+          toggleNotify(true);
+        }
+        setUpdatedStreamers(arr);
       }
-      setUpdatedStreamers(arr);
-    });
+    );
 
     window.api.loadStreamers("loadStreamers", (event: StreamerResult[]) => {
       props.setSavedStreamers(event);
@@ -103,53 +127,74 @@ export function StreamerContainer(props: {
       style={{ display: `${!props.toggleSearch ? "flex" : "none"}` }}
       className={`streamer-container ${props.show}`}
     >
-      <div className="online">
-        <h2 className="section">
-          Online{" "}
-          <span className="count">{`(${props.liveStreamers.length})`}</span>
-        </h2>
-        {props.liveStreamers.length > 0 &&
-          props.liveStreamers.map((streamer: LiveStreamer, index: number) => {
-            return (
-              <Streamer
-                key={index}
-                streamer={props.savedStreamers.find(
-                  (item) => item.id === streamer.id
-                )}
-                liveStreamer={streamer}
-                context={props.context}
-              />
-            );
-          })}
-      </div>
-      <div className="offline">
-        <h2 className="section">
-          Offline{" "}
-          <span className="count" onClick={hideOffline}>
-            {`(${props.savedStreamers.length - props.liveStreamers.length})`}
-            <i className="toggle">{props.hideOffline ? <Plus /> : <Dash />}</i>
-          </span>
-        </h2>
-        {!props.hideOffline &&
-          props.savedStreamers.map(
-            (streamer: StreamerResult, index: number) => {
-              if (
-                !props.liveStreamers.some((live) => live.id === streamer.id)
-              ) {
-                return (
-                  <Streamer
-                    key={index}
-                    streamer={streamer}
-                    liveStreamer={props.liveStreamers.find(
-                      (item) => item.id === streamer.id
-                    )}
-                    context={props.context}
-                  />
-                );
-              }
-            }
-          )}
-      </div>
+      {props.savedStreamers.length > 0 ? (
+        <div className="section-container">
+          <div className="online">
+            <h2 className="section">
+              Online{" "}
+              <span className="count">{`(${props.liveStreamers.length})`}</span>
+            </h2>
+            {props.liveStreamers.length > 0 &&
+              props.liveStreamers.map(
+                (streamer: LiveStreamer, index: number) => {
+                  return (
+                    <Streamer
+                      key={index}
+                      streamer={props.savedStreamers.find(
+                        (item) => item.id === streamer.id
+                      )}
+                      liveStreamer={streamer}
+                      context={props.context}
+                    />
+                  );
+                }
+              )}
+          </div>
+          <div className="offline">
+            <h2 className="section">
+              Offline{" "}
+              <span className="count" onClick={hideOffline}>
+                {`(${
+                  props.savedStreamers.length - props.liveStreamers.length
+                })`}
+                <i className="toggle">
+                  {props.hideOffline ? <Plus /> : <Dash />}
+                </i>
+              </span>
+            </h2>
+            {!props.hideOffline &&
+              props.savedStreamers.map(
+                (streamer: StreamerResult, index: number) => {
+                  if (
+                    !props.liveStreamers.some((live) => live.id === streamer.id)
+                  ) {
+                    return (
+                      <Streamer
+                        key={index}
+                        streamer={streamer}
+                        liveStreamer={props.liveStreamers.find(
+                          (item) => item.id === streamer.id
+                        )}
+                        context={props.context}
+                      />
+                    );
+                  }
+                }
+              )}
+          </div>
+        </div>
+      ) : (
+        <div className="guide-div">
+          <p className="text1">
+            This is where your favourite streamers will be shown once you have
+            added them.
+          </p>
+          <p className="text2">
+            Use the search box above to search for your streamers and add them
+            to your selection of streamers to keep track of.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
