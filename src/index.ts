@@ -16,7 +16,6 @@ import AutoLaunch from "auto-launch";
 
 const autoLauncher = new AutoLaunch({
   name: "TwitchTrack",
-  path: app.getPath("exe"),
 });
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -38,23 +37,25 @@ if (app.isPackaged) {
 
   autoUpdater.on("error", (err) => {
     log.info("autoUpdaterError:", err);
+    splash.webContents.send("splash-update", "No updates found");
     createWindow();
   });
 
   autoUpdater.on("checking-for-update", () => {
-    splash.webContents.send("looking-for-updates", "Looking for updates...");
+    splash.webContents.send("splash-update", "Looking for updates...");
   });
 
   autoUpdater.on("update-not-available", () => {
+    splash.webContents.send("splash-update", "No updates found");
     createWindow();
   });
 
   autoUpdater.on("update-available", () => {
-    splash.webContents.send("update-available", "New update found!");
+    splash.webContents.send("splash-update", "New update found!");
   });
 
   autoUpdater.on("update-downloaded", () => {
-    splash.webContents.send("update-completed", "Update completed!");
+    splash.webContents.send("splash-update", "Update completed!");
     autoUpdater.quitAndInstall();
   });
 }

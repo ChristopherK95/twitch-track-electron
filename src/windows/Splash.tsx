@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/Splash.css";
 
 export function Splash() {
-  const [loadingText, setLoadingText] = useState("Checking for updates...");
+  const [loadingText, setLoadingText] = useState("Loading...");
 
   useEffect(() => {
     window.api.splashUpdates("splash-update", (data: string) => {
