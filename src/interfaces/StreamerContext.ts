@@ -1,3 +1,8 @@
+export interface Settings {
+  Token: string;
+  AutoStart: boolean;
+}
+
 export interface LiveStreamer {
   id: string;
   name: string;
