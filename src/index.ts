@@ -5,12 +5,19 @@ import {
   ChannelResponse,
   Channel,
   StreamResponse,
+  Settings,
 } from "./interfaces/StreamerContext";
 import { OAuth } from "./OAuth";
 import https from "https";
 import fs from "fs";
 import path from "path";
 import log from "electron-log";
+import AutoLaunch from "auto-launch";
+
+const autoLauncher = new AutoLaunch({
+  name: "TwitchTrack",
+  path: app.getPath("exe"),
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -52,11 +59,7 @@ if (app.isPackaged) {
   });
 }
 
-interface Settings {
-  Token: string;
-}
-
-let Settings: Settings;
+let settings: Settings;
 let APItoken = "";
 const ClientID = "p4dvj9r4r5jnih8uq373imda1n2v0j";
 const fullPath = path.join(process.env.APPDATA, "\\", "TwitchTrack-elctrn");
@@ -201,23 +204,45 @@ function checkFiles() {
   }
 
   if (!fs.existsSync(path.join(fullPath, "\\", "settings.json"))) {
-    const json = JSON.stringify({ Token: "" });
+    const settings: Settings = { Token: "", AutoStart: false };
+    const json = JSON.stringify(settings);
     fs.writeFileSync(path.join(fullPath, "\\", "settings.json"), json);
+  } else {
+    if (
+      !fs
+        .readFileSync(path.join(fullPath, "\\", "settings.json"), "utf8")
+        .includes("AutoStart")
+    ) {
+      const settings: Settings = { Token: "", AutoStart: false };
+      const json = JSON.stringify(settings);
+      fs.writeFileSync(path.join(fullPath, "\\", "settings.json"), json);
+    }
   }
-  Settings = JSON.parse(
+  settings = JSON.parse(
     fs.readFileSync(path.join(fullPath, "\\", "settings.json"), "utf8")
   );
-  APItoken = Settings.Token;
+  APItoken = settings.Token;
+  if (settings.AutoStart) {
+    autoLauncher
+      .isEnabled()
+      .then((isEnabled) => {
+        if (!isEnabled) autoLauncher.enable();
+      })
+      .catch((err) => {
+        log.info("AutoLaunchError", err);
+      });
+  }
 }
 
 // Saves changes to settings (currently only APItoken).
 function saveSettings() {
   const settingsPath = path.join(fullPath, "\\", "settings.json");
   if (!fs.existsSync(settingsPath)) {
-    const json = JSON.stringify({ Token: "" });
+    const settings = { Token: "", AutoStart: false };
+    const json = JSON.stringify(settings);
     fs.writeFileSync(settingsPath, json);
   }
-  fs.writeFileSync(settingsPath, JSON.stringify(Settings));
+  fs.writeFileSync(settingsPath, JSON.stringify(settings));
 }
 
 // Updates streamers live status every minute.
@@ -322,8 +347,8 @@ function getImages(url: string) {
 // Handle events. //
 ///////////////////////
 
-ipcMain.handle("aquireToken", async () => {
-  return APItoken;
+ipcMain.handle("getSettings", async () => {
+  return settings;
 });
 
 ipcMain.handle("fetchChannels", async (event, data) => {
@@ -356,7 +381,7 @@ ipcMain.handle("fetchChannels", async (event, data) => {
 
 ipcMain.handle("getNewToken", async () => {
   APItoken = await OAuth();
-  Settings.Token = APItoken;
+  settings.Token = APItoken;
   saveSettings();
   if (streamers.length > 0) {
     const response = await getStreamerStatus(streamers);
@@ -374,6 +399,16 @@ ipcMain.handle("getNewToken", async () => {
 ////////////////
 // On events. //
 ////////////////
+
+ipcMain.on("toggleAutoStart", () => {
+  settings.AutoStart = !settings.AutoStart;
+  if (settings.AutoStart) {
+    autoLauncher.enable();
+  } else {
+    autoLauncher.disable();
+  }
+  saveSettings();
+});
 
 ipcMain.on("openVersion", () => {
   shell.openExternal(
