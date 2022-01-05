@@ -1,7 +1,7 @@
 {
   "name": "twitch-track",
   "productName": "TwitchTrack",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "TwitchTrack, an application made to prevent you from missing when your favourite streamers go live, and more.",
   "main": ".webpack/main",
   "scripts": {
@@ -52,7 +52,7 @@
               "owner": "ChristopherK95",
               "name": "twitch-track-electron"
             },
-            "prerelease": true
+            "prerelease": false
           }
         }
       ],

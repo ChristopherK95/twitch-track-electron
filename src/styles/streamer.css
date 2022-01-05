@@ -13,6 +13,7 @@
   height: 100%;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
+  user-select: none;
 }
 
 .streamer .container {
@@ -36,6 +37,7 @@
   cursor: pointer;
   width: fit-content;
   max-width: 100%;
+  user-select: none;
 }
 
 .streamer h1:hover {
@@ -52,50 +54,17 @@
   height: 24px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   cursor: default;
+  transform-origin: left;
+  transition: transform 0.5s ease, color 0.5s ease;
+  user-select: none;
 }
 
-/* .streamer .category:hover:after,
-.streamer .category:hover:before {
-  visibility: visible;
-  transition: visibility 0s 0.6s;
+.streamer .category-changed {
+  transform: scale(125%);
+  color: white;
 }
-
-.streamer .category::after {
-  content: attr(data-title);
-  position: absolute;
-  padding: 10px;
-  background-color: #262525;
-  font-size: 15px;
-  width: auto;
-  display: flex;
-  z-index: 1;
-  height: auto;
-  white-space: break-spaces;
-  max-width: 180px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  min-width: 100px;
-  bottom: 30px;
-  left: 10px;
-  box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 50%);
-  color: #cfcfcf;
-  visibility: hidden;
-  overflow-wrap: anywhere;
-}
-
-.streamer .category::before {
-  content: "";
-  border-left: solid 15px transparent;
-  border-right: solid 0px transparent;
-  border-top: solid 12px #262525;
-  position: absolute;
-  left: 54px;
-  bottom: 18px;
-  z-index: 2;
-  visibility: hidden;
-} */
 
 .status {
   display: flex;

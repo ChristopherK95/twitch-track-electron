@@ -13,6 +13,8 @@ export function Streamer(props: {
   }) => void;
 }) {
   const [viewers, setViewers] = useState<string>();
+  const [prevCategory, setPrevCategory] = useState<string>("");
+  const [changedCategory, toggleChangedCategory] = useState<boolean>();
 
   let time;
 
@@ -67,6 +69,13 @@ export function Streamer(props: {
     } else {
       setViewers(`${props.liveStreamer.viewers}`);
     }
+    if (prevCategory !== "" && props.liveStreamer.category !== prevCategory) {
+      toggleChangedCategory(true);
+      setTimeout(() => {
+        toggleChangedCategory(false);
+      }, 1000);
+    }
+    setPrevCategory(props.liveStreamer.category);
   }, [props.liveStreamer]);
 
   return (
@@ -82,7 +91,7 @@ export function Streamer(props: {
           {props.streamer.name}
         </h1>
         <h2
-          className="category"
+          className={`category ${changedCategory ? "category-changed" : ""}`}
           title={props.liveStreamer && props.liveStreamer.title}
         >
           {props.liveStreamer !== undefined

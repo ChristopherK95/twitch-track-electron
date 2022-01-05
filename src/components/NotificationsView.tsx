@@ -86,20 +86,24 @@ export function NotificationsView(props: {
         <div></div>
       </div>
       <h1 className="notif-history">History</h1>
-      {notifHistory.map((notif, index) => {
-        return (
-          <div
-            key={index}
-            className={`notif ${notif.live ? "live-bg" : "offline-bg"}`}
-            onClick={() => deleteNotif(notif)}
-          >
-            <p className="name">{notif.name}</p>
-            <p className="notif-h-status">{notif.live ? "Live" : "Offline"}</p>
-            <p className="date">{notif.time}</p>
-            <div className="hover">Click to delete</div>
-          </div>
-        );
-      })}
+      <div className="notifs-container">
+        {notifHistory.map((notif, index) => {
+          return (
+            <div
+              key={index}
+              className={`notif ${notif.live ? "live-bg" : "offline-bg"}`}
+              onClick={() => deleteNotif(notif)}
+            >
+              <p className="name">{notif.name}</p>
+              <p className="notif-h-status">
+                {notif.live ? "Live" : "Offline"}
+              </p>
+              <p className="date">{notif.time}</p>
+              <div className="hover">Click to delete</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
