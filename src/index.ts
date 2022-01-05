@@ -76,10 +76,12 @@ declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 const createWindow = (): void => {
+  checkFiles();
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 400,
-    height: 600,
+    width: settings.StartSize.x,
+    height: settings.StartSize.y,
     maxWidth: 600,
     minWidth: 400,
     minHeight: 600,
@@ -97,7 +99,6 @@ const createWindow = (): void => {
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
-  checkFiles();
   // and load the index.html of the app.
   mainWindow.loadURL(
     MAIN_WINDOW_WEBPACK_ENTRY + `${app.isPackaged ? "#/App" : "/#/App"}`
@@ -107,6 +108,18 @@ const createWindow = (): void => {
     splash.destroy();
     mainWindow.show();
     mainWindow.webContents.send("get-version", app.getVersion());
+  });
+
+  mainWindow.webContents.on("before-input-event", (event, input) => {
+    if (input.control && input.key.toLocaleLowerCase() === "s") {
+      console.log(mainWindow.getSize());
+      const startSize = mainWindow.getSize();
+      settings.StartSize.x = startSize[0];
+      settings.StartSize.y = startSize[1];
+      mainWindow.webContents.send("saved-size");
+      saveSettings();
+      event.preventDefault();
+    }
   });
 };
 
@@ -205,23 +218,38 @@ function checkFiles() {
   }
 
   if (!fs.existsSync(path.join(fullPath, "\\", "settings.json"))) {
-    const settings: Settings = { Token: "", AutoStart: false };
+    const settings: Settings = {
+      Token: "",
+      AutoStart: false,
+      StartSize: { x: 400, y: 600 },
+    };
     const json = JSON.stringify(settings);
     fs.writeFileSync(path.join(fullPath, "\\", "settings.json"), json);
-  } else {
-    if (
-      !fs
-        .readFileSync(path.join(fullPath, "\\", "settings.json"), "utf8")
-        .includes("AutoStart")
-    ) {
-      const settings: Settings = { Token: "", AutoStart: false };
-      const json = JSON.stringify(settings);
-      fs.writeFileSync(path.join(fullPath, "\\", "settings.json"), json);
-    }
   }
+
   settings = JSON.parse(
     fs.readFileSync(path.join(fullPath, "\\", "settings.json"), "utf8")
   );
+
+  let updatedSettings = false;
+  if (!("Token" in settings)) {
+    settings.Token = "";
+    updatedSettings = true;
+  }
+  if (!("AutoStart" in settings)) {
+    settings.AutoStart = false;
+    updatedSettings = true;
+  }
+  if (!("StartSize" in settings)) {
+    settings.StartSize = { x: 400, y: 600 };
+    updatedSettings = true;
+  }
+
+  if (updatedSettings) {
+    const json = JSON.stringify(settings);
+    fs.writeFileSync(path.join(fullPath, "\\", "settings.json"), json);
+  }
+
   APItoken = settings.Token;
   if (settings.AutoStart) {
     autoLauncher

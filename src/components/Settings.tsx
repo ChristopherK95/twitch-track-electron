@@ -113,6 +113,9 @@ export function Settings(props: {
           {token === "" ? "No OAuth token found" : token}
         </p>
       </div>
+
+      <p className="hint-title">Hint</p>
+      <p className="hint">Ctrl + s to save current window size as start size</p>
       <div className="info" onClick={showInfo}>
         Info
       </div>

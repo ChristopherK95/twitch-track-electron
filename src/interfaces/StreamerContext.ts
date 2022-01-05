@@ -1,6 +1,7 @@
 export interface Settings {
   Token: string;
   AutoStart: boolean;
+  StartSize: { x: number; y: number };
 }
 
 export interface LiveStreamer {
