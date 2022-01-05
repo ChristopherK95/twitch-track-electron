@@ -52,7 +52,7 @@
               "owner": "ChristopherK95",
               "name": "twitch-track-electron"
             },
-            "prerelease": true
+            "prerelease": false
           }
         }
       ],
