@@ -29,6 +29,13 @@ contextBridge.exposeInMainWorld("api", {
   // On functions. //
   ///////////////////
 
+  savedSize: (channel: string, func: any) => {
+    const validChannels = ["saved-size"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (event, ...args) => func(...args));
+    }
+  },
+
   splashUpdates: (channel: string, func: any) => {
     const validChannels = ["splash-update"];
     if (validChannels.includes(channel)) {

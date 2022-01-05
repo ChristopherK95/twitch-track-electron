@@ -16,6 +16,7 @@ import { Settings } from "./Settings";
 import Logo from "../svg/TwitchTrackSVG.svg";
 import Cog from "../svg/Cog.svg";
 import Bell from "../svg/Bell.svg";
+import Check from "../svg/Check.svg";
 
 export function MainWindow() {
   // Array that contains all the results when searching for streamers to add.
@@ -48,11 +49,12 @@ export function MainWindow() {
   // Boolean state for whether the API Token is expired or missing.
   const [tokenMissing, setTokenMissing] = useState<boolean>(false);
   // Boolean state for whether the search bar should be visible or not.
-  const [hideSearchBar, toggleSearchBar] = useState(false);
+  const [hideSearchBar, toggleSearchBar] = useState<boolean>(false);
   // Boolean state for whether to show the settings window.
-  const [settings, toggleSettings] = useState(false);
+  const [settings, toggleSettings] = useState<boolean>(false);
+  const [savedSize, setSavedSize] = useState<boolean>(false);
   // State for the search bar value.
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
 
   // Makes an API request to Twitch for channels/streamers that match given search param.
   async function fetchStreamers(name: string) {
@@ -67,6 +69,13 @@ export function MainWindow() {
     window.api.tokenMissing("tokenMissing", () => {
       setTokenMissing(true);
     });
+
+    window.api.savedSize("saved-size", () => {
+      setSavedSize(true);
+      setTimeout(() => {
+        setSavedSize(false);
+      }, 3000);
+    });
   }, []);
 
   return (
@@ -78,6 +87,14 @@ export function MainWindow() {
               <i className="logo">
                 <Logo />
               </i>
+              {savedSize && (
+                <div className="saved-size">
+                  <p>Size saved</p>
+                  <i className="check">
+                    <Check />
+                  </i>
+                </div>
+              )}
             </div>
           </div>
           <div className="titleBarBtns">

@@ -225,6 +225,24 @@
   transform: translateX(100%);
 }
 
+.settings .hint-title {
+  color: #9b9b9b;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  margin: 15px 0 0 0;
+  user-select: none;
+}
+
+.settings .hint {
+  color: #a3a3a3;
+  font-family: sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  margin: 5px 0 0 0;
+  user-select: none;
+}
+
 .info {
   border: none;
   padding: 10px 15px;

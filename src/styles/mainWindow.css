@@ -47,6 +47,29 @@
   width: 100%;
   height: 100%;
   -webkit-app-region: drag;
+  position: relative;
+}
+
+.title .topBar .titleBar .handle .saved-size {
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 7px;
+}
+
+.title .topBar .titleBar .handle .saved-size p {
+  margin: 0;
+  color: #00eb89;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.title .topBar .titleBar .handle .saved-size .check {
+  display: flex;
+  fill: #00eb89;
+  height: 15px;
 }
 
 .logo {
