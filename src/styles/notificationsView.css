@@ -22,10 +22,59 @@
   user-select: none;
 }
 
+.notifications-view .delete-all {
+  display: flex;
+  height: 30px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  fill: white;
+  cursor: pointer;
+}
+
+.notifications-view .disable {
+  fill: #4a4a4a;
+  pointer-events: none;
+}
+
+.notifications-view .delete-all::after {
+  content: "Delete all";
+  position: absolute;
+  padding: 5px;
+  background: #424242;
+  color: white;
+  font-family: sans-serif;
+  font-style: normal;
+  left: 0px;
+  top: 50%;
+  transform: translate(-100%, -50%);
+  width: max-content;
+  border-radius: 3px;
+  font-size: 15px;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0.1s;
+  box-shadow: -4px 4px 4px 0px rgb(0 0 0 / 50%);
+}
+
+.notifications-view .delete-all:hover:after {
+  opacity: 1;
+}
+
+.notifications-view .delete-all:hover svg #layer1 > #lid {
+  transform: rotate(-15deg);
+}
+
+.notifications-view .delete-all #lid {
+  transform-origin: 75px 85px;
+  transition: transform 0.3s ease;
+}
+
 .notifications-view .notifs-container {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   height: auto;
   padding-bottom: 15px;
@@ -63,7 +112,8 @@
   align-items: center;
   justify-content: center;
   user-select: none;
-  transform: translateX(100%);
+  transform: translateX(-100%);
+  cursor: pointer;
 }
 
 .notifications-view .notifs-container .notif p {
@@ -80,6 +130,7 @@
   margin-top: -20px;
   font-weight: 700;
   text-transform: capitalize;
+  transition: margin 0.3s ease;
 }
 
 .notifications-view .notifs-container .notif .notif-h-status {
@@ -89,6 +140,7 @@
   bottom: 3px;
   font-weight: bold;
   font-size: 14px;
+  transition: margin 0.3s ease;
 }
 
 .notifications-view .notifs-container .notif .date {
