@@ -68,6 +68,19 @@ export function NotificationsView(props: {
     }
   }, [props.pages.notificationsPage]);
 
+  useEffect(() => {
+    const arr = [];
+    for (let i = 0; i < 10; i++) {
+      const abc: SavedNotif = {
+        name: "Soda",
+        live: true,
+        time: "12:" + (20 + i),
+      };
+      arr.push(abc);
+    }
+    setNotifHistory(arr);
+  }, []);
+
   return (
     <div
       className={`notifications-view ${
