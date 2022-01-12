@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { StreamerResult, LiveStreamer } from "../interfaces/StreamerContext";
 import Viewers from "../svg/Viewers.svg";
 import "../styles/streamer.css";
@@ -15,6 +15,8 @@ export function Streamer(props: {
   const [viewers, setViewers] = useState<string>();
   const [prevCategory, setPrevCategory] = useState<string>("");
   const [changedCategory, toggleChangedCategory] = useState<boolean>();
+  const tooltipRef = useRef(null);
+  const titleRef = useRef(null);
 
   let time;
 
@@ -41,7 +43,7 @@ export function Streamer(props: {
     if (x + 100 > e.view.innerWidth) {
       x = x - 100;
     }
-
+    console.log(titleRef);
     props.context({
       show: true,
       name: props.streamer.name,
@@ -90,14 +92,38 @@ export function Streamer(props: {
         <h1 className="name" onClick={openStream}>
           {props.streamer.name}
         </h1>
-        <h2
-          className={`category ${changedCategory ? "category-changed" : ""}`}
-          title={props.liveStreamer && props.liveStreamer.title}
-        >
+        <h2 className={`category ${changedCategory ? "category-changed" : ""}`}>
           {props.liveStreamer !== undefined
             ? props.liveStreamer.category
             : "Offline"}
         </h2>
+        {props.liveStreamer && (
+          <div ref={tooltipRef} className="tooltip">
+            <p className="t-category">
+              {props.liveStreamer && props.liveStreamer.category}
+            </p>
+            <div
+              className="marquee"
+              style={{
+                animation: `marquee ${
+                  props.liveStreamer.title.length * 0.14
+                }s linear infinite alternate`,
+              }}
+            >
+              <p
+                ref={titleRef}
+                className="t-title"
+                style={{
+                  animation: `marquee-content ${
+                    props.liveStreamer.title.length * 0.14
+                  }s linear infinite alternate`,
+                }}
+              >
+                {props.liveStreamer && props.liveStreamer.title}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
       <div className="status">
         <div

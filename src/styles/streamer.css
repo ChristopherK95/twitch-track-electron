@@ -44,26 +44,64 @@
   color: rgb(255, 255, 255);
 }
 
-.streamer .category {
+.streamer .container .category {
   margin: 0;
   padding: 0;
   text-align: left;
-  font-size: 18px;
+  font-size: 16px;
   font-family: system-ui;
   color: rgb(150, 150, 150);
   height: 24px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
   cursor: default;
   transform-origin: left;
   transition: transform 0.5s ease, color 0.5s ease;
   user-select: none;
 }
 
+.streamer .container .category:hover + .tooltip {
+  display: block;
+}
+
 .streamer .category-changed {
   transform: scale(125%);
   color: white;
+}
+
+.streamer .container .tooltip {
+  position: absolute;
+  min-width: 150px;
+  max-width: 200px;
+  width: max-content;
+  background: #2c2c2c;
+  box-shadow: 3px 3px 3px 1px rgb(0 0 0 / 50%);
+  overflow: hidden;
+  border-radius: 3px;
+  bottom: 0;
+  transform: translateY(90%);
+  z-index: 1;
+  border: 5px solid #2c2c2c;
+  display: none;
+  pointer-events: none;
+}
+
+.streamer .container .tooltip .t-category {
+  color: white;
+  margin: 0;
+  text-align: left;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.streamer .container .tooltip .t-title {
+  color: rgb(200, 200, 200);
+  margin: 0;
+  text-align: left;
+  width: max-content;
+  font-family: sans-serif;
+  font-size: 11px;
 }
 
 .status {
@@ -109,4 +147,30 @@
   color: #9f9f9f;
   font-size: 14px;
   cursor: default;
+}
+
+.marquee {
+  display: inline-block;
+}
+
+@keyframes marquee {
+  0%,
+  5% {
+    margin-left: 0%;
+  }
+  95%,
+  100% {
+    margin-left: 100%;
+  }
+}
+
+@keyframes marquee-content {
+  0%,
+  5% {
+    margin-left: 0%;
+  }
+  95%,
+  100% {
+    margin-left: -100%;
+  }
 }

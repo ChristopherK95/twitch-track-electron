@@ -28,8 +28,12 @@
   position: absolute;
   right: 15px;
   top: 15px;
-  fill: white;
+  fill: #878787;
   cursor: pointer;
+}
+
+.notifications-view .delete-all:hover {
+  fill: white;
 }
 
 .notifications-view .disable {
@@ -47,19 +51,20 @@
   font-style: normal;
   left: 0px;
   top: 50%;
-  transform: translate(-100%, -50%);
+  transform: translate(-90%, -50%);
   width: max-content;
   border-radius: 3px;
   font-size: 15px;
   opacity: 0;
   user-select: none;
   pointer-events: none;
-  transition: opacity 0.2s ease 0.1s;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   box-shadow: -4px 4px 4px 0px rgb(0 0 0 / 50%);
 }
 
 .notifications-view .delete-all:hover:after {
   opacity: 1;
+  transform: translate(-110%, -50%);
 }
 
 .notifications-view .delete-all:hover svg #layer1 > #lid {
