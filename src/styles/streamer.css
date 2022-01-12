@@ -84,6 +84,7 @@
   z-index: 1;
   border: 5px solid #2c2c2c;
   display: none;
+  pointer-events: none;
 }
 
 .streamer .container .tooltip .t-category {
