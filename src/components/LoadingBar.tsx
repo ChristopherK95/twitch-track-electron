@@ -6,17 +6,20 @@ export function LoadingBar() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    window.api.progress("progress", (event: any) => {
-      if (!loading) {
-        setLoading(true);
+    window.api.progress(
+      "progress",
+      (event: { progress: number; max: number }) => {
+        if (!loading) {
+          setLoading(true);
+        }
+        setProgress((event.progress / event.max) * 100);
+        if (event.progress / event.max === 1) {
+          setTimeout(() => {
+            setLoading(false);
+          }, 500);
+        }
       }
-      setProgress((event.progress / event.max) * 100);
-      if (event.progress / event.max === 1) {
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
-      }
-    });
+    );
   }, []);
 
   const progressBar = {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Notif, Pages } from "../interfaces/StreamerContext";
 import "../styles/notificationsView.css";
-import Trash from "../svg/Trash.svg";
 
 interface SavedNotif {
   name: string;
@@ -67,19 +66,6 @@ export function NotificationsView(props: {
       setNewNotifs([]);
     }
   }, [props.pages.notificationsPage]);
-
-  useEffect(() => {
-    const arr = [];
-    for (let i = 0; i < 10; i++) {
-      const abc: SavedNotif = {
-        name: "Soda",
-        live: true,
-        time: "12:" + (20 + i),
-      };
-      arr.push(abc);
-    }
-    setNotifHistory(arr);
-  }, []);
 
   return (
     <div

@@ -16,7 +16,7 @@ export function ContextMenu(props: {
 }) {
   const contextRef = useRef(null);
 
-  function deleteStreamer(e: any) {
+  function deleteStreamer() {
     // Checks if streamer is currently live and removes them from liveStreamers first if true.
     if (
       props.liveStreamers.some(
