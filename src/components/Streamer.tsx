@@ -36,14 +36,12 @@ export function Streamer(props: {
     return { timeElapsed, hours, minutes };
   }
 
-  function spawnContext(e: any) {
+  function spawnContext(e: React.MouseEvent<HTMLDivElement>) {
     let x = e.clientX;
     const y = e.clientY - 43;
-
-    if (x + 100 > e.view.innerWidth) {
+    if (x + 100 > e.view.document.body.clientWidth) {
       x = x - 100;
     }
-    console.log(titleRef);
     props.context({
       show: true,
       name: props.streamer.name,
