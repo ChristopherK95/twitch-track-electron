@@ -11,12 +11,13 @@ import {
 import { StreamerContainer } from "./streamerContainer";
 import { NotificationsView } from "./NotificationsView";
 import { ContextMenu } from "./ContextMenu";
-import { Notifications } from "./Notifications";
+// import { Notifications } from "./Notifications";
 import { Settings } from "./Settings";
 import Logo from "../svg/TwitchTrackSVG.svg";
 import Cog from "../svg/Cog.svg";
 import Bell from "../svg/Bell.svg";
 import Check from "../svg/Check.svg";
+import Notifications from "./new-notification/Notifications";
 
 export function MainWindow() {
   // Array that contains all the results when searching for streamers to add.
@@ -55,6 +56,7 @@ export function MainWindow() {
   const [savedSize, setSavedSize] = useState<boolean>(false);
   // State for the search bar value.
   const [search, setSearch] = useState<string>("");
+  const [platform, setPlatform] = useState<"win32" | "linux">("win32");
 
   // Makes an API request to Twitch for channels/streamers that match given search param.
   async function fetchStreamers(name: string) {
@@ -72,50 +74,57 @@ export function MainWindow() {
 
     window.api.savedSize("saved-size", () => {
       setSavedSize(true);
+      console.log("Saved size");
       setTimeout(() => {
         setSavedSize(false);
       }, 3000);
+    });
+
+    window.api.os("os", (os: "win32" | "linux") => {
+      setPlatform(os);
     });
   }, []);
 
   return (
     <div className="main-window">
-      <div className="title">
-        <div className="topBar">
-          <div className="titleBar">
-            <div className="handle">
-              <i className="logo">
-                <Logo />
-              </i>
-              {savedSize && (
-                <div className="saved-size">
-                  <p>Size saved</p>
-                  <i className="check">
-                    <Check />
-                  </i>
-                </div>
-              )}
+      {platform === "win32" && (
+        <div className="title">
+          <div className="topBar">
+            <div className="titleBar">
+              <div className="handle">
+                <i className="logo">
+                  <Logo />
+                </i>
+                {savedSize && (
+                  <div className="saved-size">
+                    <p>Size saved</p>
+                    <i className="check">
+                      <Check />
+                    </i>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="titleBarBtns">
+              <button
+                id="minimizeBtn"
+                className="topBtn"
+                onClick={() => window.api.minimizeApp("minimizeApp")}
+              >
+                <div></div>
+              </button>
+              <button
+                id="closeBtn"
+                className="topBtn"
+                onClick={() => window.api.closeApp("closeApp")}
+              >
+                <div></div>
+                <div></div>
+              </button>
             </div>
           </div>
-          <div className="titleBarBtns">
-            <button
-              id="minimizeBtn"
-              className="topBtn"
-              onClick={() => window.api.minimizeApp("minimizeApp")}
-            >
-              <div></div>
-            </button>
-            <button
-              id="closeBtn"
-              className="topBtn"
-              onClick={() => window.api.closeApp("closeApp")}
-            >
-              <div></div>
-              <div></div>
-            </button>
-          </div>
         </div>
-      </div>
+      )}
       <div className="main">
         {settings && <div className="shade"></div>}
         {settings && (
@@ -134,6 +143,7 @@ export function MainWindow() {
               {`OAuth token is either empty or expired`}
             </div>
           )}
+          <Notifications />
           <NotificationsView
             notifs={notifs}
             showNotifications={showNotifications}
@@ -151,7 +161,7 @@ export function MainWindow() {
             liveStreamers={liveStreamers}
             setLiveStreamers={setLiveStreamers}
           />
-          <Notifications notifs={notifs} setNotifs={setNotifs} />
+          {/* <Notifications notifs={notifs} setNotifs={setNotifs} /> */}
           <div
             className={`main-page ${
               pages.mainPage ? "show-page" : "hide-page"

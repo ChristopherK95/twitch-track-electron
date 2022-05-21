@@ -21,10 +21,6 @@ export interface StreamerResult {
 
 export interface ChannelResponse {
   data: Channel[];
-
-  pagination: {
-    cursor: string;
-  };
 }
 
 export interface Channel {
@@ -43,9 +39,6 @@ export interface Channel {
 
 export interface StreamResponse {
   data: Stream[];
-  pagination: {
-    cursor: string;
-  };
 }
 
 export interface Stream {

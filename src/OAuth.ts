@@ -27,7 +27,7 @@ export async function OAuth(): Promise<string> {
   const AuthToken = await getToken();
 
   async function getToken(): Promise<string> {
-    const abc: string = await new Promise((resolve, reject) => {
+    const abc: string = await new Promise((resolve) => {
       webRequest.onBeforeRequest(filter, async ({ url }) => {
         const token = await loadTokens(url);
         resolve(token);

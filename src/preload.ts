@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { StreamerResult } from "./interfaces/StreamerContext";
+import { StreamerResult, StreamResponse } from "./interfaces/StreamerContext";
 
 contextBridge.exposeInMainWorld("api", {
   ///////////////////////
@@ -29,62 +29,75 @@ contextBridge.exposeInMainWorld("api", {
   // On functions. //
   ///////////////////
 
-  savedSize: (channel: string, func: any) => {
+  savedSize: (channel: string, func: () => void) => {
     const validChannels = ["saved-size"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
+      ipcRenderer.on(channel, () => func());
     }
   },
 
-  splashUpdates: (channel: string, func: any) => {
+  splashUpdates: (channel: string, func: (data: string) => void) => {
     const validChannels = ["splash-update"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
+      ipcRenderer.on(channel, (_, args) => func(args));
     }
   },
 
-  progress: (channel: string, func: any) => {
+  progress: (
+    channel: string,
+    func: (event: { progress: number; max: number }) => void
+  ) => {
     const validChannels = ["progress"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
+      ipcRenderer.on(channel, (_, args) => func(args));
     }
   },
 
-  awaitStatus: (channel: string, func: any) => {
+  awaitStatus: (
+    channel: string,
+    func: (event: { tag: string; data: StreamResponse }) => void
+  ) => {
     const validChannels = ["awaitStatus"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
+      ipcRenderer.on(channel, (_, args) => func(args));
     }
   },
 
-  loadStreamers: (channel: string, func: any) => {
+  loadStreamers: (channel: string, func: (event: StreamerResult[]) => void) => {
     const validChannels = ["loadStreamers"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
+      ipcRenderer.on(channel, (_, args) => func(args));
     }
   },
-  tokenMissing: (channel: string, func: any) => {
+  tokenMissing: (channel: string, func: () => void) => {
     const validChannels = ["tokenMissing"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
+      ipcRenderer.on(channel, () => func());
     }
   },
 
-  awaitToken: (channel: string, func: any) => {
-    const validChannels = ["awaitToken"];
-    if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
-    }
-  },
+  // awaitToken: (channel: string, func: any) => {
+  //   const validChannels = ["awaitToken"];
+  //   if (validChannels.includes(channel)) {
+  //     ipcRenderer.on(channel, (event, ...args) => func(...args));
+  //   }
+  // },
 
   /////////////////////
   // Once functions. //
   /////////////////////
 
-  getVersion: (channel: string, func: (...ver: string[]) => void) => {
+  getVersion: (channel: string, func: (ver: string) => void) => {
     const validChannels = ["get-version"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.once(channel, (_, ...args) => func(...args));
+      ipcRenderer.once(channel, (_, args) => func(args));
+    }
+  },
+
+  os: (channel: "win32" | "linux", func: (os: string) => void) => {
+    const validChannels = ["os"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.once(channel, (_, args) => func(args));
     }
   },
 

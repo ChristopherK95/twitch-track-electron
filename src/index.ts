@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, autoUpdater, shell } from "electron";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
 import fetch from "node-fetch";
 import {
   StreamerResult,
@@ -13,6 +13,14 @@ import fs from "fs";
 import path from "path";
 import log from "electron-log";
 import AutoLaunch from "auto-launch";
+import {
+  AssureFileExists,
+  AssureSettingsExists,
+  CheckIfExists,
+  LoadSettings,
+  ReadFile,
+  WriteToFile,
+} from "./file-setup/file-handler";
 
 const autoLauncher = new AutoLaunch({
   name: "TwitchTrack",
@@ -29,41 +37,47 @@ if (process.platform === "win32") {
 let mainWindow: BrowserWindow;
 let splash: BrowserWindow;
 
-if (app.isPackaged) {
-  const server = "https://twitch-track-vercel.vercel.app";
-  const url = `${server}/update/${process.platform}/${app.getVersion()}`;
+// if (app.isPackaged) {
+//   const server = "https://twitch-track-vercel.vercel.app";
+//   const url = `${server}/update/${process.platform}/${app.getVersion()}`;
 
-  autoUpdater.setFeedURL({ url });
+//   autoUpdater.setFeedURL({ url });
 
-  autoUpdater.on("error", (err) => {
-    log.info("autoUpdaterError:", err);
-    splash.webContents.send("splash-update", "No updates found");
-    createWindow();
-  });
+//   autoUpdater.on("error", (err) => {
+//     log.info("autoUpdaterError:", err);
+//     splash.webContents.send("splash-update", "No updates found");
+//     createWindow();
+//   });
 
-  autoUpdater.on("checking-for-update", () => {
-    splash.webContents.send("splash-update", "Looking for updates...");
-  });
+//   autoUpdater.on("checking-for-update", () => {
+//     splash.webContents.send("splash-update", "Looking for updates...");
+//   });
 
-  autoUpdater.on("update-not-available", () => {
-    splash.webContents.send("splash-update", "No updates found");
-    createWindow();
-  });
+//   autoUpdater.on("update-not-available", () => {
+//     splash.webContents.send("splash-update", "No updates found");
+//     createWindow();
+//   });
 
-  autoUpdater.on("update-available", () => {
-    splash.webContents.send("splash-update", "New update found!");
-  });
+//   autoUpdater.on("update-available", () => {
+//     splash.webContents.send("splash-update", "New update found!");
+//   });
 
-  autoUpdater.on("update-downloaded", () => {
-    splash.webContents.send("splash-update", "Update completed!");
-    autoUpdater.quitAndInstall();
-  });
-}
+//   autoUpdater.on("update-downloaded", () => {
+//     splash.webContents.send("splash-update", "Update completed!");
+//     autoUpdater.quitAndInstall();
+//   });
+// }
 
 let settings: Settings;
 let APItoken = "";
 const ClientID = "p4dvj9r4r5jnih8uq373imda1n2v0j";
-const fullPath = path.join(process.env.APPDATA, "\\", "TwitchTrack-elctrn");
+let fullPath: string;
+if (process.platform === "win32") {
+  fullPath = path.join(process.env.APPDATA, "\\", "TwitchTrack-elctrn");
+}
+if (process.platform === "linux") {
+  fullPath = app.getPath("appData") + "/TwitchTrack-elctrn";
+}
 const streamers: StreamerResult[] = [];
 
 log.transports.file.level = "info";
@@ -88,7 +102,7 @@ const createWindow = (): void => {
     show: false,
     backgroundColor: "#262626",
     icon: "./images/Logo.ico",
-    frame: false,
+    frame: process.platform === "linux" ? true : false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -96,6 +110,7 @@ const createWindow = (): void => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
+  mainWindow.removeMenu();
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
@@ -108,11 +123,11 @@ const createWindow = (): void => {
     splash.destroy();
     mainWindow.show();
     mainWindow.webContents.send("get-version", app.getVersion());
+    mainWindow.webContents.send("os", process.platform);
   });
 
   mainWindow.webContents.on("before-input-event", (event, input) => {
     if (input.control && input.key.toLocaleLowerCase() === "s") {
-      console.log(mainWindow.getSize());
       const startSize = mainWindow.getSize();
       settings.StartSize.x = startSize[0];
       settings.StartSize.y = startSize[1];
@@ -142,7 +157,8 @@ const createSplash = (): void => {
   );
 
   if (app.isPackaged) {
-    autoUpdater.checkForUpdates();
+    // autoUpdater.checkForUpdates();
+    createWindow();
   } else {
     splash.webContents.openDevTools();
     setTimeout(() => {
@@ -213,23 +229,10 @@ function checkFiles() {
       }
     });
   }
-  if (!fs.existsSync(path.join(fullPath, "\\", "streamers.json"))) {
-    fs.writeFileSync(path.join(fullPath, "\\", "streamers.json"), "[]");
-  }
 
-  if (!fs.existsSync(path.join(fullPath, "\\", "settings.json"))) {
-    const settings: Settings = {
-      Token: "",
-      AutoStart: false,
-      StartSize: { x: 400, y: 600 },
-    };
-    const json = JSON.stringify(settings);
-    fs.writeFileSync(path.join(fullPath, "\\", "settings.json"), json);
-  }
-
-  settings = JSON.parse(
-    fs.readFileSync(path.join(fullPath, "\\", "settings.json"), "utf8")
-  );
+  AssureFileExists(fullPath, "streamers.json");
+  AssureSettingsExists();
+  settings = LoadSettings();
 
   let updatedSettings = false;
   if (!("Token" in settings)) {
@@ -247,7 +250,7 @@ function checkFiles() {
 
   if (updatedSettings) {
     const json = JSON.stringify(settings);
-    fs.writeFileSync(path.join(fullPath, "\\", "settings.json"), json);
+    WriteToFile("settings.json", json);
   }
 
   APItoken = settings.Token;
@@ -265,20 +268,20 @@ function checkFiles() {
 
 // Saves changes to settings (currently only APItoken).
 function saveSettings() {
-  const settingsPath = path.join(fullPath, "\\", "settings.json");
-  if (!fs.existsSync(settingsPath)) {
+  if (CheckIfExists("settings.json")) {
+    WriteToFile("settings.json", JSON.stringify(settings));
+  } else {
     const settings = { Token: "", AutoStart: false };
     const json = JSON.stringify(settings);
-    fs.writeFileSync(settingsPath, json);
+    WriteToFile("settings.json", json);
   }
-  fs.writeFileSync(settingsPath, JSON.stringify(settings));
 }
 
 // Updates streamers live status every minute.
 async function continousUpdate() {
   setInterval(async () => {
     if (streamers.length === 0) return;
-    const response: StreamResponse = await getStreamerStatus(streamers);
+    const response = await getStreamerStatus(streamers);
     if (response.data.length > 0) {
       mainWindow.webContents.send("awaitStatus", {
         tag: "update",
@@ -290,30 +293,25 @@ async function continousUpdate() {
 
 // Fetches an array of streamers related to the query in the URL.
 async function fetchStreamers(name: string): Promise<ChannelResponse> {
-  let result;
-  await fetch("https://api.twitch.tv/helix/search/channels?query=" + name, {
-    method: "GET",
-    headers: {
-      "client-id": ClientID,
-      Authorization: "Bearer " + APItoken,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      result = res;
-    })
-    .catch((err) => {
-      log.info("FetchStreamersError:", err);
-    });
+  const result = await fetch(
+    "https://api.twitch.tv/helix/search/channels?query=" + name,
+    {
+      method: "GET",
+      headers: {
+        "client-id": ClientID,
+        Authorization: "Bearer " + APItoken,
+      },
+    }
+  );
+  const data = (await result.json()) as ChannelResponse;
 
-  return result;
+  return { data: data.data };
 }
 
 // Fetches one or more streamers live status based on the given user-ids in the URL.
 async function getStreamerStatus(
   arg: StreamerResult[] | StreamerResult
 ): Promise<StreamResponse> {
-  let result;
   let url: string;
   if (Array.isArray(arg)) {
     url = `https://api.twitch.tv/helix/streams?user_id=${arg[0].id}`;
@@ -326,26 +324,21 @@ async function getStreamerStatus(
     url = `https://api.twitch.tv/helix/streams?user_id=${arg.id}`;
   }
 
-  try {
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        "client-id": ClientID,
-        Authorization: "Bearer " + APItoken,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        result = res;
-      })
-      .catch((err) => {
-        log.info("FetchError:", err);
-      });
-  } catch (error) {
-    log.info("GetStreamerStatusError:", error);
+  const data = await fetch(url, {
+    method: "GET",
+    headers: {
+      "client-id": ClientID,
+      Authorization: "Bearer " + APItoken,
+    },
+  });
+  if (data.ok) {
+    const res = (await data.json()) as StreamResponse;
+    return { data: res.data };
   }
 
-  return result;
+  log.info("getStreamerStatus unable to fetch data - " + data.status);
+  mainWindow.webContents.send("tokenMissing");
+  return { data: [] };
 }
 
 // Downloads streamers thumbnail images in base64 format.
@@ -383,18 +376,16 @@ ipcMain.handle("getSettings", async () => {
 ipcMain.handle("fetchChannels", async (event, data) => {
   const result: ChannelResponse = await fetchStreamers(data);
   const streamerArr: StreamerResult[] = [];
-
   let currentProgress = 1;
   const max = result.data.length;
   const responses = await Promise.all(
-    result.data.map((streamer: Channel) => {
-      return getImages(streamer.thumbnail_url).then((res) => {
-        mainWindow.webContents.send("progress", {
-          progress: currentProgress++,
-          max: max,
-        });
-        return Promise.resolve(res);
+    result.data.map(async (streamer: Channel) => {
+      const res = await getImages(streamer.thumbnail_url);
+      mainWindow.webContents.send("progress", {
+        progress: currentProgress++,
+        max: max,
       });
+      return await Promise.resolve(res);
     })
   );
   responses.forEach((res: { body: string }, index) => {
@@ -405,6 +396,7 @@ ipcMain.handle("fetchChannels", async (event, data) => {
     };
     streamerArr.push(streamer);
   });
+
   return streamerArr;
 });
 
@@ -453,7 +445,7 @@ ipcMain.on("openStream", (_, name: string) => {
   shell.openExternal(`https://twitch.tv/${name}`);
 });
 
-ipcMain.on("saveStreamer", async (event, data: StreamerResult[]) => {
+ipcMain.on("saveStreamer", async (_, data: StreamerResult[]) => {
   if (!fs.existsSync(fullPath)) {
     fs.mkdir(fullPath, (err) => {
       if (err) {
@@ -469,15 +461,10 @@ ipcMain.on("saveStreamer", async (event, data: StreamerResult[]) => {
   });
 
   const json = JSON.stringify(data);
-
-  fs.writeFile(path.join(fullPath, "\\", "streamers.json"), json, (err) => {
-    if (err) {
-      log.info("writeFileError2:", err);
-    }
-  });
+  WriteToFile("streamers.json", json);
 });
 
-ipcMain.on("deleteStreamer", async (event, data: StreamerResult) => {
+ipcMain.on("deleteStreamer", async (_, data: StreamerResult) => {
   for (let i = 0; i < streamers.length; i++) {
     if (streamers[i].id === data.id) {
       streamers.splice(i, 1);
@@ -485,35 +472,21 @@ ipcMain.on("deleteStreamer", async (event, data: StreamerResult) => {
   }
 
   const json = JSON.stringify(streamers);
-
-  fs.writeFile(path.join(fullPath, "\\", "streamers.json"), json, (err) => {
-    if (err) {
-      log.info("writeFileError3:", err);
-    }
-  });
+  WriteToFile("streamers.json", json);
 });
 
 // Waits for the renderer to call it. Then loads saved streamers and
 // fetches their live status which are then sent to the renderer.
 ipcMain.on("rendererReady", async () => {
-  const data = fs.readFileSync(
-    path.join(fullPath, "\\", "streamers.json"),
-    "utf8"
-  );
+  const data = ReadFile("streamers.json");
   const arr: StreamerResult[] = JSON.parse(data);
   if (arr.length > 0) {
     for (let i = 0; i < arr.length; i++) {
       streamers.push(arr[i]);
     }
     mainWindow.webContents.send("loadStreamers", streamers);
-    const response: any = await getStreamerStatus(streamers).catch((err) => {
-      log.info("FetchError:", err);
-    });
+    const response = await getStreamerStatus(streamers);
 
-    if (response.status && response.status === 401) {
-      mainWindow.webContents.send("tokenMissing");
-      return;
-    }
     if (response.data.length > 0) {
       mainWindow.webContents.send("awaitStatus", {
         tag: "!update",
