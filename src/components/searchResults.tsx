@@ -24,7 +24,7 @@ export function SearchResults(props: {
       className="search-results"
     >
       <div className="util-bar">
-        <p onClick={back}>Go back</p>
+        <p onClick={back}>Back</p>
       </div>
       {props.searchResults.map((result: StreamerResult, index: number) => {
         return (

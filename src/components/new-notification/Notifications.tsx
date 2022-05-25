@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "./Styles";
 import Notification from "./Notification";
+import { Notif } from "../../interfaces/StreamerContext";
+import { Action, createStore } from "redux";
+import store from "src/reduxStore";
 
-const Notifications = () => {
-  const [notifs, setNotifs] = useState<{ name: string; online: boolean }[]>([
-    { name: "Sodapoppin", online: true },
-    { name: "Maya", online: false },
-    { name: "NmpLol", online: true },
-    { name: "Northernlion", online: false },
-  ]);
+const Notifications = (props: {
+  notifs: Notif[];
+  destroyNotifs: () => void;
+}) => {
+  const { notifs, destroyNotifs } = props;
   const [totalNotifs, setTotalNotifs] = useState<number>(0);
+
+  store.subscribe(() => console.log("update", store.getState()));
 
   useEffect(() => {
     setTotalNotifs(notifs.length);
@@ -20,7 +23,7 @@ const Notifications = () => {
         }, 1500 * i);
       }
       setTimeout(() => {
-        setNotifs([]);
+        destroyNotifs();
       }, 1500 * notifs.length);
     }, 5000);
   }, [notifs]);
@@ -31,7 +34,7 @@ const Notifications = () => {
         <Notification
           key={index}
           name={notif.name}
-          online={notif.online}
+          online={notif.live}
           index={index}
           total={totalNotifs}
         />

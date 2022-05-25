@@ -11,13 +11,13 @@ import {
 import { StreamerContainer } from "./streamerContainer";
 import { NotificationsView } from "./NotificationsView";
 import { ContextMenu } from "./ContextMenu";
-// import { Notifications } from "./Notifications";
 import { Settings } from "./Settings";
 import Logo from "../svg/TwitchTrackSVG.svg";
 import Cog from "../svg/Cog.svg";
 import Bell from "../svg/Bell.svg";
 import Check from "../svg/Check.svg";
 import Notifications from "./new-notification/Notifications";
+import store from "./";
 
 export function MainWindow() {
   // Array that contains all the results when searching for streamers to add.
@@ -39,22 +39,16 @@ export function MainWindow() {
     mainPage: true,
     notificationsPage: false,
   });
+
   // Boolean state for whether to show search results or not.
   const [toggleSearch, setToggleSearch] = useState<boolean>(false);
-  // Boolean state for whether the offline streamers should be visible or not.
   const [hideOffline, toggleOffline] = useState(false);
-  // Boolean state for whether the notifications should should be visible or not.
   const [showNotifications, toggleNotifications] = useState<boolean>(false);
-  // Boolean state for whether there are notifications that happened when the app was not visible.
   const [unseenNotif, setUnseenNotif] = useState<boolean>(false);
-  // Boolean state for whether the API Token is expired or missing.
   const [tokenMissing, setTokenMissing] = useState<boolean>(false);
-  // Boolean state for whether the search bar should be visible or not.
   const [hideSearchBar, toggleSearchBar] = useState<boolean>(false);
-  // Boolean state for whether to show the settings window.
   const [settings, toggleSettings] = useState<boolean>(false);
   const [savedSize, setSavedSize] = useState<boolean>(false);
-  // State for the search bar value.
   const [search, setSearch] = useState<string>("");
   const [platform, setPlatform] = useState<"win32" | "linux">("win32");
 
@@ -65,6 +59,10 @@ export function MainWindow() {
     setResultArr(response);
     setToggleSearch(true);
   }
+
+  const destroyNotifs = () => {
+    setNotifs([]);
+  };
 
   // Toggles the tokenMissing state if the current token is empty or expired.
   useEffect(() => {
@@ -83,6 +81,8 @@ export function MainWindow() {
     window.api.os("os", (os: "win32" | "linux") => {
       setPlatform(os);
     });
+
+    store.dispatch({ type: "NOTIF", text: "Sodapoppin", color: "green" });
   }, []);
 
   return (
@@ -143,7 +143,7 @@ export function MainWindow() {
               {`OAuth token is either empty or expired`}
             </div>
           )}
-          <Notifications />
+          <Notifications notifs={notifs} destroyNotifs={destroyNotifs} />
           <NotificationsView
             notifs={notifs}
             showNotifications={showNotifications}
