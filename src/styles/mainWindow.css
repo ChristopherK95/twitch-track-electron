@@ -202,3 +202,27 @@
     transform: rotate(0deg);
   }
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: #1c1d1e;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-track {
+  border: 5px solid #1c1d1e;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5e5e5e;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #828181;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #343434;
+}

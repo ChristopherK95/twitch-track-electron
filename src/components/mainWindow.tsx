@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SearchBar } from "./searchBar";
-import { SearchResults } from "./searchResults";
+// import { SearchResults } from "./searchResults";
 import "../styles/mainWindow.css";
 import {
   StreamerResult,
@@ -21,6 +21,7 @@ import Notifications from "./new-notification/Notifications";
 import { useDispatch } from "react-redux";
 import { addNotif } from "../actions/notifActions";
 import { SpinnerCircular } from "spinners-react";
+import { SearchResults } from "./search-results/SearchResults";
 
 export function MainWindow() {
   const dispatch = useDispatch();
@@ -58,10 +59,10 @@ export function MainWindow() {
 
   // Makes an API request to Twitch for channels/streamers that match given search param.
   async function fetchStreamers(name: string) {
-    const response = await window.api.fetchChannels("fetchChannels", name);
     setResultArr([]);
-    setResultArr(response);
     setToggleSearch(true);
+    const response = await window.api.fetchChannels("fetchChannels", name);
+    setResultArr(response);
   }
 
   // Toggles the tokenMissing state if the current token is empty or expired.
@@ -83,6 +84,10 @@ export function MainWindow() {
       setPlatform(os);
     });
   }, []);
+
+  useEffect(() => {
+    console.log(savedStreamers);
+  }, [savedStreamers]);
 
   return (
     <div className="main-window">

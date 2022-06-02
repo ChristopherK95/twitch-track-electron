@@ -1,8 +1,8 @@
 import React from "react";
-import { StreamerResult } from "../interfaces/StreamerContext";
-import { SearchResult } from "./searchResult";
-import "../styles/searchResults.css";
+import { StreamerResult } from "../../interfaces/StreamerContext";
 import { SpinnerCircular } from "spinners-react";
+import { Container, StyledLabel, StyledUtilBar } from "./Styles";
+import { SearchResult } from "./SearchResult";
 
 export function SearchResults(props: {
   searchResults: StreamerResult[];
@@ -31,13 +31,15 @@ export function SearchResults(props: {
   }
 
   return (
-    <div
-      style={{ display: `${props.toggleSearch ? "flex" : "none"}` }}
-      className="search-results"
+    <Container
+      animate={{
+        height: props.searchResults.length * 58,
+      }}
+      visible={props.toggleSearch}
     >
-      <div className="util-bar">
-        <p onClick={back}>Back</p>
-      </div>
+      <StyledUtilBar>
+        <StyledLabel onClick={back}>Back</StyledLabel>
+      </StyledUtilBar>
       {props.searchResults.map((result: StreamerResult, index: number) => {
         return (
           <SearchResult
@@ -48,6 +50,6 @@ export function SearchResults(props: {
           />
         );
       })}
-    </div>
+    </Container>
   );
 }
