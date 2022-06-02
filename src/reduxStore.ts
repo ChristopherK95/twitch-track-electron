@@ -1,24 +1,8 @@
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
+import notifReducer from "./reducers/notifReducer";
 
-const initState = {
-  notifs: [{ text: "", color: "" }],
-};
+export const store = configureStore({
+  reducer: { notifs: notifReducer },
+});
 
-const reducer = (
-  state = initState,
-  action: { type: string; text: string; color: string }
-) => {
-  switch (action.type) {
-    case "NOTIF":
-      return {
-        ...state,
-        notifs: [{ text: action.text, color: action.color }],
-      };
-    default:
-      return state;
-  }
-};
-
-const store = createStore(reducer);
-
-export default store;
+export type RootState = ReturnType<typeof store.getState>;

@@ -4,7 +4,7 @@ export const Container = styled.div`
   position: absolute;
   top: 10px;
   right: 20px;
-  width: 135px;
+  width: 200px;
   height: fit-content;
   display: flex;
   flex-direction: column;
@@ -17,15 +17,13 @@ export const StyledNotification = styled.div<{
   online: boolean;
   index: number;
   total: number;
+  position: number;
 }>`
   position: absolute;
-  top: 0;
-  right: ${(p) => (p.index + p.total - 4 < 0 ? -180 : 0)}px;
-  transform: translateY(
-    ${(p) => (p.index + p.total - 4 < 0 ? 0 : 45 * (p.index + p.total - 4))}px
-  );
+  top: ${(p) => (p.position === -1 ? 0 : p.position * 45)}px;
+  right: ${(p) => (p.position === -1 ? `calc(-100% - 30px)` : 0)};
   display: flex;
-  width: 100%;
+  width: fit-content;
   height: 35px;
   background-color: ${(p) => (p.online ? "#00c368" : "#606362")};
   border-radius: 3px;
@@ -38,12 +36,12 @@ export const StyledNotification = styled.div<{
   text-overflow: ellipsis;
   white-space: nowrap;
   justify-content: flex-start;
-  transition: transform 0.6s ease 0.6s, right 0.3s ease 0.3s;
+  transition: top 0.5s ease 0.3s, right 0.3s ease 0.2s;
 `;
 
 export const StyledText = styled.p`
   color: white;
-  font-size: 18px;
+  font-size: 14px;
   font-family: system-ui;
   font-weight: bold;
   margin: 0;

@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { StreamerResult, LiveStreamer } from "../interfaces/StreamerContext";
 import Viewers from "../svg/Viewers.svg";
 import "../styles/streamer.css";
+import Tooltip from "./tooltip/Tooltip";
+import Category from "./streamer/Category";
+import Img from "./streamer/Img";
 
 export function Streamer(props: {
   streamer: StreamerResult;
@@ -17,6 +20,7 @@ export function Streamer(props: {
   const [changedCategory, toggleChangedCategory] = useState<boolean>();
   const tooltipRef = useRef(null);
   const titleRef = useRef(null);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   let time;
 
@@ -53,6 +57,10 @@ export function Streamer(props: {
     window.api.openStream("openStream", props.streamer.name);
   }
 
+  const toggleTooltip = (hover: boolean) => {
+    setShowTooltip(hover);
+  };
+
   useEffect(() => {
     if (props.liveStreamer === undefined) return;
     if (props.liveStreamer.viewers > 999) {
@@ -85,42 +93,22 @@ export function Streamer(props: {
       }`}
       onContextMenu={spawnContext}
     >
-      <img src={props.streamer.imgUrl} alt="" />
+      <Img url={props.streamer.imgUrl} />
       <div className="container">
         <h1 className="name" onClick={openStream}>
           {props.streamer.name}
         </h1>
-        <h2 className={`category ${changedCategory ? "category-changed" : ""}`}>
-          {props.liveStreamer !== undefined
-            ? props.liveStreamer.category
-            : "Offline"}
-        </h2>
+        <Category
+          hover={toggleTooltip}
+          category={props.liveStreamer?.category}
+          offline={props.liveStreamer ? false : true}
+        />
         {props.liveStreamer && (
-          <div ref={tooltipRef} className="tooltip">
-            <p className="t-category">
-              {props.liveStreamer && props.liveStreamer.category}
-            </p>
-            <div
-              className="marquee"
-              style={{
-                animation: `marquee ${
-                  props.liveStreamer.title.length * 0.14
-                }s linear infinite alternate`,
-              }}
-            >
-              <p
-                ref={titleRef}
-                className="t-title"
-                style={{
-                  animation: `marquee-content ${
-                    props.liveStreamer.title.length * 0.14
-                  }s linear infinite alternate`,
-                }}
-              >
-                {props.liveStreamer && props.liveStreamer.title}
-              </p>
-            </div>
-          </div>
+          <Tooltip
+            category={props.liveStreamer?.category}
+            title={props.liveStreamer?.title}
+            visible={showTooltip}
+          />
         )}
       </div>
       <div className="status">

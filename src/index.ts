@@ -135,6 +135,10 @@ const createWindow = (): void => {
       saveSettings();
       event.preventDefault();
     }
+    if (input.control && input.key.toLocaleLowerCase() === "r") {
+      app.relaunch();
+      app.quit();
+    }
   });
 };
 
@@ -342,7 +346,7 @@ async function getStreamerStatus(
 }
 
 // Downloads streamers thumbnail images in base64 format.
-function getImages(url: string) {
+async function getImages(url: string) {
   return new Promise((resolve) => {
     return https.get(url, (res) => {
       res.setEncoding("base64");
@@ -373,7 +377,7 @@ ipcMain.handle("getSettings", async () => {
   return settings;
 });
 
-ipcMain.handle("fetchChannels", async (event, data) => {
+ipcMain.handle("fetchChannels", async (_, data) => {
   const result: ChannelResponse = await fetchStreamers(data);
   const streamerArr: StreamerResult[] = [];
   let currentProgress = 1;

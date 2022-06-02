@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { StreamerResult, StreamResponse } from "./interfaces/StreamerContext";
+import {
+  Platform,
+  StreamerResult,
+  StreamResponse,
+} from "./interfaces/StreamerContext";
 
 contextBridge.exposeInMainWorld("api", {
   ///////////////////////
@@ -94,7 +98,7 @@ contextBridge.exposeInMainWorld("api", {
     }
   },
 
-  os: (channel: "win32" | "linux", func: (os: string) => void) => {
+  os: (channel: "win32" | "linux", func: (os: Platform) => void) => {
     const validChannels = ["os"];
     if (validChannels.includes(channel)) {
       ipcRenderer.once(channel, (_, args) => func(args));

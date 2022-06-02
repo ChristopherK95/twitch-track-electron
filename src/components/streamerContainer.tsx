@@ -10,6 +10,8 @@ import "../styles/streamerContainer.css";
 import NotifFx from "../audio/NotificationSound.wav";
 import Plus from "../svg/Plus.svg";
 import Dash from "../svg/Dash.svg";
+import { useDispatch } from "react-redux";
+import { addNotif } from "../actions/notifActions";
 
 export function StreamerContainer(props: {
   savedStreamers: StreamerResult[];
@@ -30,6 +32,7 @@ export function StreamerContainer(props: {
   const [updatedStreamers, setUpdatedStreamers] = useState<LiveStreamer[]>([]);
   const [notify, toggleNotify] = useState(false);
   const notifFx = new Audio(NotifFx);
+  const dispatch = useDispatch();
 
   function getDiff() {
     const onlineDiff = updatedStreamers.filter(
@@ -71,7 +74,11 @@ export function StreamerContainer(props: {
     }
     if (notifArr.length === 0) return;
     notifFx.play();
-    props.setNotifs(notifArr);
+
+    for (let i = 0; i < notifArr.length; i++) {
+      dispatch(addNotif({ name: notifArr[i].name, live: notifArr[i].live }));
+    }
+    // props.setNotifs(notifArr);
   }
 
   function hideOffline() {

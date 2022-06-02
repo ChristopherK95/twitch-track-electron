@@ -2,6 +2,7 @@ import React from "react";
 import { StreamerResult } from "../interfaces/StreamerContext";
 import { SearchResult } from "./searchResult";
 import "../styles/searchResults.css";
+import { SpinnerCircular } from "spinners-react";
 
 export function SearchResults(props: {
   searchResults: StreamerResult[];
@@ -16,6 +17,18 @@ export function SearchResults(props: {
     props.setToggleSearch(false);
     props.setArr([]);
     props.setSearch("");
+  }
+
+  if (props.searchResults.length === 0) {
+    console.log("yo");
+
+    return (
+      <SpinnerCircular
+        color={"#17d963"}
+        secondaryColor={"#4D4D4D"}
+        size={150}
+      />
+    );
   }
 
   return (

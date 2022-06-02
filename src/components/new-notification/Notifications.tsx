@@ -1,42 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container } from "./Styles";
 import Notification from "./Notification";
-import { Notif } from "../../interfaces/StreamerContext";
-import { Action, createStore } from "redux";
-import store from "src/reduxStore";
+import { RootState } from "../../reduxStore";
+import { useSelector } from "react-redux";
 
-const Notifications = (props: {
-  notifs: Notif[];
-  destroyNotifs: () => void;
-}) => {
-  const { notifs, destroyNotifs } = props;
-  const [totalNotifs, setTotalNotifs] = useState<number>(0);
-
-  store.subscribe(() => console.log("update", store.getState()));
-
-  useEffect(() => {
-    setTotalNotifs(notifs.length);
-    setTimeout(() => {
-      for (let i = 0; i < notifs.length; i++) {
-        setTimeout(() => {
-          setTotalNotifs((total) => total - 1);
-        }, 1500 * i);
-      }
-      setTimeout(() => {
-        destroyNotifs();
-      }, 1500 * notifs.length);
-    }, 5000);
-  }, [notifs]);
+const Notifications = () => {
+  const notifs = useSelector((state: RootState) => state.notifs.notifs);
 
   return (
     <Container>
-      {notifs.map((notif, index) => (
+      {notifs.map((notif, i) => (
         <Notification
-          key={index}
+          key={notif.id}
           name={notif.name}
           online={notif.live}
-          index={index}
-          total={totalNotifs}
+          index={i}
+          total={notifs.length}
+          id={notif.id}
         />
       ))}
     </Container>

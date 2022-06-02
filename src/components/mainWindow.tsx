@@ -7,6 +7,7 @@ import {
   Notif,
   LiveStreamer,
   Pages,
+  Platform,
 } from "../interfaces/StreamerContext";
 import { StreamerContainer } from "./streamerContainer";
 import { NotificationsView } from "./NotificationsView";
@@ -17,9 +18,12 @@ import Cog from "../svg/Cog.svg";
 import Bell from "../svg/Bell.svg";
 import Check from "../svg/Check.svg";
 import Notifications from "./new-notification/Notifications";
-import store from "./";
+import { useDispatch } from "react-redux";
+import { addNotif } from "../actions/notifActions";
+import { SpinnerCircular } from "spinners-react";
 
 export function MainWindow() {
+  const dispatch = useDispatch();
   // Array that contains all the results when searching for streamers to add.
   const [resultArr, setResultArr] = useState<StreamerResult[]>([]);
   // Array that contains all saved streamers.
@@ -50,7 +54,7 @@ export function MainWindow() {
   const [settings, toggleSettings] = useState<boolean>(false);
   const [savedSize, setSavedSize] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
-  const [platform, setPlatform] = useState<"win32" | "linux">("win32");
+  const [platform, setPlatform] = useState<Platform>(Platform.windows);
 
   // Makes an API request to Twitch for channels/streamers that match given search param.
   async function fetchStreamers(name: string) {
@@ -60,10 +64,6 @@ export function MainWindow() {
     setToggleSearch(true);
   }
 
-  const destroyNotifs = () => {
-    setNotifs([]);
-  };
-
   // Toggles the tokenMissing state if the current token is empty or expired.
   useEffect(() => {
     window.api.tokenMissing("tokenMissing", () => {
@@ -72,17 +72,16 @@ export function MainWindow() {
 
     window.api.savedSize("saved-size", () => {
       setSavedSize(true);
-      console.log("Saved size");
+      dispatch(addNotif({ name: "Saved windows size", live: true }));
+
       setTimeout(() => {
         setSavedSize(false);
       }, 3000);
     });
 
-    window.api.os("os", (os: "win32" | "linux") => {
+    window.api.os("os", (os: Platform) => {
       setPlatform(os);
     });
-
-    store.dispatch({ type: "NOTIF", text: "Sodapoppin", color: "green" });
   }, []);
 
   return (
@@ -143,7 +142,7 @@ export function MainWindow() {
               {`OAuth token is either empty or expired`}
             </div>
           )}
-          <Notifications notifs={notifs} destroyNotifs={destroyNotifs} />
+          <Notifications />
           <NotificationsView
             notifs={notifs}
             showNotifications={showNotifications}
@@ -173,12 +172,12 @@ export function MainWindow() {
               </i>
               <i
                 className="bell"
-                onClick={() =>
+                onClick={() => {
                   setPages({
                     mainPage: false,
                     notificationsPage: true,
-                  })
-                }
+                  });
+                }}
               >
                 <Bell />
               </i>
@@ -195,27 +194,37 @@ export function MainWindow() {
               search={search}
               setSearch={setSearch}
             />
-            <StreamerContainer
-              savedStreamers={savedStreamers}
-              setSavedStreamers={setSavedStreamers}
-              liveStreamers={liveStreamers}
-              setLiveStreamers={setLiveStreamers}
-              toggleSearch={toggleSearch}
-              hideOffline={hideOffline}
-              toggleOffline={toggleOffline}
-              context={toggleContextMenu}
-              setNotifs={setNotifs}
-              show={showNotifications ? "right" : ""}
-            />
-            <SearchResults
-              searchResults={resultArr}
-              toggleSearch={toggleSearch}
-              setToggleSearch={setToggleSearch}
-              setArr={setResultArr}
-              savedStreamers={savedStreamers}
-              saveStreamer={setSavedStreamers}
-              setSearch={setSearch}
-            />
+            {savedStreamers ? (
+              <>
+                <StreamerContainer
+                  savedStreamers={savedStreamers}
+                  setSavedStreamers={setSavedStreamers}
+                  liveStreamers={liveStreamers}
+                  setLiveStreamers={setLiveStreamers}
+                  toggleSearch={toggleSearch}
+                  hideOffline={hideOffline}
+                  toggleOffline={toggleOffline}
+                  context={toggleContextMenu}
+                  setNotifs={setNotifs}
+                  show={showNotifications ? "right" : ""}
+                />
+                <SearchResults
+                  searchResults={resultArr}
+                  toggleSearch={toggleSearch}
+                  setToggleSearch={setToggleSearch}
+                  setArr={setResultArr}
+                  savedStreamers={savedStreamers}
+                  saveStreamer={setSavedStreamers}
+                  setSearch={setSearch}
+                />
+              </>
+            ) : (
+              <SpinnerCircular
+                color={"#17d963"}
+                secondaryColor={"#4D4D4D"}
+                size={150}
+              />
+            )}
           </div>
         </div>
       </div>

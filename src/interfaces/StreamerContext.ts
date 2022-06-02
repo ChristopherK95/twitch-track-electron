@@ -61,9 +61,15 @@ export interface Stream {
 export interface Notif {
   name: string;
   live: boolean;
+  id: string;
 }
 
 export interface Pages {
   mainPage: boolean;
   notificationsPage: boolean;
+}
+
+export enum Platform {
+  windows = "win32",
+  linux = "linux",
 }
