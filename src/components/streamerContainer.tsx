@@ -3,22 +3,22 @@ import {
   StreamerResult,
   LiveStreamer,
   StreamResponse,
-  Notif,
+  State,
 } from "../interfaces/StreamerContext";
 import { Streamer } from "./Streamer";
 import "../styles/streamerContainer.css";
 import NotifFx from "../audio/NotificationSound.wav";
 import Plus from "../svg/Plus.svg";
 import Dash from "../svg/Dash.svg";
-import { useDispatch } from "react-redux";
-import { addNotif } from "../actions/notifActions";
+import { useDispatch, useSelector } from "react-redux";
+import { addNotif, addNotifHistory } from "../actions/notifActions";
+import { RootState } from "../reduxStore";
 
 export function StreamerContainer(props: {
   savedStreamers: StreamerResult[];
   setSavedStreamers: (streamers: StreamerResult[]) => void;
   liveStreamers: LiveStreamer[];
   setLiveStreamers: (streamers: LiveStreamer[]) => void;
-  toggleSearch: boolean;
   hideOffline: boolean;
   toggleOffline: (hideOffline: boolean) => void;
   context: (context: {
@@ -26,9 +26,8 @@ export function StreamerContainer(props: {
     name: string;
     pos: { x: number; y: number };
   }) => void;
-  setNotifs: (notifs: Notif[]) => void;
-  show: string;
 }) {
+  const state = useSelector((state: RootState) => state.state.state);
   const [updatedStreamers, setUpdatedStreamers] = useState<LiveStreamer[]>([]);
   const [notify, toggleNotify] = useState(false);
   const notifFx = new Audio(NotifFx);
@@ -75,11 +74,28 @@ export function StreamerContainer(props: {
     if (notifArr.length === 0) return;
     notifFx.play();
 
+    const date = new Date();
     for (let i = 0; i < notifArr.length; i++) {
       dispatch(addNotif({ name: notifArr[i].name, live: notifArr[i].live }));
+      dispatch(
+        addNotifHistory({
+          name: notifArr[i].name,
+          live: notifArr[i].live,
+          time: parseDate(date),
+        })
+      );
     }
-    // props.setNotifs(notifArr);
   }
+
+  const parseDate = (date: Date): string => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const time = `${hours > 9 ? hours : "0" + hours}:${
+      minutes > 9 ? minutes : "0" + minutes
+    }`;
+
+    return time;
+  };
 
   function hideOffline() {
     props.toggleOffline(!props.hideOffline);
@@ -131,8 +147,8 @@ export function StreamerContainer(props: {
 
   return (
     <div
-      style={{ display: `${!props.toggleSearch ? "flex" : "none"}` }}
-      className={`streamer-container ${props.show}`}
+      style={{ display: `${state === State.main ? "flex" : "none"}` }}
+      className={"streamer-container"}
     >
       {props.savedStreamers.length > 0 ? (
         <div className="section-container">

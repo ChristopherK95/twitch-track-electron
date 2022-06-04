@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { StreamerResult, LiveStreamer } from "../interfaces/StreamerContext";
 import Viewers from "../svg/Viewers.svg";
 import "../styles/streamer.css";
@@ -18,8 +18,6 @@ export function Streamer(props: {
   const [viewers, setViewers] = useState<string>();
   const [prevCategory, setPrevCategory] = useState<string>("");
   const [changedCategory, toggleChangedCategory] = useState<boolean>();
-  const tooltipRef = useRef(null);
-  const titleRef = useRef(null);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   let time;

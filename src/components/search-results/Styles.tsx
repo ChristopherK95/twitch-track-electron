@@ -4,45 +4,13 @@ import styled from "styled-components";
 export const Container = styled(motion.div)<{ visible: boolean }>`
   width: 100%;
   height: max-content;
-  visibility: ${(p) => (p.visible ? "visible" : "hidden")};
-  display: flex;
+  display: ${(p) => (p.visible ? "flex" : "none")};
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 10px;
   margin-top: 10px;
   overflow-y: hidden;
-`;
-
-export const StyledUtilBar = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 5px;
-  position: absolute;
-  top: 5px;
-`;
-
-export const StyledLabel = styled.p`
-  margin: 0;
-  margin-top: 5px;
-  color: rgb(201, 201, 201);
-  font-family: system-ui;
-  font-weight: bold;
-  margin-bottom: 5px;
-  cursor: pointer;
-  border-radius: 3px;
-  background-color: #cecece2d;
-  padding: 5px;
-  opacity: 0.7;
-  /* position: absolute; */
-  /* top: 5px; */
-  transition: all 0.3s;
-
-  :hover {
-    color: white;
-    opacity: 1;
-  }
 `;
 
 //////////////////
@@ -69,7 +37,7 @@ export const StyledResult = styled.div`
 export const StyledImg = styled.img`
   width: 50px;
   height: 50px;
-  border-radius: 5px;
+  border-radius: 3px 0 0 3px;
   margin-right: 15px;
 `;
 

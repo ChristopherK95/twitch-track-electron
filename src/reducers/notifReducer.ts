@@ -1,10 +1,16 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { Notif } from "../interfaces/StreamerContext";
-import { addNotif, deleteNotif } from "../actions/notifActions";
+import { Notif, SavedNotif } from "../interfaces/StreamerContext";
+import {
+  addNotif,
+  deleteNotif,
+  addNotifHistory,
+  deleteAllHistory,
+} from "../actions/notifActions";
 import { nanoid } from "nanoid";
 
-const initialState: { notifs: Notif[] } = {
+const initialState: { notifs: Notif[]; notifHistory: SavedNotif[] } = {
   notifs: [],
+  notifHistory: [],
 };
 
 const notifReducer = createReducer(initialState, (builder) => {
@@ -16,6 +22,12 @@ const notifReducer = createReducer(initialState, (builder) => {
       state.notifs = state.notifs.filter(
         (notif) => notif.id !== action.payload
       );
+    })
+    .addCase(addNotifHistory, (state, action) => {
+      state.notifHistory.push({ ...action.payload, id: nanoid() });
+    })
+    .addCase(deleteAllHistory, (state) => {
+      state.notifHistory = [];
     });
 });
 

@@ -6,29 +6,29 @@ const Category = (props: {
   offline: boolean;
   hover: (hover: boolean) => void;
 }) => {
-  if (props.offline) {
-    return <StyledCategory offline>Offline</StyledCategory>;
-  }
+	if (props.offline) {
+		return <StyledCategory offline>Offline</StyledCategory>;
+	}
 
-  if (!props.category) {
-    return (
-      <StyledCategory
-        onMouseEnter={() => props.hover(true)}
-        onMouseLeave={() => props.hover(false)}
-      >
+	if (!props.category) {
+		return (
+			<StyledCategory
+				onMouseEnter={() => props.hover(true)}
+				onMouseLeave={() => props.hover(false)}
+			>
         No category
-      </StyledCategory>
-    );
-  }
+			</StyledCategory>
+		);
+	}
 
-  return (
-    <StyledCategory
-      onMouseEnter={() => props.hover(true)}
-      onMouseLeave={() => props.hover(false)}
-    >
-      {props.category}
-    </StyledCategory>
-  );
+	return (
+		<StyledCategory
+			onMouseEnter={() => props.hover(true)}
+			onMouseLeave={() => props.hover(false)}
+		>
+			{props.category}
+		</StyledCategory>
+	);
 };
 
 export default Category;

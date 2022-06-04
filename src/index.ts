@@ -6,6 +6,7 @@ import {
   Channel,
   StreamResponse,
   Settings,
+  Platform,
 } from "./interfaces/StreamerContext";
 import { OAuth } from "./OAuth";
 import https from "https";
@@ -31,7 +32,7 @@ if (require("electron-squirrel-startup")) {
   // eslint-disable-line global-require
   app.quit();
 }
-if (process.platform === "win32") {
+if (process.platform === Platform.windows) {
   app.setAppUserModelId(app.name);
 }
 let mainWindow: BrowserWindow;
@@ -72,7 +73,7 @@ let settings: Settings;
 let APItoken = "";
 const ClientID = "p4dvj9r4r5jnih8uq373imda1n2v0j";
 let fullPath: string;
-if (process.platform === "win32") {
+if (process.platform === Platform.windows) {
   fullPath = path.join(process.env.APPDATA, "\\", "TwitchTrack-elctrn");
 }
 if (process.platform === "linux") {
@@ -485,6 +486,7 @@ ipcMain.on("rendererReady", async () => {
   const data = ReadFile("streamers.json");
   const arr: StreamerResult[] = JSON.parse(data);
   if (arr.length > 0) {
+    mainWindow.webContents.send("loading", true);
     for (let i = 0; i < arr.length; i++) {
       streamers.push(arr[i]);
     }
@@ -496,6 +498,7 @@ ipcMain.on("rendererReady", async () => {
         tag: "!update",
         data: response,
       });
+      mainWindow.webContents.send("loading", false);
     }
   }
   if (APItoken === "") {

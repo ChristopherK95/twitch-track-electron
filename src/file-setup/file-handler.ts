@@ -1,5 +1,6 @@
 import { app } from "electron";
 import fs from "fs";
+import { Platform } from "../interfaces/StreamerContext";
 import path from "path";
 
 export interface Settings {
@@ -43,7 +44,7 @@ const GetPath = (): string => {
   if (process.platform === "linux") {
     return app.getPath("appData") + "/TwitchTrack-elctrn/";
   }
-  if (process.platform === "win32") {
+  if (process.platform === Platform.windows) {
     return path.join(process.env.APPDATA, "\\", "TwitchTrack-elctrn\\");
   }
 };

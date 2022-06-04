@@ -33,6 +33,13 @@ contextBridge.exposeInMainWorld("api", {
   // On functions. //
   ///////////////////
 
+  loading: (channel: string, func: (isLoading: boolean) => void) => {
+    const validChannels = ["laoding"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (_, args) => func(args));
+    }
+  },
+
   savedSize: (channel: string, func: () => void) => {
     const validChannels = ["saved-size"];
     if (validChannels.includes(channel)) {
@@ -98,7 +105,7 @@ contextBridge.exposeInMainWorld("api", {
     }
   },
 
-  os: (channel: "win32" | "linux", func: (os: Platform) => void) => {
+  os: (channel: Platform, func: (os: Platform) => void) => {
     const validChannels = ["os"];
     if (validChannels.includes(channel)) {
       ipcRenderer.once(channel, (_, args) => func(args));

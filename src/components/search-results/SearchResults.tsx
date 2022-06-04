@@ -1,25 +1,21 @@
 import React from "react";
-import { StreamerResult } from "../../interfaces/StreamerContext";
+import { State, StreamerResult } from "../../interfaces/StreamerContext";
 import { SpinnerCircular } from "spinners-react";
-import { Container, StyledLabel, StyledUtilBar } from "./Styles";
+import { Container } from "./Styles";
 import { SearchResult } from "./SearchResult";
+import { RootState } from "../../reduxStore";
+import { useSelector } from "react-redux";
 
 export function SearchResults(props: {
   searchResults: StreamerResult[];
-  toggleSearch: boolean;
-  setToggleSearch: (bool: boolean) => void;
   setArr: (arr: StreamerResult[]) => void;
   savedStreamers: StreamerResult[];
   saveStreamer: (arr: StreamerResult[]) => void;
   setSearch: (val: string) => void;
 }) {
-  function back() {
-    props.setToggleSearch(false);
-    props.setArr([]);
-    props.setSearch("");
-  }
+  const state = useSelector((state: RootState) => state.state.state);
 
-  if (props.searchResults.length === 0 && props.toggleSearch) {
+  if (props.searchResults.length === 0 && state === State.search) {
     return (
       <SpinnerCircular
         color={"#17d963"}
@@ -32,14 +28,13 @@ export function SearchResults(props: {
 
   return (
     <Container
+      initial={{ height: 0 }}
       animate={{
         height: props.searchResults.length * 58,
       }}
-      visible={props.toggleSearch}
+      transition={{ type: "spring", stiffness: 110, duration: 1 }}
+      visible={state === State.search}
     >
-      <StyledUtilBar>
-        <StyledLabel onClick={back}>Back</StyledLabel>
-      </StyledUtilBar>
       {props.searchResults.map((result: StreamerResult, index: number) => {
         return (
           <SearchResult

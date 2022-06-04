@@ -64,6 +64,13 @@ export interface Notif {
   id: string;
 }
 
+export interface SavedNotif {
+  id: string;
+  name: string;
+  live: boolean;
+  time: string;
+}
+
 export interface Pages {
   mainPage: boolean;
   notificationsPage: boolean;
@@ -72,4 +79,11 @@ export interface Pages {
 export enum Platform {
   windows = "win32",
   linux = "linux",
+}
+
+export enum State {
+  main = "main",
+  search = "search",
+  settings = "settings",
+  notifications = "notifications",
 }

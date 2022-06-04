@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { StreamerResult, LiveStreamer } from "../interfaces/StreamerContext";
 import "../styles/contextMenu.css";
 
@@ -14,7 +14,7 @@ export function ContextMenu(props: {
   liveStreamers: LiveStreamer[];
   setLiveStreamers: (streamers: LiveStreamer[]) => void;
 }) {
-  const contextRef = useRef(null);
+  const contextRef = useRef({} as HTMLDivElement);
 
   function deleteStreamer() {
     // Checks if streamer is currently live and removes them from liveStreamers first if true.
@@ -43,7 +43,7 @@ export function ContextMenu(props: {
     props.setContext({ show: false, name: "", pos: { x: 0, y: 0 } });
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     contextRef.current.focus();
   }, [props.context]);
 

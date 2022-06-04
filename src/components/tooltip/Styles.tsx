@@ -12,8 +12,11 @@ export const Container = styled.div<{ visible: boolean }>`
   bottom: 35px;
   left: 50px;
   visibility: ${(p) => (p.visible ? "visible" : "hidden")};
+  opacity: ${(p) => (p.visible ? 1 : 0)};
   pointer-events: none;
   z-index: 1000;
+
+  ${(p) => p.visible && "transition: opacity 0.2s ease 0.5s;"}
 
   ::after {
     content: "";
