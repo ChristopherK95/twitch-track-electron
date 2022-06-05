@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import {
+  AppInfo,
   Platform,
   StreamerResult,
   StreamResponse,
@@ -26,6 +27,13 @@ contextBridge.exposeInMainWorld("api", {
     const validChannels = ["getNewToken"];
     if (validChannels.includes(channel)) {
       return await ipcRenderer.invoke(channel);
+    }
+  },
+
+  getAppInfo: async (channel: string, args: AppInfo) => {
+    const validChannels = ["getAppInfo"];
+    if (validChannels.includes(channel)) {
+      return await ipcRenderer.invoke(channel, args);
     }
   },
 
@@ -105,16 +113,30 @@ contextBridge.exposeInMainWorld("api", {
     }
   },
 
-  os: (channel: Platform, func: (os: Platform) => void) => {
+  os: (channel: string, func: (os: Platform) => void) => {
     const validChannels = ["os"];
     if (validChannels.includes(channel)) {
       ipcRenderer.once(channel, (_, args) => func(args));
     }
   },
 
+  updateAvailable: (channel: string, func: (update: string) => void) => {
+    const validChannels = ["update-available"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.once(channel, (_, update: string) => func(update));
+    }
+  },
+
   /////////////////////
   // Send functions. //
   /////////////////////
+
+  update: (channel: string) => {
+    const validChannels = ["update"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
 
   toggleAutoStart: (channel: string) => {
     const validChannels = ["toggleAutoStart"];
@@ -125,6 +147,13 @@ contextBridge.exposeInMainWorld("api", {
 
   openVersion: (channel: string) => {
     const validChannels = ["openVersion"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  openRepo: (channel: string) => {
+    const validChannels = ["openRepo"];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel);
     }

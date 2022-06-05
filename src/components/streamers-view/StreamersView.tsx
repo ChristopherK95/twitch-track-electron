@@ -49,7 +49,9 @@ const StreamersView = (props: {
   }, []);
 
   return (
-    <StyledStreamersView visible={state === State.main}>
+    <StyledStreamersView
+      visible={state === State.main || state === State.search}
+    >
       <div className="misc">
         <i
           className="cog"

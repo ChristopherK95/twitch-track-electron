@@ -5,18 +5,17 @@ import Logo from "../svg/TwitchTrackSVG.svg";
 import Check from "../svg/Check.svg";
 import Notifications from "./new-notification/Notifications";
 import { useDispatch, useSelector } from "react-redux";
-import { addNotif } from "../actions/notifActions";
-import { RootState } from "../reduxStore";
+import { RootState, AppDispatch } from "../reduxStore";
 import { Settings } from "./settings/Settings";
 import StreamersView from "./streamers-view/StreamersView";
 import NotificationsView from "./notifications-view/NotificationsView";
 
 export function MainWindow() {
   const state = useSelector((state: RootState) => state.state.state);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // Boolean state for whether to show search results or not.
-  const [hideOffline, toggleOffline] = useState(false);
+  const [hideOffline, toggleOffline] = useState<boolean>(false);
   const [tokenMissing, setTokenMissing] = useState<boolean>(false);
   const [hideSearchBar, toggleSearchBar] = useState<boolean>(false);
   const [savedSize, setSavedSize] = useState<boolean>(false);
@@ -31,7 +30,7 @@ export function MainWindow() {
 
     window.api.savedSize("saved-size", () => {
       setSavedSize(true);
-      dispatch(addNotif({ name: "Saved windows size", live: true }));
+      dispatch({ type: "addNotifs", name: "Saved windows size", live: true });
 
       setTimeout(() => {
         setSavedSize(false);
@@ -40,6 +39,13 @@ export function MainWindow() {
 
     window.api.os("os", (os: Platform) => {
       setPlatform(os);
+    });
+
+    window.api.updateAvailable("update-available", (update: string) => {
+      dispatch({
+        type: "addNotifs",
+        payload: { name: `Update ${update} available`, live: true },
+      });
     });
   }, []);
 

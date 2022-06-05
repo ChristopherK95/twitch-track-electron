@@ -6,7 +6,6 @@ import {
   ExitSettings,
   Hint,
   HintTitle,
-  Info,
   Label,
   Setting,
   StyledSettings,
@@ -16,6 +15,7 @@ import {
   Token,
 } from "./Styles";
 import { useDispatch } from "react-redux";
+import About from "./about/About";
 
 export function Settings(props: {
   hideSearchBar: boolean;
@@ -30,9 +30,9 @@ export function Settings(props: {
   const [autoStart, toggleAutoStart] = useState<boolean>();
 
   // Opens Info window.
-  function showInfo() {
-    window.api.showInfo("showInfo");
-  }
+  // function showInfo() {
+  //   window.api.showInfo("showInfo");
+  // }
 
   function setAutoStart(bool: boolean) {
     toggleAutoStart(bool);
@@ -122,7 +122,8 @@ export function Settings(props: {
 
       <HintTitle>Hint</HintTitle>
       <Hint>Ctrl + s to save current window size as start size</Hint>
-      <Info onClick={showInfo}>Info</Info>
+      {/* <Info onClick={showInfo}>Info</Info> */}
+      <About />
     </StyledSettings>
   );
 }

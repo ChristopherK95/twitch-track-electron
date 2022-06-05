@@ -7,6 +7,7 @@ import {
   StreamResponse,
   Settings,
   Platform,
+  AppInfo,
 } from "./interfaces/StreamerContext";
 import { OAuth } from "./OAuth";
 import https from "https";
@@ -26,6 +27,8 @@ import {
 const autoLauncher = new AutoLaunch({
   name: "TwitchTrack",
 });
+
+app.disableDomainBlockingFor3DAPIs();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -222,8 +225,23 @@ app.on("activate", () => {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+///////////////
+// FUNCTIONS //
+///////////////
+
+async function checkNewVersion() {
+  const res = await fetch(
+    "https://api.github.com/repos/ChristopherK95/twitch-track-electron/releases/latest",
+    {
+      method: "GET",
+    }
+  );
+  const { tag_name } = (await res.json()) as { tag_name: string };
+  const version = tag_name.replace("v", "");
+  if (app.getVersion() !== version) {
+    mainWindow.webContents.send("updateAvailable", version);
+  }
+}
 
 // Checks and makes sure that all necessary files are either present or created.
 function checkFiles() {
@@ -422,9 +440,38 @@ ipcMain.handle("getNewToken", async () => {
   return APItoken;
 });
 
+ipcMain.handleOnce("getAppInfo", async () => {
+  const info: AppInfo = {
+    currentVersion: app.getVersion(),
+    latestVersion: "",
+    availableVersion: false,
+    os: process.type,
+  };
+  const res = await fetch(
+    "https://api.github.com/repos/ChristopherK95/twitch-track-electron/releases/latest",
+    {
+      method: "GET",
+    }
+  );
+  const { tag_name } = (await res.json()) as { tag_name: string };
+  const version = tag_name.replace("v", "");
+  info.latestVersion = version;
+  if (app.getVersion() !== version) {
+    info.availableVersion = true;
+  }
+
+  return info;
+});
+
 ////////////////
 // On events. //
 ////////////////
+
+ipcMain.on("update", () => {
+  shell.openExternal(
+    "https://github.com/ChristopherK95/twitch-track-electron/releases/latest"
+  );
+});
 
 ipcMain.on("toggleAutoStart", () => {
   settings.AutoStart = !settings.AutoStart;
@@ -440,6 +487,10 @@ ipcMain.on("openVersion", () => {
   shell.openExternal(
     `https://github.com/ChristopherK95/twitch-track-electron/releases/tag/v${app.getVersion()}`
   );
+});
+
+ipcMain.on("openRepo", () => {
+  shell.openExternal("https://github.com/ChristopherK95/twitch-track-electron");
 });
 
 ipcMain.on("showInfo", () => {
@@ -504,6 +555,7 @@ ipcMain.on("rendererReady", async () => {
   if (APItoken === "") {
     mainWindow.webContents.send("tokenMissing");
   }
+  checkNewVersion();
   continousUpdate();
 });
 

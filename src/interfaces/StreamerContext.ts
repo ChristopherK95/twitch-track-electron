@@ -4,6 +4,13 @@ export interface Settings {
   StartSize: { x: number; y: number };
 }
 
+export interface AppInfo {
+  currentVersion: string;
+  latestVersion: string;
+  availableVersion: boolean;
+  os: string;
+}
+
 export interface LiveStreamer {
   id: string;
   name: string;
