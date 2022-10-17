@@ -1,0 +1,9 @@
+.loading-bar {
+  position: absolute;
+  bottom: -5px;
+  width: 90%;
+  height: 5px;
+  border-radius: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}

@@ -1,12 +1,12 @@
 {
-  "name": "vite-reactts-electron-starter",
-  "version": "0.5.0",
+  "name": "twitch-track",
+  "version": "1.2.1",
   "license": "MIT",
   "main": "main/index.js",
   "author": {
-    "name": "Maximilian Stümpfl"
+    "name": "Christopher Karlsson"
   },
-  "description": "Starter using Vite 2+ React +Typescript + Electron for fast prototyping.",
+  "description": "TwitchTrack",
   "keywords": [
     "vite",
     "react",
@@ -14,9 +14,10 @@
     "typescript"
   ],
   "repository": {
-    "url": "https://github.com/lTimeless/vite-reactts-electron-starter"
+    "name": "ChristopherK95",
+    "url": "https://github.com/ChristopherK95/twitch-track-electron"
   },
-  "productName": "vite-reactts-electron-starter",
+  "productName": "TwitchTrack",
   "scripts": {
     "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
     "dev:vite": "vite",
@@ -24,7 +25,7 @@
     "build": "npm run build:vite && npm run build:electron",
     "build:vite": "vite build",
     "build:electron": "tsc -p electron",
-    "dist": "npm run build && electron-builder",
+    "dist": "npm run build && electron-packager . TwitchTrack --overwrite --out=release-builds --prune=true --ignore=installers",
     "pack": "npm run build && electron-builder --dir",
     "clean": "rimraf dist main src/out",
     "type-check": "tsc",
@@ -32,32 +33,42 @@
     "lint:fix": "eslint . --ext js,jsx,ts,tsx --fix"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.2",
     "@vitejs/plugin-react": "^1.2.0",
-    "electron-is-dev": "^2.0.0",
+    "auto-launch": "^5.0.5",
+    "dotenv": "^16.0.1",
+    "electron-log": "^4.4.8",
+    "electron-squirrel-startup": "^1.0.0",
+    "nanoid": "^4.0.0",
+    "node-fetch": "2.6.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5",
     "vite": "^2.8.6"
   },
   "devDependencies": {
+    "@types/auto-launch": "^5.0.2",
     "@types/node": "^17.0.22",
+    "@types/node-fetch": "^2.6.2",
     "@types/react": "^17.0.41",
     "@types/react-dom": "^17.0.14",
+    "@types/styled-components": "^5.1.25",
     "@typescript-eslint/eslint-plugin": "5.16.0",
     "@typescript-eslint/parser": "5.16.0",
     "autoprefixer": "^10.4.4",
     "concurrently": "^7.0.0",
     "electron": "^17.1.2",
-    "electron-builder": "^22.14.13",
+    "electron-packager": "^15.5.1",
+    "electron-winstaller": "^5.0.0",
     "eslint": "8.11.0",
-    "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "^7.29.4",
-    "postcss": "^8.4.12",
     "prettier": "2.6.0",
-    "tailwindcss": "^3.0.23",
     "typescript": "^4.6.2"
   },
   "build": {

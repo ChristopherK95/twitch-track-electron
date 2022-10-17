@@ -1,45 +1,199 @@
-import { ipcRenderer, contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
+import { AppInfo, Platform, Streamer, StreamerResult, StreamResponse } from './StreamerContext';
 
-declare global {
-  interface Window {
-    Main: typeof api;
-    ipcRenderer: typeof ipcRenderer;
-  }
-}
+contextBridge.exposeInMainWorld('api', {
+  /*
+  // Invoke functions. //
+  */
 
-const api = {
-  /**
-   * Here you can expose functions to the renderer process
-   * so they can interact with the main (electron) side
-   * without security problems.
-   *
-   * The function below can accessed using `window.Main.sayHello`
-   */
-  sendMessage: (message: string) => {
-    ipcRenderer.send('message', message);
+  getSettings: (channel: string) => {
+    return ipcRenderer.invoke(channel);
   },
-  /**
-    Here function for AppBar
-   */
-  Minimize: () => {
-    ipcRenderer.send('minimize');
+  fetchChannels: async (channel: string, arg: string) => {
+    return ipcRenderer.invoke(channel, arg);
   },
-  Maximize: () => {
-    ipcRenderer.send('maximize');
+  getNewToken: async (channel: string) => {
+    return ipcRenderer.invoke(channel);
   },
-  Close: () => {
-    ipcRenderer.send('close');
+
+  getAppInfo: async (channel: string, args: AppInfo) => {
+    return ipcRenderer.invoke(channel, args);
   },
-  /**
-   * Provide an easier way to listen to events
-   */
-  on: (channel: string, callback: (data: any) => void) => {
-    ipcRenderer.on(channel, (_, data) => callback(data));
+
+  /*
+  // On functions. //
+  */
+
+  loading: (channel: string, func: (isLoading: boolean) => void) => {
+    const validChannels = ['loading'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (_, args) => func(args));
+    }
+  },
+
+  savedSize: (channel: string, func: () => void) => {
+    const validChannels = ['saved-size'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, () => func());
+    }
+  },
+
+  splashUpdates: (channel: string, func: (data: string) => void) => {
+    const validChannels = ['splash-update'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (_, args) => func(args));
+    }
+  },
+
+  progress: (channel: string, func: (event: { progress: number; max: number }) => void) => {
+    const validChannels = ['progress'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (_, args) => func(args));
+    }
+  },
+
+  awaitStatus: (channel: string, func: (event: { tag: string; data: StreamResponse }) => void) => {
+    const validChannels = ['awaitStatus'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (_, args) => func(args));
+    }
+  },
+
+  loadStreamers: (channel: string, func: (event: Streamer[]) => void) => {
+    const validChannels = ['loadStreamers'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (_, args) => func(args));
+    }
+  },
+
+  tokenMissing: (channel: string, func: () => void) => {
+    const validChannels = ['tokenMissing'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, () => func());
+    }
+  },
+
+  // awaitToken: (channel: string, func: any) => {
+  //   const validChannels = ["awaitToken"];
+  //   if (validChannels.includes(channel)) {
+  //     ipcRenderer.on(channel, (event, ...args) => func(...args));
+  //   }
+  // },
+
+  /*
+  // Once functions. //
+  */
+
+  getVersion: (channel: string, func: (ver: string) => void) => {
+    const validChannels = ['get-version'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.once(channel, (_, args) => func(args));
+    }
+  },
+
+  os: (channel: string, func: (os: Platform) => void) => {
+    const validChannels = ['os'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.once(channel, (_, args) => func(args));
+    }
+  },
+
+  updateAvailable: (channel: string, func: (update: string) => void) => {
+    const validChannels = ['update-available'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.once(channel, (_, update: string) => func(update));
+    }
+  },
+
+  /*
+  // Send functions. //
+  */
+
+  update: (channel: string) => {
+    const validChannels = ['update'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  toggleAutoStart: (channel: string) => {
+    const validChannels = ['toggleAutoStart'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  openVersion: (channel: string) => {
+    const validChannels = ['openVersion'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  openRepo: (channel: string) => {
+    const validChannels = ['openRepo'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  showInfo: (channel: string) => {
+    const validChannels = ['showInfo'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  openStream: (channel: string, data: string) => {
+    const validChannels = ['openStream'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel, data);
+    }
+  },
+
+  askStatus: (channel: string, data: StreamerResult) => {
+    const validChannels = ['askStatus'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel, data);
+    }
+  },
+
+  saveStreamer: (channel: string, data: StreamerResult[]) => {
+    const validChannels = ['saveStreamer'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel, data);
+    }
+  },
+
+  getToken: (channel: string) => {
+    const validChannels = ['getToken'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+
+  rendererReady: (channel: string) => {
+    const validChannels = ['rendererReady'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+  deleteStreamer: (channel: string, data: StreamerResult) => {
+    const validChannels = ['deleteStreamer'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel, data);
+    }
+  },
+  minimizeApp: (channel: string) => {
+    const validChannels = ['minimizeApp'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
+  },
+  closeApp: (channel: string) => {
+    const validChannels = ['closeApp'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel);
+    }
   }
-};
-contextBridge.exposeInMainWorld('Main', api);
-/**
- * Using the ipcRenderer directly in the browser through the contextBridge ist not really secure.
- * I advise using the Main/api way !!
- */
-contextBridge.exposeInMainWorld('ipcRenderer', ipcRenderer);
+});

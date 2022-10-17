@@ -1,14 +1,115 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+body {
+  overflow: hidden;
+  margin: 0;
+}
 
-/* For AppBar */
-.draggable {
-    -webkit-user-select: none;
-    -webkit-app-region: drag;
-  }
+.topBar {
+  display: flex;
+  height: 30px;
+  background: #121212;
+  position: relative;
+  justify-content: space-between;
+  z-index: 100;
+}
 
-.undraggable {
-    -webkit-app-region: no-drag;
-  }
+.titleBar {
+  display: flex;
+  align-items: center;
+  width: -webkit-fill-available;
+}
+
+.titleBar h1 {
+  color: #fff;
+  font-family: system-ui;
+  font-size: 20px;
+  -webkit-app-region: drag;
+  width: inherit;
+  user-select: none;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+#showHideMenus {
+  padding-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50px;
+  height: 100%;
+  background: none;
+  border: none;
+}
+
+#showHideMenus:hover {
+  background: lightskyblue;
+}
+
+#showHideMenus div {
+  height: 2px;
+  width: 20px;
+  background-color: white;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+#showHideMenus .notif-bubble {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  box-shadow: 0 0 5px 1px black;
+  border-radius: 100%;
+}
+
+.titleBarBtns {
+  display: flex;
+}
+
+.topBtn {
+  height: 100%;
+  width: 40px;
+  border: none;
+}
+
+#minimizeBtn {
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#minimizeBtn div {
+  width: 15px;
+  height: 3px;
+  background-color: white;
+}
+
+#minimizeBtn:hover {
+  background: lightskyblue;
+}
+
+#closeBtn {
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#closeBtn div {
+  width: 15px;
+  height: 3px;
+  background: white;
+  transform: rotate(-45deg);
+  position: absolute;
+}
+
+#closeBtn div:first-child {
+  transform: rotate(45deg);
+}
+
+#closeBtn:hover {
+  background: rgb(238, 38, 71);
+}
