@@ -80,15 +80,15 @@ export function checkFiles() {
   settings = LoadSettings();
 
   let updatedSettings = false;
-  if (!('Token' in settings)) {
+  if (!settings.Token) {
     settings.Token = '';
     updatedSettings = true;
   }
-  if (!('AutoStart' in settings)) {
+  if (!settings.AutoStart) {
     settings.AutoStart = false;
     updatedSettings = true;
   }
-  if (!('StartSize' in settings)) {
+  if (!settings.StartSize) {
     settings.StartSize = { x: 400, y: 600 };
     updatedSettings = true;
   }
@@ -127,14 +127,14 @@ const createWindow = (): void => {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: settings.StartSize.x,
-    height: settings.StartSize.y,
+    width: settings.StartSize?.x ?? 400,
+    height: settings.StartSize?.y ?? 600,
     maxWidth: 600,
     minWidth: 400,
     minHeight: 600,
     show: true,
     backgroundColor: '#262626',
-    icon: './images/Logo.ico',
+    icon: path.join(__dirname, '../src/images/Logo.ico'),
     frame: process.platform === 'linux',
     webPreferences: {
       nodeIntegration: false,
@@ -161,7 +161,7 @@ const createWindow = (): void => {
   mainWindow.webContents.on('before-input-event', (event, input) => {
     if (input.control && input.key.toLocaleLowerCase() === 's') {
       const startSize = mainWindow.getSize();
-      [settings.StartSize.x, settings.StartSize.y] = [startSize[0], startSize[1]];
+      settings.StartSize = { x: startSize[0], y: startSize[1] };
       mainWindow.webContents.send('saved-size');
       saveSettings();
       event.preventDefault();
