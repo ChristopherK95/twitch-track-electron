@@ -10,8 +10,8 @@ import Bell from '../../svg/Bell';
 import NotifFx from '../../audio/NotificationSound.wav';
 import useNotify from '../../hooks/use-notify';
 import useMode from '../../hooks/use-mode';
-import ContextMenu from '../context-menu/ContextMenu';
 import StreamerContainer from '../streamer-container/StreamerContainer';
+import Spinner from '../spinner/Spinner';
 
 const StreamersView = (props: {
   tokenMissing: boolean;
@@ -21,6 +21,7 @@ const StreamersView = (props: {
 }) => {
   const [streamers, setStreamers] = useState<Streamer[]>([]);
   const [oldStreamers, setOldStreamers] = useState<Streamer[]>([]);
+  const [fetching, setFetching] = useState(false);
   const { notify } = useNotify();
   const { changeMode } = useMode();
 
@@ -29,11 +30,6 @@ const StreamersView = (props: {
   const [resultArr, setResultArr] = useState<StreamerResult[]>([]);
   const [savedStreamers, setSavedStreamers] = useState<StreamerResult[]>([]);
   const [hideOffline, toggleOffline] = useState<boolean>(false);
-  const [contextMenu, toggleContextMenu] = useState<{
-    show: boolean;
-    name: string;
-    pos: { x: number; y: number };
-  }>({ show: false, name: '', pos: { x: 0, y: 0 } });
   const notifFx = new Audio(NotifFx);
 
   // Makes an API request to Twitch for channels/streamers that match given search param.
@@ -105,7 +101,12 @@ const StreamersView = (props: {
   useEffect(() => {
     window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
       setStreamers(data);
+      setTimeout(() => {
+        setFetching(false);
+      }, 2000);
     });
+
+    window.api.fetching('fetching', () => setFetching(true));
 
     window.api.rendererReady('rendererReady');
   }, []);
@@ -125,6 +126,7 @@ const StreamersView = (props: {
             <Bell />
           </StyledBell>
         </TopbarBtn>
+        {fetching && <Spinner />}
       </Misc>
       <SearchBar
         fetch={fetchStreamers}
@@ -134,16 +136,9 @@ const StreamersView = (props: {
         setSearch={setSearch}
       />
       <>
-        <ContextMenu
-          context={contextMenu}
-          setContext={toggleContextMenu}
-          streamers={streamers}
-          setStreamers={setStreamers}
-        />
         <StreamerContainer
           hideOffline={hideOffline}
           toggleOffline={toggleOffline}
-          context={toggleContextMenu}
           streamers={streamers}
           setStreamers={(s) => setStreamers(s)}
         />
@@ -159,3 +154,4 @@ const StreamersView = (props: {
 };
 
 export default StreamersView;
+

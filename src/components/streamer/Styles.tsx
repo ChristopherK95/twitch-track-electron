@@ -51,7 +51,7 @@ export const TimeElapsed = styled.p`
   cursor: default;
 `;
 
-export const StyledCategory = styled.h2<{ offline?: boolean }>`
+export const StyledCategory = styled.h2<{ offline?: boolean; categoryChanged?: boolean }>`
   margin: 0;
   padding: 0;
   text-align: left;
@@ -66,6 +66,7 @@ export const StyledCategory = styled.h2<{ offline?: boolean }>`
   transform-origin: left;
   transition: transform 0.5s ease, color 0.5s ease;
   user-select: none;
+  ${(p) => p.categoryChanged && 'transform: scale(1.3); color: white;'}
 `;
 
 export const StyledImg = styled.img`
@@ -114,14 +115,14 @@ export const DeleteContainer = styled.div`
   right: 0;
   overflow: hidden;
   height: 100%;
-  width: 150px;
+  width: 180px;
   display: flex;
   justify-content: flex-end;
 `;
 
 export const Delete = styled.div<{ visible: boolean }>`
   background-color: #ff3d3d;
-  width: 75px;
+  width: 100px;
   height: 100%;
   border-radius: 0 3px 3px 0;
   display: flex;
@@ -132,3 +133,4 @@ export const Delete = styled.div<{ visible: boolean }>`
   opacity: ${(p) => (p.visible ? 1 : 0)};
   transition: transform 0.2s ease, opacity 0.2s ease;
 `;
+

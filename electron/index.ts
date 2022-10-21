@@ -148,8 +148,7 @@ const createWindow = (): void => {
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
-
-  mainWindow.loadURL(!app.isPackaged ? 'http://localhost:3000/' : path.join(__dirname, '../src/out/index.html'));
+  mainWindow.loadURL(!app.isPackaged ? 'http://localhost:3000/' : `file://${__dirname}/../src/out/index.html`);
 
   mainWindow.on('ready-to-show', () => {
     // splash.destroy();
@@ -282,6 +281,7 @@ async function continousUpdate() {
 
   interval = setInterval(async () => {
     if (streamers.length === 0) return;
+    mainWindow.webContents.send('fetching');
     const response = await getStreamerStatus(streamers);
 
     for (let i = 0; i < streamers.length; i++) {
@@ -577,3 +577,4 @@ ipcMain.on('closeApp', () => {
   mainWindow.close();
   app.quit();
 });
+

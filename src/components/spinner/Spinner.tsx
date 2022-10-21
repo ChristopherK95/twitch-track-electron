@@ -1,14 +1,14 @@
 import React from 'react';
-import { Bar, Container } from './Styles';
+import { Container } from './Styles';
+import SpinnerSVG from '../../svg/Spinner';
 
 const Spinner = () => {
   return (
     <Container>
-      <Bar delay={0} />
-      <Bar delay={1} />
-      <Bar delay={2} />
+      <SpinnerSVG />
     </Container>
   );
 };
 
 export default Spinner;
+

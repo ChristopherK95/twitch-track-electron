@@ -24,6 +24,13 @@ contextBridge.exposeInMainWorld('api', {
   // On functions. //
   */
 
+  fetching: (channel: string, func: (isFetching: boolean) => void) => {
+    const validChannels = ['fetching'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (_, args) => func(args));
+    }
+  },
+
   loading: (channel: string, func: (isLoading: boolean) => void) => {
     const validChannels = ['loading'];
     if (validChannels.includes(channel)) {
@@ -197,3 +204,4 @@ contextBridge.exposeInMainWorld('api', {
     }
   }
 });
+

@@ -26,6 +26,7 @@
     "build:vite": "vite build",
     "build:electron": "tsc -p electron",
     "dist": "npm run build && electron-packager . TwitchTrack --overwrite --out=release-builds --prune=true --ignore=installers",
+    "dist:linux": "npm run build && electron-packager . TwitchTrack --overwrite --out=release-builds --prune=true --ignore=installers --platform=linux",
     "pack": "npm run build && electron-builder --dir",
     "clean": "rimraf dist main src/out",
     "type-check": "tsc",
@@ -60,6 +61,7 @@
     "autoprefixer": "^10.4.4",
     "concurrently": "^7.0.0",
     "electron": "^17.1.2",
+    "electron-builder": "^23.6.0",
     "electron-packager": "^15.5.1",
     "electron-winstaller": "^5.0.0",
     "eslint": "8.11.0",
@@ -79,6 +81,11 @@
     ],
     "directories": {
       "buildResources": "resources"
+    },
+    "linux": {
+      "target": [
+        "tar.gz"
+      ]
     }
   }
 }

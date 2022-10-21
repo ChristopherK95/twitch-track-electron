@@ -33,6 +33,7 @@ const Streamer = (
   const { id, name, imgUrl, started, viewers, live, category, title, deleteStreamer } = props;
   const [showDelete, setShowDelete] = useState<boolean>(false);
   const [deleteHover, setDeleteHover] = useState<boolean>(false);
+  const [prevCategory, setPrevCategory] = useState<string>(category ?? '');
 
   const getTimeElapsed = (started: string) => {
     const date = new Date();
@@ -78,14 +79,18 @@ const Streamer = (
       //   }, 1000);
       // }
       // setPrevCategory(props.liveStreamer.category);
-    }, [viewers]);
+    }, [viewers, category, title]);
+
+    useEffect(() => {
+      setTimeout(() => setPrevCategory(category), 3000);
+    }, [category]);
 
     return (
       <StyledStreamer onContextMenu={() => setShowDelete((show: boolean) => !show)}>
         <Img url={imgUrl} />
         <Container>
           <Name onClick={openStream}>{name}</Name>
-          <Category hover={toggleTooltip} category={category} live={true} />
+          <Category hover={toggleTooltip} category={category} live={true} categoryChanged={prevCategory !== category} />
           {category && title && <Tooltip category={category} title={title} visible={showTooltip} />}
         </Container>
         <>
@@ -130,3 +135,4 @@ const Streamer = (
 };
 
 export default Streamer;
+

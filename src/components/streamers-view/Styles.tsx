@@ -13,14 +13,15 @@ export const StyledStreamersView = styled.div<{ visible: boolean }>`
 `;
 
 export const Misc = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 5%;
   display: flex;
   flex-direction: row;
   cursor: pointer;
-  width: fit-content;
   align-items: center;
   transition: background-color 0.3s;
   position: relative;
-  margin-left: 18px;
   margin-top: 15px;
   gap: 10px;
 `;
@@ -104,3 +105,4 @@ export const StyledBell = styled.i`
     }
   }
 `;
+

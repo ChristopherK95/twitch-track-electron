@@ -20,7 +20,6 @@ import {
 const StreamerContainer = (props: {
   hideOffline: boolean;
   toggleOffline: (hideOffline: boolean) => void;
-  context: (context: { show: boolean; name: string; pos: { x: number; y: number } }) => void;
   streamers: Streamers[];
   setStreamers: (s: Streamers[]) => void;
 }) => {
@@ -134,3 +133,4 @@ const StreamerContainer = (props: {
 };
 
 export default StreamerContainer;
+
