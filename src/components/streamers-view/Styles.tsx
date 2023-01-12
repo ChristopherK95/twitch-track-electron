@@ -15,94 +15,72 @@ export const StyledStreamersView = styled.div<{ visible: boolean }>`
 export const Misc = styled.div`
   box-sizing: border-box;
   width: 100%;
-  padding: 0 5%;
   display: flex;
   flex-direction: row;
-  cursor: pointer;
   align-items: center;
+  justify-content: flex-end;
   transition: background-color 0.3s;
-  position: relative;
-  margin-top: 15px;
-  gap: 10px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  gap: 5px;
 `;
 
 export const TopbarBtn = styled.button`
   position: relative;
   border: none;
-  border-radius: 3px;
-  background-color: #626262;
-  color: white;
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 50%);
+  background-color: transparent;
   font-family: system-ui;
   font-weight: bold;
-  height: 25px;
+  height: 24px;
+  width: 20px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding-right: 25px;
   user-select: none;
-  transition: background-color 0.3s ease;
   cursor: pointer;
+  z-index: 100;
 
   :hover {
-    background-color: #464646;
-
     i {
       animation-play-state: running;
       fill: white;
+      transform: scale(1.1);
+    }
+  }
+`;
+
+export const StyledSearch = styled.i`
+  position: relative;
+  display: flex;
+  width: 16px;
+  height: 24px;
+  fill: #aaaaaa;
+  transition: stroke 0.3s ease, transform 0.3s ease;
+
+  :hover {
+    svg {
+      path {
+        stroke: white;
+      }
     }
   }
 `;
 
 export const StyledCog = styled.i`
-  position: absolute;
-  right: 5px;
+  position: relative;
+  display: flex;
   width: 16px;
-  height: 16px;
-  fill: white;
-  transition: fill 0.5s ease;
-  animation: spin 2s linear infinite;
-  animation-play-state: paused;
-
-  @keyframes spin {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+  height: 24px;
+  fill: #aaaaaa;
+  transition: fill 0.3s ease, transform 0.3s ease;
 `;
 
 export const StyledBell = styled.i`
-  position: absolute;
-  right: 5px;
+  position: relative;
+  display: flex;
   width: 15px;
-  height: 18px;
-  fill: white;
-  transition: fill 0.5s ease;
-  animation: shake 1.2s ease infinite;
-  animation-play-state: paused;
-
-  @keyframes shake {
-    0% {
-      transform: rotate(0deg);
-    }
-    10% {
-      transform: rotate(10deg);
-    }
-    20% {
-      transform: rotate(-10deg);
-    }
-    30% {
-      transform: rotate(10deg);
-    }
-    40% {
-      transform: rotate(-10deg);
-    }
-    50% {
-      transform: rotate(10deg);
-    }
-    60%,
-    100% {
-      transform: rotate(0deg);
-    }
-  }
+  height: 24px;
+  fill: #aaaaaa;
+  transition: fill 0.3s ease, transform 0.3s ease;
 `;
-

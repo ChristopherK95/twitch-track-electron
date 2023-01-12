@@ -204,4 +204,3 @@ contextBridge.exposeInMainWorld('api', {
     }
   }
 });
-

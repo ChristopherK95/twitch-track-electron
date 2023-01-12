@@ -90,6 +90,7 @@ const MainWindow = () => {
           <NotificationsView />
           <StreamersView
             hideSearchBar={hideSearchBar}
+            toggleSearchBar={() => toggleSearchBar((b: boolean) => !b)}
             search={search}
             setSearch={setSearch}
             tokenMissing={tokenMissing}

@@ -171,4 +171,3 @@ export const Exit = styled.div`
     fill: white;
   }
 `;
-

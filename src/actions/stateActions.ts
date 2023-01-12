@@ -1,4 +1,4 @@
-import { createAction } from "@reduxjs/toolkit";
-import { State } from "../interfaces/StreamerContext";
+import { createAction } from '@reduxjs/toolkit';
+import { State } from '../interfaces/StreamerContext';
 
-export const changeState = createAction<State>("changeState");
+export const changeState = createAction<State>('changeState');

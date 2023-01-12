@@ -577,4 +577,3 @@ ipcMain.on('closeApp', () => {
   mainWindow.close();
   app.quit();
 });
-

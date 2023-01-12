@@ -2,30 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { State, Streamer, StreamerResult } from '../../interfaces/StreamerContext';
 import { RootState } from '../../reduxStore';
-import { Misc, StyledBell, StyledCog, StyledStreamersView, TopbarBtn } from './Styles';
+import { StyledStreamersView } from './Styles';
 import SearchBar from '../search-bar/SearchBar';
 import SearchResults from '../search-results/SearchResults';
-import Cog from '../../svg/Cog';
-import Bell from '../../svg/Bell';
 import NotifFx from '../../audio/NotificationSound.wav';
 import useNotify from '../../hooks/use-notify';
-import useMode from '../../hooks/use-mode';
 import StreamerContainer from '../streamer-container/StreamerContainer';
-import Spinner from '../spinner/Spinner';
 
 const StreamersView = (props: {
   tokenMissing: boolean;
   hideSearchBar: boolean;
+  toggleSearchBar: () => void;
   search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setSearch: (s: string) => void;
 }) => {
+  const { hideSearchBar, toggleSearchBar, search, setSearch, tokenMissing } = props;
   const [streamers, setStreamers] = useState<Streamer[]>([]);
   const [oldStreamers, setOldStreamers] = useState<Streamer[]>([]);
   const [fetching, setFetching] = useState(false);
   const { notify } = useNotify();
-  const { changeMode } = useMode();
 
-  const { hideSearchBar, search, setSearch, tokenMissing } = props;
   const state = useSelector((state: RootState) => state.state.state);
   const [resultArr, setResultArr] = useState<StreamerResult[]>([]);
   const [savedStreamers, setSavedStreamers] = useState<StreamerResult[]>([]);
@@ -113,21 +109,6 @@ const StreamersView = (props: {
 
   return (
     <StyledStreamersView visible={state === State.main || state === State.search}>
-      <Misc>
-        <TopbarBtn onClick={() => changeMode(State.settings)}>
-          Settings
-          <StyledCog>
-            <Cog />
-          </StyledCog>
-        </TopbarBtn>
-        <TopbarBtn onClick={() => changeMode(State.notifications)}>
-          Notifications
-          <StyledBell>
-            <Bell />
-          </StyledBell>
-        </TopbarBtn>
-        {fetching && <Spinner />}
-      </Misc>
       <SearchBar
         fetch={fetchStreamers}
         tokenMissing={tokenMissing}
@@ -141,6 +122,8 @@ const StreamersView = (props: {
           toggleOffline={toggleOffline}
           streamers={streamers}
           setStreamers={(s) => setStreamers(s)}
+          fetching={fetching}
+          toggleSearchBar={toggleSearchBar}
         />
         <SearchResults
           searchResults={resultArr}
@@ -154,4 +137,3 @@ const StreamersView = (props: {
 };
 
 export default StreamersView;
-

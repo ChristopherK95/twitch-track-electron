@@ -58,4 +58,3 @@ const NotificationsView = () => {
 };
 
 export default NotificationsView;
-

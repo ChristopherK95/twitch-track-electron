@@ -42,4 +42,3 @@ const Category = (props: Props) => {
 };
 
 export default Category;
-

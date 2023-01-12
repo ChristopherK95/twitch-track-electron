@@ -25,7 +25,7 @@ export const Container = styled.div`
   padding: 0 10px;
 `;
 
-export const Section = styled.h2`
+export const Section = styled.div`
   color: #ffffffb3;
   font-family: system-ui;
   font-size: 18px;
@@ -35,6 +35,10 @@ export const Section = styled.h2`
   margin-bottom: 5px;
   margin-top: 10px;
   user-select: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-weight: 800;
 `;
 
 export const Count = styled.span`

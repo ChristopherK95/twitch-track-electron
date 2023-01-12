@@ -5,11 +5,9 @@ export const Container = styled.div`
   gap: 10px;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  right: 5%;
   z-index: 1000;
-  width: 24px;
-  height: 20px;
+  width: 16px;
+  height: 25px;
 `;
 
 export const Bar = styled.div<{ delay: number }>`
@@ -29,4 +27,3 @@ export const Bar = styled.div<{ delay: number }>`
     }
   }
 `;
-

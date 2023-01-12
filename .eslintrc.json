@@ -10,7 +10,6 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
-        "airbnb",
         "plugin:prettier/recommended",
         "prettier"
     ],
@@ -38,7 +37,6 @@
         ],
         // Typescript
         "no-use-before-define": "off",
-        "import/prefer-default-export": "warn",
         "@typescript-eslint/no-use-before-define": ["error"],
         "@typescript-eslint/no-unused-vars": "warn",
         "@typescript-eslint/no-explicit-any": "warn",
@@ -46,6 +44,7 @@
         "no-plusplus": "off",
         "no-shadow":"off",
         "no-new": "off",
+        "no-unused-vars": "warn",
         // react
         "react/no-array-index-key": "off",
         "react/jsx-no-bind": "off",

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TwitchTrackIcon() {
+const TwitchTrackIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129.747 146.135">
       <g transform="translate(262.18 707.666)">
@@ -69,6 +69,6 @@ function TwitchTrackIcon() {
       </g>
     </svg>
   );
-}
+};
 
 export default TwitchTrackIcon;

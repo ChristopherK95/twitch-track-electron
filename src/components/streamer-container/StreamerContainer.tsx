@@ -16,14 +16,17 @@ import {
   Text1,
   Text2
 } from './Styles';
+import Miscellaneous from '../streamers-view/Misc';
 
 const StreamerContainer = (props: {
   hideOffline: boolean;
   toggleOffline: (hideOffline: boolean) => void;
   streamers: Streamers[];
   setStreamers: (s: Streamers[]) => void;
+  fetching: boolean;
+  toggleSearchBar: () => void;
 }) => {
-  const { hideOffline, toggleOffline, streamers, setStreamers } = props;
+  const { hideOffline, toggleOffline, streamers, setStreamers, fetching, toggleSearchBar } = props;
   const state = useSelector((state: RootState) => state.state.state);
 
   const onToggleOffline = () => {
@@ -64,6 +67,7 @@ const StreamerContainer = (props: {
           <Container>
             <Section>
               Online <Count>{`(${getCount('live')})`}</Count>
+              <Miscellaneous fetching={fetching} toggleSearchBar={toggleSearchBar} />
             </Section>
 
             {streamers
@@ -133,4 +137,3 @@ const StreamerContainer = (props: {
 };
 
 export default StreamerContainer;
-

@@ -118,6 +118,7 @@ export const DeleteContainer = styled.div`
   width: 180px;
   display: flex;
   justify-content: flex-end;
+  pointer-events: none;
 `;
 
 export const Delete = styled.div<{ visible: boolean }>`
@@ -131,6 +132,6 @@ export const Delete = styled.div<{ visible: boolean }>`
   cursor: pointer;
   transform: ${(p) => (p.visible ? 'translateX(0px)' : 'translateX(75px)')};
   opacity: ${(p) => (p.visible ? 1 : 0)};
+  pointer-events: ${(p) => (p.visible ? 'initial' : 'none')};
   transition: transform 0.2s ease, opacity 0.2s ease;
 `;
-
