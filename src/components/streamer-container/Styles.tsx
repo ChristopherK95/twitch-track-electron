@@ -38,7 +38,7 @@ export const Section = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  font-weight: 800;
+  font-weight: 700;
 `;
 
 export const Count = styled.span`

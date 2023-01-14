@@ -5,7 +5,6 @@ import fs from 'fs';
 import path from 'path';
 import log from 'electron-log';
 import AutoLaunch from 'auto-launch';
-import 'dotenv/config';
 import {
   StreamerResult,
   ChannelResponse,
@@ -25,11 +24,6 @@ import {
   ReadFile,
   WriteToFile
 } from './file-handler';
-
-if (require('electron-squirrel-startup')) {
-  // eslint-disable-line global-require
-  app.quit();
-}
 
 log.info(__dirname);
 
@@ -435,8 +429,18 @@ ipcMain.handleOnce('getAppInfo', async () => {
   // eslint-disable-next-line camelcase
   const version = tag_name.replace('v', '');
   info.latestVersion = version;
-  if (app.getVersion() !== version) {
-    info.availableVersion = true;
+  const latestVersionSplit = version.split('.');
+  const appVersionSplit = app.getVersion().split('.');
+  for (let i = 0; i < latestVersionSplit.length; i++) {
+    console.log(latestVersionSplit[i], appVersionSplit[i]);
+    console.log(latestVersionSplit[i] > appVersionSplit[i]);
+    if (latestVersionSplit[i] > appVersionSplit[i]) {
+      info.availableVersion = true;
+      break;
+    }
+    if (latestVersionSplit[i] < appVersionSplit[i]) {
+      break;
+    }
   }
 
   return info;

@@ -91,7 +91,7 @@ const Streamer = (
         <Container>
           <Name onClick={openStream}>{name}</Name>
           <Category hover={toggleTooltip} category={category} live={true} categoryChanged={prevCategory !== category} />
-          {category && title && <Tooltip category={category} title={title} visible={showTooltip} />}
+          {title && <Tooltip category={category} title={title} visible={showTooltip} />}
         </Container>
         <>
           <Status viewers={liveViewers.toString()} />

@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import {
   CloseBtn,
   ContentArea,
-  Handle,
   Main,
   MinimizeBtn,
   MissingToken,
@@ -20,6 +19,7 @@ import NotificationsView from '../notifications-view/NotificationsView';
 import StreamersView from '../streamers-view/StreamersView';
 import useNotify from '../../hooks/use-notify';
 import useMode from '../../hooks/use-mode';
+import Logo from '../../svg/Logo';
 
 const MainWindow = () => {
   const state = useSelector((state: RootState) => state.state.state);
@@ -58,7 +58,7 @@ const MainWindow = () => {
       {platform === Platform.windows && (
         <TopBar>
           <TitleBar>
-            <Handle>TwitchTrack</Handle>
+            <Logo />
           </TitleBar>
           <TitleBarBtns>
             <MinimizeBtn onClick={() => window.api.minimizeApp('minimizeApp')}>

@@ -1,18 +1,16 @@
-import { AppInfo, Platform, Streamer, StreamerResult, StreamResponse } from './interfaces/StreamerContext';
+import { AppInfo, Platform, Settings, Streamer, StreamerResult } from './interfaces/StreamerContext';
 
 declare global {
   interface Window {
     api: {
-      getSettings: (channel: string) => void;
-      fetchChannels: (channel: string, arg: string) => void;
-      getNewToken: (channel: string) => void;
-      getAppInfo: (channel: string, args: AppInfo) => void;
+      getSettings: (channel: string) => Settings;
+      fetchChannels: (channel: string, arg: string) => StreamerResult[];
+      getNewToken: (channel: string) => string;
+      getAppInfo: (channel: string) => Promise<AppInfo>;
       fetching: (channel: string, func: (isFetching: boolean) => void) => void;
-      loading: (channel: string, func: (isLoading: boolean) => void) => void;
       savedSize: (channel: string, func: () => void) => void;
       splashUpdates: (channel: string, func: (data: string) => void) => void;
       progress: (channel: string, func: (event: { progress: number; max: number }) => void) => void;
-      awaitStatus: (channel: string, func: (event: { tag: string; data: StreamResponse }) => void) => void;
       loadStreamers: (channel: string, func: (event: Streamer[]) => void) => void;
       tokenMissing: (channel: string, func: () => void) => void;
       getVersion: (channel: string, func: (ver: string) => void) => void;
@@ -28,7 +26,7 @@ declare global {
       saveStreamer: (channel: string, data: StreamerResult[]) => void;
       getToken: (channel: string) => void;
       rendererReady: (channel: string) => void;
-      deleteStreamer: (channel: string, data: StreamerResult) => void;
+      deleteStreamer: (channel: string, data: Streamer) => void;
       minimizeApp: (channel: string) => void;
       closeApp: (channel: string) => void;
     };

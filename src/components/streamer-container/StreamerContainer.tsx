@@ -57,7 +57,9 @@ const StreamerContainer = (props: {
     // Checks if streamer is currently live and removes them from liveStreamers first if true.
     setStreamers(streamers.filter((streamer) => streamer.id !== id));
     const streamer = streamers.find((s) => s.id === id);
-    window.api.deleteStreamer('deleteStreamer', streamer);
+    if (streamer) {
+      window.api.deleteStreamer('deleteStreamer', streamer);
+    }
   };
 
   return (
