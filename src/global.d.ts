@@ -3,9 +3,9 @@ import { AppInfo, Platform, Settings, Streamer, StreamerResult } from './interfa
 declare global {
   interface Window {
     api: {
-      getSettings: (channel: string) => Settings;
+      getSettings: (channel: string) => Promise<Settings>;
       fetchChannels: (channel: string, arg: string) => StreamerResult[];
-      getNewToken: (channel: string) => string;
+      getNewToken: (channel: string) => Promise<string>;
       getAppInfo: (channel: string) => Promise<AppInfo>;
       fetching: (channel: string, func: (isFetching: boolean) => void) => void;
       savedSize: (channel: string, func: () => void) => void;

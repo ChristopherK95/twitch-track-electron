@@ -1,18 +1,18 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { AppInfo, Platform, Streamer, StreamerResult } from './StreamerContext';
+import { AppInfo, Platform, Settings, Streamer, StreamerResult } from './StreamerContext';
 
 contextBridge.exposeInMainWorld('api', {
   /*
   // Invoke functions. //
   */
 
-  getSettings: (channel: string) => {
+  getSettings: (channel: string): Promise<Settings> => {
     return ipcRenderer.invoke(channel);
   },
   fetchChannels: async (channel: string, arg: string) => {
     return ipcRenderer.invoke(channel, arg);
   },
-  getNewToken: async (channel: string) => {
+  getNewToken: async (channel: string): Promise<string> => {
     return ipcRenderer.invoke(channel);
   },
 
