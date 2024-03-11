@@ -8,6 +8,7 @@ import SearchResults from '../search-results/SearchResults';
 import NotifFx from '../../audio/NotificationSound.wav';
 import useNotify from '../../hooks/use-notify';
 import StreamerContainer from '../streamer-container/StreamerContainer';
+import processStreamerData from './process-streamer-data';
 
 const StreamersView = (props: {
   tokenMissing: boolean;
@@ -19,6 +20,8 @@ const StreamersView = (props: {
   const { hideSearchBar, toggleSearchBar, search, setSearch, tokenMissing } = props;
   const [streamers, setStreamers] = useState<Streamer[]>([]);
   const [oldStreamers, setOldStreamers] = useState<Streamer[]>([]);
+  const [wentOnline, setWentOnline] = useState<Streamer[]>([]);
+  const [wentOffline, setWentOffline] = useState<Streamer[]>([]);
   const [fetching, setFetching] = useState(false);
   const { notify } = useNotify();
 
@@ -96,7 +99,12 @@ const StreamersView = (props: {
 
   useEffect(() => {
     window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
+      const { online, offline } = processStreamerData(streamers, data);
+
       setStreamers(data);
+      setWentOnline(online);
+      setWentOffline(offline);
+
       setTimeout(() => {
         setFetching(false);
       }, 2000);
@@ -124,6 +132,8 @@ const StreamersView = (props: {
           setStreamers={(s) => setStreamers(s)}
           fetching={fetching}
           toggleSearchBar={toggleSearchBar}
+          wentOnline={wentOnline}
+          wentOffline={wentOffline}
         />
         <SearchResults
           searchResults={resultArr}

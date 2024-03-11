@@ -17,6 +17,8 @@ import {
   Text2
 } from './Styles';
 import Miscellaneous from '../streamers-view/Misc';
+import WentOnline from './WentOnline';
+import WentOffline from './WentOffline';
 
 const StreamerContainer = (props: {
   hideOffline: boolean;
@@ -25,8 +27,11 @@ const StreamerContainer = (props: {
   setStreamers: (s: Streamers[]) => void;
   fetching: boolean;
   toggleSearchBar: () => void;
+  wentOnline: Streamers[];
+  wentOffline: Streamers[];
 }) => {
-  const { hideOffline, toggleOffline, streamers, setStreamers, fetching, toggleSearchBar } = props;
+  const { hideOffline, toggleOffline, streamers, setStreamers, fetching, toggleSearchBar, wentOnline, wentOffline } =
+    props;
   const state = useSelector((state: RootState) => state.state.state);
 
   const onToggleOffline = () => {
@@ -66,6 +71,24 @@ const StreamerContainer = (props: {
     <StyledStreamerContainer visible={state === State.main}>
       {streamers.length > 0 ? (
         <SectionContainer>
+          {Boolean(wentOnline.length) && (
+            <Container>
+              <Section>
+                Went Online <Count>{`(${wentOnline.length})`}</Count>
+              </Section>
+
+              <WentOnline streamers={wentOnline} />
+            </Container>
+          )}
+          {Boolean(wentOffline.length) && (
+            <Container>
+              <Section>
+                Went Offline <Count>{`(${wentOffline.length})`}</Count>
+              </Section>
+
+              <WentOffline streamers={wentOffline} />
+            </Container>
+          )}
           <Container>
             <Section>
               Online <Count>{`(${getCount('live')})`}</Count>

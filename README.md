@@ -1,5 +1,3 @@
-
-
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 ![downloads-shield]
@@ -21,31 +19,34 @@
 <br/>
 
 ## About TwitchTrack
+
 ![Application Name Screen Shot][app-screenshot]
 
 TwitchTrack is an application which purpose is to help keeping track on if your favourite Twitch streamers are either live or not.\
 <br/>
-It does so by: 
+It does so by:
+
 - showing a feed of which of your choosen streamers are currently live :heavy_check_mark:
 - what category they're currently under :heavy_check_mark:
 - what their title is :heavy_check_mark:
 - how many viewers they have :heavy_check_mark:
 - how long they've been live for :heavy_check_mark:
-<br/>
-TwitchTrack will also give sound notifications to make sure that you don't miss when a streamer goes live or offline.
-:smile:
+  <br/>
+  TwitchTrack will also give sound notifications to make sure that you don't miss when a streamer goes live or offline.
+  :smile:
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 ### Built With
 
 #### Frameworks
+
 - [Electron](https://www.electronjs.org/)
 - [React.js](https://reactjs.org/)
 - [Typescript](https://www.typescriptlang.org/)
 
 #### Some plugins and tools that were used
+
 - [React-Redux](https://react-redux.js.org/)
 - [Vite](https://vitejs.dev)
 - [electron-log](https://www.npmjs.com/package/electron-log/)

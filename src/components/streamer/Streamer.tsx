@@ -27,7 +27,7 @@ const Streamer = (
     id: string;
     name: string;
     imgUrl: string;
-    deleteStreamer: (id: string) => void;
+    deleteStreamer?: (id: string) => void;
   } & LiveProps
 ) => {
   const { id, name, imgUrl, started, viewers, live, category, title, deleteStreamer } = props;
@@ -99,16 +99,18 @@ const Streamer = (
             {time.timeElapsed}
           </TimeElapsed>
         </>
-        <DeleteContainer>
-          <Delete
-            onClick={() => deleteStreamer(id)}
-            visible={showDelete}
-            onMouseEnter={() => setDeleteHover(true)}
-            onMouseLeave={() => setDeleteHover(false)}
-          >
-            <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
-          </Delete>
-        </DeleteContainer>
+        {deleteStreamer && (
+          <DeleteContainer>
+            <Delete
+              onClick={() => deleteStreamer(id)}
+              visible={showDelete}
+              onMouseEnter={() => setDeleteHover(true)}
+              onMouseLeave={() => setDeleteHover(false)}
+            >
+              <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
+            </Delete>
+          </DeleteContainer>
+        )}
       </StyledStreamer>
     );
   }
@@ -120,16 +122,18 @@ const Streamer = (
         <Name onClick={openStream}>{name}</Name>
         <Category live={false} />
       </Container>
-      <DeleteContainer>
-        <Delete
-          onClick={() => deleteStreamer(id)}
-          visible={showDelete}
-          onMouseEnter={() => setDeleteHover(true)}
-          onMouseLeave={() => setDeleteHover(false)}
-        >
-          <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
-        </Delete>
-      </DeleteContainer>
+      {deleteStreamer && (
+        <DeleteContainer>
+          <Delete
+            onClick={() => deleteStreamer(id)}
+            visible={showDelete}
+            onMouseEnter={() => setDeleteHover(true)}
+            onMouseLeave={() => setDeleteHover(false)}
+          >
+            <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
+          </Delete>
+        </DeleteContainer>
+      )}
     </StyledStreamer>
   );
 };

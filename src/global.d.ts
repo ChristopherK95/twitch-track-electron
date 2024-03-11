@@ -4,7 +4,7 @@ declare global {
   interface Window {
     api: {
       getSettings: (channel: string) => Promise<Settings>;
-      fetchChannels: (channel: string, arg: string) => StreamerResult[];
+      fetchChannels: (channel: string, arg: string) => Promise<StreamerResult[]>;
       getNewToken: (channel: string) => Promise<string>;
       getAppInfo: (channel: string) => Promise<AppInfo>;
       fetching: (channel: string, func: (isFetching: boolean) => void) => void;
