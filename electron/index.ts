@@ -123,9 +123,9 @@ const createWindow = (): void => {
   mainWindow = new BrowserWindow({
     width: settings.StartSize?.x ?? 400,
     height: settings.StartSize?.y ?? 600,
-    maxWidth: 600,
     minWidth: 400,
     minHeight: 600,
+    maxWidth: 600,
     show: true,
     backgroundColor: '#262626',
     icon: path.join(__dirname, '../src/images/Logo.ico'),
