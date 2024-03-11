@@ -1,5 +1,5 @@
-import { BrowserWindow } from "electron";
-import { loadTokens, getAuthenticationURL } from "./auth-service";
+import { BrowserWindow } from 'electron';
+import { loadTokens, getAuthenticationURL } from './auth-service';
 
 export async function OAuth(): Promise<string> {
   const win = new BrowserWindow({
@@ -9,24 +9,27 @@ export async function OAuth(): Promise<string> {
     frame: true,
     resizable: true,
     webPreferences: {
-      nodeIntegration: false,
-    },
+      nodeIntegration: false
+    }
   });
 
   win.removeMenu();
 
   win.loadURL(getAuthenticationURL());
   const {
-    session: { webRequest },
+    session: { webRequest }
   } = win.webContents;
 
   const filter = {
-    urls: ["https://streamtrack-authentication.firebaseapp.com/"],
+    urls: ['https://streamtrack-authentication.firebaseapp.com/']
   };
 
-  const AuthToken = await getToken();
+  const destroyAuthWindow = async () => {
+    if (!win) return;
+    win.close();
+  };
 
-  async function getToken(): Promise<string> {
+  const getToken = async (): Promise<string> => {
     const abc: string = await new Promise((resolve) => {
       webRequest.onBeforeRequest(filter, async ({ url }) => {
         const token = await loadTokens(url);
@@ -35,12 +38,9 @@ export async function OAuth(): Promise<string> {
     });
     destroyAuthWindow();
     return abc;
-  }
+  };
 
-  function destroyAuthWindow() {
-    if (!win) return;
-    win.close();
-  }
+  const AuthToken = await getToken();
 
   return AuthToken;
 }

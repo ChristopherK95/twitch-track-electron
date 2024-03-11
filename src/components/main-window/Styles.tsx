@@ -28,6 +28,13 @@ export const TitleBar = styled.div`
   display: flex;
   align-items: center;
   width: -webkit-fill-available;
+  -webkit-app-region: drag;
+
+  svg {
+    width: 18px;
+    margin-left: 5px;
+    -webkit-app-region: drag;
+  }
 `;
 
 export const Handle = styled.div`

@@ -1,31 +1,31 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { AppInfo, Platform, Streamer, StreamerResult, StreamResponse } from './StreamerContext';
+import { AppInfo, Platform, Settings, Streamer, StreamerResult } from './StreamerContext';
 
 contextBridge.exposeInMainWorld('api', {
   /*
   // Invoke functions. //
   */
 
-  getSettings: (channel: string) => {
+  getSettings: (channel: string): Promise<Settings> => {
     return ipcRenderer.invoke(channel);
   },
   fetchChannels: async (channel: string, arg: string) => {
     return ipcRenderer.invoke(channel, arg);
   },
-  getNewToken: async (channel: string) => {
+  getNewToken: async (channel: string): Promise<string> => {
     return ipcRenderer.invoke(channel);
   },
 
-  getAppInfo: async (channel: string, args: AppInfo) => {
-    return ipcRenderer.invoke(channel, args);
+  getAppInfo: async (channel: string): Promise<AppInfo> => {
+    return ipcRenderer.invoke(channel);
   },
 
   /*
   // On functions. //
   */
 
-  loading: (channel: string, func: (isLoading: boolean) => void) => {
-    const validChannels = ['loading'];
+  fetching: (channel: string, func: (isFetching: boolean) => void) => {
+    const validChannels = ['fetching'];
     if (validChannels.includes(channel)) {
       ipcRenderer.on(channel, (_, args) => func(args));
     }
@@ -47,13 +47,6 @@ contextBridge.exposeInMainWorld('api', {
 
   progress: (channel: string, func: (event: { progress: number; max: number }) => void) => {
     const validChannels = ['progress'];
-    if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (_, args) => func(args));
-    }
-  },
-
-  awaitStatus: (channel: string, func: (event: { tag: string; data: StreamResponse }) => void) => {
-    const validChannels = ['awaitStatus'];
     if (validChannels.includes(channel)) {
       ipcRenderer.on(channel, (_, args) => func(args));
     }

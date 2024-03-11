@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bubble, EyeGroup, Loading, LoadingBar, LoadingText, StyledSplash } from './Styles';
 
-export function Splash() {
+export const Splash = () => {
   const [loadingText, setLoadingText] = useState('Loading...');
 
   useEffect(() => {
@@ -56,4 +56,4 @@ export function Splash() {
       </Loading>
     </StyledSplash>
   );
-}
+};

@@ -27,12 +27,13 @@ const Streamer = (
     id: string;
     name: string;
     imgUrl: string;
-    deleteStreamer: (id: string) => void;
+    deleteStreamer?: (id: string) => void;
   } & LiveProps
 ) => {
   const { id, name, imgUrl, started, viewers, live, category, title, deleteStreamer } = props;
   const [showDelete, setShowDelete] = useState<boolean>(false);
   const [deleteHover, setDeleteHover] = useState<boolean>(false);
+  const [prevCategory, setPrevCategory] = useState<string>(category ?? '');
 
   const getTimeElapsed = (started: string) => {
     const date = new Date();
@@ -78,15 +79,19 @@ const Streamer = (
       //   }, 1000);
       // }
       // setPrevCategory(props.liveStreamer.category);
-    }, [viewers]);
+    }, [viewers, category, title]);
+
+    useEffect(() => {
+      setTimeout(() => setPrevCategory(category), 3000);
+    }, [category]);
 
     return (
       <StyledStreamer onContextMenu={() => setShowDelete((show: boolean) => !show)}>
         <Img url={imgUrl} />
         <Container>
           <Name onClick={openStream}>{name}</Name>
-          <Category hover={toggleTooltip} category={category} live={true} />
-          {category && title && <Tooltip category={category} title={title} visible={showTooltip} />}
+          <Category hover={toggleTooltip} category={category} live={true} categoryChanged={prevCategory !== category} />
+          {title && <Tooltip category={category} title={title} visible={showTooltip} />}
         </Container>
         <>
           <Status viewers={liveViewers.toString()} />
@@ -94,16 +99,18 @@ const Streamer = (
             {time.timeElapsed}
           </TimeElapsed>
         </>
-        <DeleteContainer>
-          <Delete
-            onClick={() => deleteStreamer(id)}
-            visible={showDelete}
-            onMouseEnter={() => setDeleteHover(true)}
-            onMouseLeave={() => setDeleteHover(false)}
-          >
-            <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
-          </Delete>
-        </DeleteContainer>
+        {deleteStreamer && (
+          <DeleteContainer>
+            <Delete
+              onClick={() => deleteStreamer(id)}
+              visible={showDelete}
+              onMouseEnter={() => setDeleteHover(true)}
+              onMouseLeave={() => setDeleteHover(false)}
+            >
+              <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
+            </Delete>
+          </DeleteContainer>
+        )}
       </StyledStreamer>
     );
   }
@@ -115,16 +122,18 @@ const Streamer = (
         <Name onClick={openStream}>{name}</Name>
         <Category live={false} />
       </Container>
-      <DeleteContainer>
-        <Delete
-          onClick={() => deleteStreamer(id)}
-          visible={showDelete}
-          onMouseEnter={() => setDeleteHover(true)}
-          onMouseLeave={() => setDeleteHover(false)}
-        >
-          <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
-        </Delete>
-      </DeleteContainer>
+      {deleteStreamer && (
+        <DeleteContainer>
+          <Delete
+            onClick={() => deleteStreamer(id)}
+            visible={showDelete}
+            onMouseEnter={() => setDeleteHover(true)}
+            onMouseLeave={() => setDeleteHover(false)}
+          >
+            <Trashcan tooltipText={'Delete'} hover={deleteHover} style={{ position: 'static', fill: 'white' }} />
+          </Delete>
+        </DeleteContainer>
+      )}
     </StyledStreamer>
   );
 };

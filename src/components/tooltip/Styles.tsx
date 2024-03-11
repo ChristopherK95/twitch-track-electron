@@ -63,6 +63,7 @@ export const Title = styled.p<{
   width: max-content;
   font-family: sans-serif;
   font-size: 11px;
+  font-weight: 600;
   position: relative;
   animation: ${(p) =>
     p.visible && p.textWidth > p.width
