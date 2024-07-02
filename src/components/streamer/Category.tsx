@@ -5,16 +5,18 @@ type Props =
   | {
       live: true;
       category: string;
+      categoryChanged: boolean;
       hover: (hover: boolean) => void;
     }
   | {
       live: false;
       category?: string;
+      categoryChanged?: boolean;
       hover?: never;
     };
 
 const Category = (props: Props) => {
-  const { hover, live, category } = props;
+  const { hover, live, category, categoryChanged } = props;
 
   if (!live) {
     return <StyledCategory offline>Offline</StyledCategory>;
@@ -29,7 +31,11 @@ const Category = (props: Props) => {
   }
 
   return (
-    <StyledCategory onMouseEnter={() => hover(true)} onMouseLeave={() => hover(false)}>
+    <StyledCategory
+      categoryChanged={categoryChanged}
+      onMouseEnter={() => hover(true)}
+      onMouseLeave={() => hover(false)}
+    >
       {category}
     </StyledCategory>
   );

@@ -5,7 +5,6 @@ import fs from 'fs';
 import path from 'path';
 import log from 'electron-log';
 import AutoLaunch from 'auto-launch';
-import 'dotenv/config';
 import {
   StreamerResult,
   ChannelResponse,
@@ -25,11 +24,6 @@ import {
   ReadFile,
   WriteToFile
 } from './file-handler';
-
-if (require('electron-squirrel-startup')) {
-  // eslint-disable-line global-require
-  app.quit();
-}
 
 log.info(__dirname);
 
@@ -80,15 +74,15 @@ export function checkFiles() {
   settings = LoadSettings();
 
   let updatedSettings = false;
-  if (!('Token' in settings)) {
+  if (!settings.Token) {
     settings.Token = '';
     updatedSettings = true;
   }
-  if (!('AutoStart' in settings)) {
+  if (!settings.AutoStart) {
     settings.AutoStart = false;
     updatedSettings = true;
   }
-  if (!('StartSize' in settings)) {
+  if (!settings.StartSize) {
     settings.StartSize = { x: 400, y: 600 };
     updatedSettings = true;
   }
@@ -127,14 +121,14 @@ const createWindow = (): void => {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: settings.StartSize.x,
-    height: settings.StartSize.y,
-    maxWidth: 600,
+    width: settings.StartSize?.x ?? 400,
+    height: settings.StartSize?.y ?? 600,
     minWidth: 400,
     minHeight: 600,
+    maxWidth: 600,
     show: true,
     backgroundColor: '#262626',
-    icon: './images/Logo.ico',
+    icon: path.join(__dirname, '../src/images/Logo.ico'),
     frame: process.platform === 'linux',
     webPreferences: {
       nodeIntegration: false,
@@ -148,8 +142,7 @@ const createWindow = (): void => {
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
-
-  mainWindow.loadURL(!app.isPackaged ? 'http://localhost:3000/' : path.join(__dirname, '../src/out/index.html'));
+  mainWindow.loadURL(!app.isPackaged ? 'http://localhost:3000/' : `file://${__dirname}/../src/out/index.html`);
 
   mainWindow.on('ready-to-show', () => {
     // splash.destroy();
@@ -161,7 +154,7 @@ const createWindow = (): void => {
   mainWindow.webContents.on('before-input-event', (event, input) => {
     if (input.control && input.key.toLocaleLowerCase() === 's') {
       const startSize = mainWindow.getSize();
-      [settings.StartSize.x, settings.StartSize.y] = [startSize[0], startSize[1]];
+      settings.StartSize = { x: startSize[0], y: startSize[1] };
       mainWindow.webContents.send('saved-size');
       saveSettings();
       event.preventDefault();
@@ -282,6 +275,7 @@ async function continousUpdate() {
 
   interval = setInterval(async () => {
     if (streamers.length === 0) return;
+    mainWindow.webContents.send('fetching');
     const response = await getStreamerStatus(streamers);
 
     for (let i = 0; i < streamers.length; i++) {
@@ -435,8 +429,16 @@ ipcMain.handleOnce('getAppInfo', async () => {
   // eslint-disable-next-line camelcase
   const version = tag_name.replace('v', '');
   info.latestVersion = version;
-  if (app.getVersion() !== version) {
-    info.availableVersion = true;
+  const latestVersionSplit = version.split('.');
+  const appVersionSplit = app.getVersion().split('.');
+  for (let i = 0; i < latestVersionSplit.length; i++) {
+    if (latestVersionSplit[i] > appVersionSplit[i]) {
+      info.availableVersion = true;
+      break;
+    }
+    if (latestVersionSplit[i] < appVersionSplit[i]) {
+      break;
+    }
   }
 
   return info;

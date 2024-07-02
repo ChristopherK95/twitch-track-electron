@@ -69,7 +69,7 @@ export const DeleteAll = styled.i<{ disabled: boolean }>`
   }
 
   ::after {
-    content: 'Delete all';
+    content: 'Clear history';
     position: absolute;
     padding: 5px;
     background: #424242;

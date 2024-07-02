@@ -2,43 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { State, Streamer, StreamerResult } from '../../interfaces/StreamerContext';
 import { RootState } from '../../reduxStore';
-import { Misc, StyledBell, StyledCog, StyledStreamersView, TopbarBtn } from './Styles';
+import { StyledStreamersView } from './Styles';
 import SearchBar from '../search-bar/SearchBar';
 import SearchResults from '../search-results/SearchResults';
-import Cog from '../../svg/Cog';
-import Bell from '../../svg/Bell';
 import NotifFx from '../../audio/NotificationSound.wav';
 import useNotify from '../../hooks/use-notify';
-import useMode from '../../hooks/use-mode';
-import ContextMenu from '../context-menu/ContextMenu';
 import StreamerContainer from '../streamer-container/StreamerContainer';
 
 const StreamersView = (props: {
   tokenMissing: boolean;
   hideSearchBar: boolean;
+  toggleSearchBar: () => void;
   search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setSearch: (s: string) => void;
 }) => {
+  const { hideSearchBar, toggleSearchBar, search, setSearch, tokenMissing } = props;
   const [streamers, setStreamers] = useState<Streamer[]>([]);
   const [oldStreamers, setOldStreamers] = useState<Streamer[]>([]);
+  const [fetching, setFetching] = useState(false);
   const { notify } = useNotify();
-  const { changeMode } = useMode();
-
-  const { hideSearchBar, search, setSearch, tokenMissing } = props;
   const state = useSelector((state: RootState) => state.state.state);
   const [resultArr, setResultArr] = useState<StreamerResult[]>([]);
   const [savedStreamers, setSavedStreamers] = useState<StreamerResult[]>([]);
   const [hideOffline, toggleOffline] = useState<boolean>(false);
-  const [contextMenu, toggleContextMenu] = useState<{
-    show: boolean;
-    name: string;
-    pos: { x: number; y: number };
-  }>({ show: false, name: '', pos: { x: 0, y: 0 } });
   const notifFx = new Audio(NotifFx);
 
   // Makes an API request to Twitch for channels/streamers that match given search param.
   const fetchStreamers = async (name: string) => {
     const response = await window.api.fetchChannels('fetchChannels', name);
+    response.sort((a, b) => {
+      if (a.name.toLowerCase() === name.toLowerCase()) {
+        return -1
+      }
+      if (b.name.toLowerCase() === name.toLowerCase()) {
+        return 1
+      }
+
+      return 0
+    })
     setResultArr(response);
   };
 
@@ -104,28 +105,28 @@ const StreamersView = (props: {
 
   useEffect(() => {
     window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
-      setStreamers(data);
+      //const { online, offline } = processStreamerData(streamers, data);
+
+      console.log(data)
+      const wasOnline = streamers.filter(s => s.live).map(s => s.id)
+      const updated: Streamer[] = data.map(s =>
+        !s.live &&
+          wasOnline.includes(s.id)
+          ? ({ ...s, ended: new Date().getTime() }) : s)
+      setStreamers(updated);
+
+      setTimeout(() => {
+        setFetching(false);
+      }, 2000);
     });
+
+    window.api.fetching('fetching', () => setFetching(true));
 
     window.api.rendererReady('rendererReady');
   }, []);
 
   return (
     <StyledStreamersView visible={state === State.main || state === State.search}>
-      <Misc>
-        <TopbarBtn onClick={() => changeMode(State.settings)}>
-          Settings
-          <StyledCog>
-            <Cog />
-          </StyledCog>
-        </TopbarBtn>
-        <TopbarBtn onClick={() => changeMode(State.notifications)}>
-          Notifications
-          <StyledBell>
-            <Bell />
-          </StyledBell>
-        </TopbarBtn>
-      </Misc>
       <SearchBar
         fetch={fetchStreamers}
         tokenMissing={tokenMissing}
@@ -134,18 +135,13 @@ const StreamersView = (props: {
         setSearch={setSearch}
       />
       <>
-        <ContextMenu
-          context={contextMenu}
-          setContext={toggleContextMenu}
-          streamers={streamers}
-          setStreamers={setStreamers}
-        />
         <StreamerContainer
           hideOffline={hideOffline}
           toggleOffline={toggleOffline}
-          context={toggleContextMenu}
           streamers={streamers}
           setStreamers={(s) => setStreamers(s)}
+          fetching={fetching}
+          toggleSearchBar={toggleSearchBar}
         />
         <SearchResults
           searchResults={resultArr}

@@ -1,7 +1,7 @@
 export interface Settings {
-  Token: string;
-  AutoStart: boolean;
-  StartSize: { x: number; y: number };
+  Token?: string;
+  AutoStart?: boolean;
+  StartSize?: { x: number; y: number };
 }
 
 export interface AppInfo {

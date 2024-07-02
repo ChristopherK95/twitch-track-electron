@@ -62,7 +62,7 @@ export const TrashcanIcon = styled.i<{ disabled?: boolean; tooltipText?: string;
       `}
 `;
 
-function Trashcan(props: { style: CSSProperties; tooltipText?: string; hover: boolean }) {
+const Trashcan = (props: { style: CSSProperties; tooltipText?: string; hover: boolean }) => {
   return (
     <TrashcanIcon style={props.style} tooltipText={props.tooltipText} hover={props.hover}>
       <svg viewBox="0 0 118.3328 135.47548">
@@ -78,6 +78,6 @@ function Trashcan(props: { style: CSSProperties; tooltipText?: string; hover: bo
       </svg>
     </TrashcanIcon>
   );
-}
+};
 
 export default Trashcan;

@@ -16,7 +16,7 @@ export const Form = styled.form<{ hide: boolean }>`
   width: 90%;
   align-self: center;
   z-index: 1;
-  margin-top: 10px;
+  margin-top: 25px;
   position: relative;
   box-shadow: 0px 4px 5px 0px rgb(0 0 0 / 40%);
   border-radius: 3px;
@@ -63,6 +63,7 @@ export const Input = styled.input`
   font-family: system-ui;
   min-width: 0;
   user-select: none;
+  transition: background-color 0.3s ease;
 
   :focus {
     background-color: #3a3a3a;
