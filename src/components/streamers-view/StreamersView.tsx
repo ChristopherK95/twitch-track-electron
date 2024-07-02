@@ -8,7 +8,6 @@ import SearchResults from '../search-results/SearchResults';
 import NotifFx from '../../audio/NotificationSound.wav';
 import useNotify from '../../hooks/use-notify';
 import StreamerContainer from '../streamer-container/StreamerContainer';
-import processStreamerData from './process-streamer-data';
 
 const StreamersView = (props: {
   tokenMissing: boolean;
@@ -20,11 +19,8 @@ const StreamersView = (props: {
   const { hideSearchBar, toggleSearchBar, search, setSearch, tokenMissing } = props;
   const [streamers, setStreamers] = useState<Streamer[]>([]);
   const [oldStreamers, setOldStreamers] = useState<Streamer[]>([]);
-  const [wentOnline, setWentOnline] = useState<Streamer[]>([]);
-  const [wentOffline, setWentOffline] = useState<Streamer[]>([]);
   const [fetching, setFetching] = useState(false);
   const { notify } = useNotify();
-
   const state = useSelector((state: RootState) => state.state.state);
   const [resultArr, setResultArr] = useState<StreamerResult[]>([]);
   const [savedStreamers, setSavedStreamers] = useState<StreamerResult[]>([]);
@@ -34,6 +30,16 @@ const StreamersView = (props: {
   // Makes an API request to Twitch for channels/streamers that match given search param.
   const fetchStreamers = async (name: string) => {
     const response = await window.api.fetchChannels('fetchChannels', name);
+    response.sort((a, b) => {
+      if (a.name.toLowerCase() === name.toLowerCase()) {
+        return -1
+      }
+      if (b.name.toLowerCase() === name.toLowerCase()) {
+        return 1
+      }
+
+      return 0
+    })
     setResultArr(response);
   };
 
@@ -99,11 +105,15 @@ const StreamersView = (props: {
 
   useEffect(() => {
     window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
-      const { online, offline } = processStreamerData(streamers, data);
+      //const { online, offline } = processStreamerData(streamers, data);
 
-      setStreamers(data);
-      setWentOnline(online);
-      setWentOffline(offline);
+      console.log(data)
+      const wasOnline = streamers.filter(s => s.live).map(s => s.id)
+      const updated: Streamer[] = data.map(s =>
+        !s.live &&
+          wasOnline.includes(s.id)
+          ? ({ ...s, ended: new Date().getTime() }) : s)
+      setStreamers(updated);
 
       setTimeout(() => {
         setFetching(false);
@@ -132,8 +142,6 @@ const StreamersView = (props: {
           setStreamers={(s) => setStreamers(s)}
           fetching={fetching}
           toggleSearchBar={toggleSearchBar}
-          wentOnline={wentOnline}
-          wentOffline={wentOffline}
         />
         <SearchResults
           searchResults={resultArr}

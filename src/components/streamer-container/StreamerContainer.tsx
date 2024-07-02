@@ -20,6 +20,25 @@ import Miscellaneous from '../streamers-view/Misc';
 import WentOnline from './WentOnline';
 import WentOffline from './WentOffline';
 
+function wentLive(date: string) {
+  const now = new Date().getTime()
+  const start = new Date(date).getTime()
+
+  // Return true if time since live is less than 1 minute.
+  return ((now - start) / 1000 / 60) < 1
+}
+
+function wentOffline(date?: number) {
+  if (!date) {
+    return false
+  }
+
+  const now = new Date().getTime()
+
+  // Return true if time since live is less than 1 minute.
+  return ((date - now) / 1000 / 60) < 1
+}
+
 const StreamerContainer = (props: {
   hideOffline: boolean;
   toggleOffline: (hideOffline: boolean) => void;
@@ -27,12 +46,14 @@ const StreamerContainer = (props: {
   setStreamers: (s: Streamers[]) => void;
   fetching: boolean;
   toggleSearchBar: () => void;
-  wentOnline: Streamers[];
-  wentOffline: Streamers[];
 }) => {
-  const { hideOffline, toggleOffline, streamers, setStreamers, fetching, toggleSearchBar, wentOnline, wentOffline } =
+  const { hideOffline, toggleOffline, streamers, setStreamers, fetching, toggleSearchBar } =
     props;
   const state = useSelector((state: RootState) => state.state.state);
+  const recentlyLive = streamers.filter(s => s.live && wentLive(s.started))
+  const recentlyOffline = streamers.filter(s => !s.live && wentOffline(s.ended))
+  const live = streamers.filter(s => s.live && !wentLive(s.started))
+  const offline = streamers.filter(s => !s.live && !wentOffline(s.ended))
 
   const onToggleOffline = () => {
     toggleOffline(!hideOffline);
@@ -40,22 +61,10 @@ const StreamerContainer = (props: {
 
   const getCount = (type: 'live' | 'offline') => {
     if (type === 'live') {
-      let count = 0;
-      for (let i = 0; i < streamers.length; i++) {
-        if (streamers[i].live) {
-          count++;
-        }
-      }
-      return count;
+      return live.length + recentlyLive.length;
     }
 
-    let count = 0;
-    for (let i = 0; i < streamers.length; i++) {
-      if (!streamers[i].live) {
-        count++;
-      }
-    }
-    return count;
+    return offline.length + recentlyOffline.length;
   };
 
   const deleteStreamer = (id: string) => {
@@ -71,22 +80,22 @@ const StreamerContainer = (props: {
     <StyledStreamerContainer visible={state === State.main}>
       {streamers.length > 0 ? (
         <SectionContainer>
-          {Boolean(wentOnline.length) && (
+          {Boolean(recentlyLive.length) && (
             <Container>
               <Section>
-                Went Online <Count>{`(${wentOnline.length})`}</Count>
+                Went Online <Count>{`(${recentlyLive.length})`}</Count>
               </Section>
 
-              <WentOnline streamers={wentOnline} />
+              <WentOnline streamers={recentlyLive} />
             </Container>
           )}
-          {Boolean(wentOffline.length) && (
+          {Boolean(recentlyOffline.length) && (
             <Container>
               <Section>
-                Went Offline <Count>{`(${wentOffline.length})`}</Count>
+                Went Offline <Count>{`(${recentlyOffline.length})`}</Count>
               </Section>
 
-              <WentOffline streamers={wentOffline} />
+              <WentOffline streamers={recentlyOffline} />
             </Container>
           )}
           <Container>
@@ -95,8 +104,7 @@ const StreamerContainer = (props: {
               <Miscellaneous fetching={fetching} toggleSearchBar={toggleSearchBar} />
             </Section>
 
-            {streamers
-              .filter((streamer) => streamer.live === true)
+            {live
               .sort((a, b) => {
                 if (a.viewers && b.viewers) {
                   if (a.viewers < b.viewers) {
@@ -134,8 +142,7 @@ const StreamerContainer = (props: {
               </Count>
             </Section>
             {!hideOffline &&
-              streamers
-                .filter((streamer: Streamers) => streamer.live === false)
+              offline
                 .map((streamer) => (
                   <Streamer
                     key={streamer.id}

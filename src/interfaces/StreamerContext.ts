@@ -19,6 +19,7 @@ export interface Streamer {
   viewers: number;
   imgUrl: string;
   live: boolean;
+  ended?: number
 }
 
 export interface LiveStreamer {

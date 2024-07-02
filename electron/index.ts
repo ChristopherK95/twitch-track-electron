@@ -432,8 +432,6 @@ ipcMain.handleOnce('getAppInfo', async () => {
   const latestVersionSplit = version.split('.');
   const appVersionSplit = app.getVersion().split('.');
   for (let i = 0; i < latestVersionSplit.length; i++) {
-    console.log(latestVersionSplit[i], appVersionSplit[i]);
-    console.log(latestVersionSplit[i] > appVersionSplit[i]);
     if (latestVersionSplit[i] > appVersionSplit[i]) {
       info.availableVersion = true;
       break;
