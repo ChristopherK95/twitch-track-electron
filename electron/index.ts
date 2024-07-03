@@ -240,15 +240,17 @@ app.on('activate', () => {
 // Fetches one or more streamers live status based on the given user-ids in the URL.
 async function getStreamerStatus(arg: Streamer[] | Streamer): Promise<StreamResponse> {
   let url: string;
-  if (Array.isArray(arg)) {
+  if (Array.isArray(arg) && arg.length) {
     url = `https://api.twitch.tv/helix/streams?user_id=${arg[0].id}`;
     if (arg.length > 1) {
       for (let i = 1; i < arg.length; i++) {
         url += `&user_id=${arg[i].id}`;
       }
     }
-  } else {
+  } else if (!Array.isArray(arg)) {
     url = `https://api.twitch.tv/helix/streams?user_id=${arg.id}`;
+  } else {
+    return { data: [] };
   }
 
   const data = await fetch(url, {
