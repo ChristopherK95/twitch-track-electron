@@ -125,7 +125,6 @@ const createWindow = (): void => {
     height: settings.StartSize?.y ?? 600,
     minWidth: 400,
     minHeight: 600,
-    maxWidth: 600,
     show: true,
     backgroundColor: '#262626',
     icon: path.join(__dirname, '../src/images/Logo.ico'),
