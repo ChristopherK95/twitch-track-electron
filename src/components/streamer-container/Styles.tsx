@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const StyledStreamerContainer = styled.div<{ visible: boolean }>`
   width: 100%;
-  height: max-content;
+  height: calc(100% - 70px);
+  overflow-y: auto;
   display: ${(p) => (p.visible ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: flex-start;

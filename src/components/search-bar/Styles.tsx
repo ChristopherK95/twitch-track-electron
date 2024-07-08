@@ -1,24 +1,24 @@
 import styled from 'styled-components';
 
 export const StyledSearchBar = styled.div`
+  height: 70px;
   width: 100%;
-  border-radius: 3px;
+  padding: 0 0 0 20px;
+  background-color: #121212;
   position: relative;
   display: flex;
+  gap: 10px;
   transition: background-color 0.3s, transform 0.5s ease-in-out;
   justify-content: flex-start;
-  flex-direction: column;
+  align-items: center;
   transform: translateX(0);
 `;
 
 export const Form = styled.form<{ hide: boolean }>`
   display: ${(p) => (p.hide ? 'none' : 'flex')};
-  width: 90%;
-  align-self: center;
+  justify-content: flex-start;
   z-index: 1;
-  margin-top: 25px;
   position: relative;
-  box-shadow: 0px 4px 5px 0px rgb(0 0 0 / 40%);
   border-radius: 3px;
   overflow: hidden;
 `;
@@ -28,7 +28,6 @@ export const SearchButton = styled.button`
   cursor: pointer;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
-  padding: 0 15px;
   background-color: #202020;
   position: relative;
   z-index: 1;
@@ -54,22 +53,23 @@ export const Input = styled.input`
   outline: none;
   color: white;
   padding: 5px 10px 5px 10px;
-  background-color: #202020;
+  background-color: #999999;
   border: none;
   width: -webkit-fill-available;
-  height: 45px;
-  font-size: 25px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
   border-radius: 0 3px 3px 0;
   font-family: system-ui;
   min-width: 0;
   user-select: none;
   transition: background-color 0.3s ease;
 
-  :focus {
+  &:focus {
     background-color: #3a3a3a;
   }
 
-  :disabled {
+  &:disabled {
     filter: brightness(0.5);
   }
 `;
@@ -94,16 +94,16 @@ export const Cross = styled.div<{ visible: boolean; slide: boolean }>`
     position: absolute;
     top: 50%;
 
-    :first-child {
+    &:first-child {
       transform: rotate(45deg);
     }
 
-    :last-child {
+    &:last-child {
       transform: rotate(-45deg);
     }
   }
 
-  :hover {
+  &:hover {
     background: #7777775d;
     div {
       background-color: white;
@@ -112,21 +112,20 @@ export const Cross = styled.div<{ visible: boolean; slide: boolean }>`
 `;
 
 export const BackButton = styled.button<{ visible: boolean }>`
-  position: absolute;
+  margin-left: 10px;
   z-index: 1;
   border: none;
-  right: 0px;
   color: #adadad;
   font-weight: bold;
   transform: translateX(${(P) => (P.visible ? '0' : '100%')});
   transition: transform 0.5s ease;
-  border-radius: 0 3px 3px 0;
+  border-radius: 3px;
   height: 45px;
   padding: 0 15px;
-  background-color: #343434;
+  background-color: #303030;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  font-size: 16px;
 
   svg {
     width: 20px;
@@ -134,9 +133,27 @@ export const BackButton = styled.button<{ visible: boolean }>`
     cursor: pointer;
   }
 
-  :hover {
-    svg {
-      fill: white;
-    }
+  &:hover {
+    background-color: #505050;
   }
 `;
+
+export const ModeContainer = styled.div`
+  display: flex;
+
+  :first-child {
+    border-radius: 3px 0 0 3px;
+  }
+
+  :last-child {
+    border-radius: 0 3px 3px 0;
+  }
+`
+
+export const ModeButton = styled.div<{ toggled: boolean }>`
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  background-color: ${p => p.toggled ? '#505050' : '#303030'};
+`

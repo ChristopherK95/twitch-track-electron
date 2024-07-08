@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BackButton, Cross, Form, Input, SearchButton, SearchIcon, StyledSearchBar } from './Styles';
-import Search from '../../svg/Search';
+import { useSelector } from 'react-redux';
+import { BackButton, Cross, Form, Input, StyledSearchBar } from './Styles';
 import { RootState } from '../../reduxStore';
 import { State } from '../../interfaces/StreamerContext';
 import Back from '../../svg/Back';
 import LoadingBar from '../loading-bar/LoadingBar';
+import AddButton from '../streamers-view/AddButton';
+import useMode from '../../hooks/use-mode';
+import ModeToggle from './ModeToggle';
 
 const SearchBar = (props: {
   hideSearchBar: boolean;
@@ -15,8 +17,7 @@ const SearchBar = (props: {
   tokenMissing: boolean;
 }) => {
   const { hideSearchBar, search, setSearch, fetch, tokenMissing } = props;
-  const dispatch = useDispatch();
-  const state = useSelector((state: RootState) => state.state.state);
+  const {mode, changeMode } = useMode()
   const [progress, setProgress] = useState<number>();
 
   const clearProgress = () => {
@@ -32,14 +33,11 @@ const SearchBar = (props: {
     if (search === '') return;
     setProgress(0);
     fetch(search);
-    if (state === State.main) {
-      dispatch({ type: 'changeState', payload: State.search });
-    }
   };
 
   const back = () => {
     setSearch('');
-    dispatch({ type: 'changeState', payload: State.main });
+    changeMode(State.main);
   };
 
   useEffect(() => {
@@ -50,21 +48,14 @@ const SearchBar = (props: {
 
   return (
     <StyledSearchBar>
-      <Form hide={hideSearchBar} onSubmit={submit}>
-        <SearchButton type="submit" disabled={tokenMissing}>
-          <SearchIcon>
-            <Search />
-          </SearchIcon>
-        </SearchButton>
-        <Input type="text" placeholder="Search" value={search} onChange={onChange} disabled={tokenMissing} />
-        <Cross visible={search.length > 0} slide={state === State.search} onClick={() => setSearch('')}>
+      <ModeToggle />
+      { mode === State.search && (<Form hide={hideSearchBar} onSubmit={submit}>
+        <Input type="text" placeholder="Search ..." value={search} onChange={onChange} disabled={tokenMissing} />
+        <Cross visible={search.length > 0} slide={mode === State.search} onClick={() => setSearch('')}>
           <div />
           <div />
         </Cross>
-        <BackButton visible={state === State.search} onClick={back}>
-          <Back />
-        </BackButton>
-      </Form>
+      </Form>) }
       <LoadingBar progress={progress} clearProgress={clearProgress} />
     </StyledSearchBar>
   );

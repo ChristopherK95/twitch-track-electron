@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StyledStreamersView = styled.div<{ visible: boolean }>`
   width: 100%;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   z-index: ${(p) => (p.visible ? 11 : 10)};
   background: #262626;
   transition: transform 0.5s ease, opacity 0.3s ease;
@@ -84,3 +84,19 @@ export const StyledBell = styled.i`
   fill: #aaaaaa;
   transition: fill 0.3s ease, transform 0.3s ease;
 `;
+
+export const StyledAddButton = styled.button`
+  width: 45px;
+  height: 45px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: #303030;
+  border: none;
+
+  &:hover {
+    background-color: #505050;
+  }
+`

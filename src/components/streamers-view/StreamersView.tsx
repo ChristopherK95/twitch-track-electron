@@ -105,9 +105,6 @@ const StreamersView = (props: {
 
   useEffect(() => {
     window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
-      //const { online, offline } = processStreamerData(streamers, data);
-
-      console.log(data)
       const wasOnline = streamers.filter(s => s.live).map(s => s.id)
       const updated: Streamer[] = data.map(s =>
         !s.live &&

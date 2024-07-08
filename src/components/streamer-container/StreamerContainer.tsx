@@ -138,7 +138,7 @@ const StreamerContainer = (props: {
               Offline{' '}
               <Count onClick={onToggleOffline}>
                 {`(${getCount('offline')})`}
-                <Toggle>{hideOffline ? <Plus /> : <Dash />}</Toggle>
+                <Toggle>{hideOffline ? <Plus color='#eeeeee' /> : <Dash />}</Toggle>
               </Count>
             </Section>
             {!hideOffline &&

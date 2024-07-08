@@ -73,7 +73,7 @@ export const MinimizeBtn = styled.button`
   justify-content: center;
   align-items: center;
 
-  :hover {
+  &:hover {
     background: #474747;
   }
 
@@ -90,7 +90,7 @@ export const CloseBtn = styled.button`
   justify-content: center;
   align-items: center;
 
-  :hover {
+  &:hover {
     background: rgb(238, 38, 71);
   }
 
@@ -101,7 +101,7 @@ export const CloseBtn = styled.button`
     transform: rotate(-45deg);
     position: absolute;
 
-    :first-child {
+    &:first-child {
       transform: rotate(45deg);
     }
   }
@@ -122,7 +122,7 @@ export const ContentArea = styled.div`
   overflow-x: hidden;
   overflow-y: hidden;
   background: #262626;
-  padding-right: 3px;
+  //padding-right: 3px;
 `;
 
 export const MissingToken = styled.div`
