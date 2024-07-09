@@ -3,15 +3,15 @@ import styled from 'styled-components';
 export const Bar = styled.div<{ progress: number }>`
   position: absolute;
   border-radius: 0 0 2px 2px;
-  width: 90%;
+  width: 100%;
   height: 4px;
   background-color: #373737;
-  bottom: 0px;
   z-index: 1;
   margin: 0 auto;
-  left: 5%;
+  left: 0%;
+  top: 0px;
 
-  :after {
+  &:after {
     content: '';
     position: absolute;
     left: 0;

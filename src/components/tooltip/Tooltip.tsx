@@ -12,9 +12,9 @@ const Tooltip = (props: { category: string; title: string; visible: boolean }) =
       <TitleContainer>
         <Title
           ref={titleRef}
-          visible={visible}
-          width={tooltipRef.current?.offsetWidth}
-          textWidth={titleRef.current?.offsetWidth}
+          $visible={visible}
+          $width={tooltipRef.current?.offsetWidth}
+          $textWidth={titleRef.current?.offsetWidth}
         >
           {title ?? 'No title'}
         </Title>

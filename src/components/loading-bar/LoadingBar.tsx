@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from './Styles';
 
-const LoadingBar = (props: { progress: number | undefined; clearProgress: () => void }) => {
-  const { progress, clearProgress } = props;
+const LoadingBar = () => {
+  const [progress, setProgress] = useState<number>();
+
+  useEffect(() => {
+    window.api.progress('progress', (p: { progress: number; max: number }) => {
+      const percentage = (p.progress / p.max) * 100
+      if (percentage === 100) {
+        setProgress(100)
+        setTimeout(() => setProgress(0), 500)
+      } else {
+        setProgress(percentage);
+      }
+    });
+  }, []);
 
   if (!progress) {
     return null;
   }
 
-  if (progress === 100) {
-    setTimeout(() => {
-      clearProgress();
-    }, 500);
-  }
+  //useEffect(() => {
+  //  if (progress === 100) {
+  //    console.log('done')
+  //    clearProgress();
+  //  }
+  //}, [progress])
 
   return <Bar progress={progress} />;
 };

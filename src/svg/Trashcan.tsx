@@ -1,7 +1,7 @@
-import React from 'react';
-import styled, { CSSProperties } from 'styled-components';
+import React, { CSSProperties } from 'react';
+import styled from 'styled-components';
 
-export const TrashcanIcon = styled.i<{ disabled?: boolean; tooltipText?: string; hover: boolean }>`
+export const TrashcanIcon = styled.i<{ $tooltipText?: string; $hover: boolean }>`
   display: flex;
   height: 25px;
   position: relative;
@@ -10,15 +10,13 @@ export const TrashcanIcon = styled.i<{ disabled?: boolean; tooltipText?: string;
   fill: #878787;
   cursor: pointer;
 
-  ${(p) => p.disabled && 'visibility: hidden'};
-
   #lid {
     transform-origin: 75px 85px;
     transition: transform 0.3s ease;
   }
 
   ${(p) =>
-    p.hover &&
+    p.$hover &&
     `
     fill: white;
 
@@ -37,10 +35,10 @@ export const TrashcanIcon = styled.i<{ disabled?: boolean; tooltipText?: string;
   `}
 
   ${(p) =>
-    p.tooltipText &&
+    p.$tooltipText &&
     `
         :after {
-        content: '${p.tooltipText}';
+        content: '${p.$tooltipText}';
         position: absolute;
         padding: 5px;
         background: #424242;
@@ -64,7 +62,7 @@ export const TrashcanIcon = styled.i<{ disabled?: boolean; tooltipText?: string;
 
 const Trashcan = (props: { style: CSSProperties; tooltipText?: string; hover: boolean }) => {
   return (
-    <TrashcanIcon style={props.style} tooltipText={props.tooltipText} hover={props.hover}>
+    <TrashcanIcon style={props.style} $tooltipText={props.tooltipText} $hover={props.hover}>
       <svg viewBox="0 0 118.3328 135.47548">
         <defs id="defs2" />
         <g id="layer1" transform="translate(-42.939969,-60.305797)">

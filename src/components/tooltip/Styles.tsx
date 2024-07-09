@@ -53,9 +53,9 @@ export const TitleContainer = styled.div`
 `;
 
 export const Title = styled.p<{
-  visible: boolean;
-  width: number;
-  textWidth: number;
+  $visible: boolean;
+  $width: number;
+  $textWidth: number;
 }>`
   color: rgb(200, 200, 200);
   margin: 0;
@@ -66,9 +66,9 @@ export const Title = styled.p<{
   font-weight: 600;
   position: relative;
   animation: ${(p) =>
-    p.visible && p.textWidth > p.width
+    p.$visible && p.$textWidth > p.$width
       ? css`
-          ${slideHorizontal(`calc(-100% + ${p.width}px - 20px)`)} ${p.textWidth * 0.02}s linear 1s infinite
+          ${slideHorizontal(`calc(-100% + ${p.$width}px - 20px)`)} ${p.$textWidth * 0.02}s linear 1s infinite
         `
       : ''};
 `;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Streamer, StreamerResult } from '../../interfaces/StreamerContext';
 import { StyledAdd, StyledImg, StyledName, StyledResult } from './Styles';
 
@@ -9,28 +9,25 @@ const SearchResult = (props: {
   streamers: Streamer[];
 }) => {
   const { result, savedStreamers, saveStreamer, streamers } = props;
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<boolean>(streamers.some(str => str.id === result.id));
 
-  function handleSave(streamer: StreamerResult) {
+  function handleSave() {
+    if (saved) {
+      return
+    }
     const arr: StreamerResult[] = savedStreamers;
-    arr.push(streamer);
+    arr.push(result);
     saveStreamer(arr);
     setSaved(true);
     window.api.saveStreamer('saveStreamer', savedStreamers);
-    window.api.askStatus('askStatus', streamer);
+    window.api.askStatus('askStatus', result);
   }
-
-  useEffect(() => {
-    if (streamers.find((streamer) => streamer.id === result.id)) {
-      setSaved(true);
-    } else setSaved(false);
-  }, [result]);
 
   return (
     <StyledResult>
       <StyledImg src={result.imgUrl} alt="" />
       <StyledName>{result.name}</StyledName>
-      <StyledAdd saved={saved} onClick={() => !saved && handleSave(result)}>
+      <StyledAdd $saved={saved} onClick={handleSave}>
         {saved ? 'Added' : 'Add'}
       </StyledAdd>
     </StyledResult>

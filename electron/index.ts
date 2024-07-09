@@ -121,8 +121,8 @@ const createWindow = (): void => {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: settings.StartSize?.x ?? 400,
-    height: settings.StartSize?.y ?? 600,
+    width: settings.StartSize?.x ?? 1000,
+    height: settings.StartSize?.y ?? 500,
     minWidth: 400,
     minHeight: 600,
     show: true,

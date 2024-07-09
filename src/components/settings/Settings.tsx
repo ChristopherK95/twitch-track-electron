@@ -53,27 +53,27 @@ const Settings = (props: {
   }, []);
 
   return (
-    <StyledSettings visible={visible}>
+    <StyledSettings $visible={visible}>
       <ExitSettings onClick={() => dispatch({ type: 'changeState', payload: State.main })}>
         <Back />
       </ExitSettings>
       <Title>Settings</Title>
       <Setting>
         <Label>Hide the search bar</Label>
-        <Checkbox enabled={hideSearchBar} onClick={() => toggleSearchBar(!hideSearchBar)}>
-          <Switch enabled={hideSearchBar} />
+        <Checkbox $enabled={hideSearchBar} onClick={() => toggleSearchBar(!hideSearchBar)}>
+          <Switch $enabled={hideSearchBar} />
         </Checkbox>
       </Setting>
       <Setting>
         <Label>Hide offline streamers</Label>
-        <Checkbox enabled={hideOffline} onClick={() => toggleOffline(!hideOffline)}>
-          <Switch enabled={hideOffline} />
+        <Checkbox $enabled={hideOffline} onClick={() => toggleOffline(!hideOffline)}>
+          <Switch $enabled={hideOffline} />
         </Checkbox>
       </Setting>
       <Setting>
         <Label>Open on start-up</Label>
-        <Checkbox onClick={() => setAutoStart(!autoStart)} enabled={autoStart}>
-          <Switch enabled={autoStart} />
+        <Checkbox onClick={() => setAutoStart(!autoStart)} $enabled={autoStart}>
+          <Switch $enabled={autoStart} />
         </Checkbox>
       </Setting>
       <Setting>

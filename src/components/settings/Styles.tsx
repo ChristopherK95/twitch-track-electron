@@ -1,19 +1,19 @@
 import styled from 'styled-components';
 
-export const StyledSettings = styled.div<{ visible: boolean }>`
+export const StyledSettings = styled.div<{ $visible: boolean }>`
   width: 100%;
   height: 100%;
   background-color: #262626;
   display: flex;
   flex-direction: column;
   position: absolute;
-  z-index: ${(p) => (p.visible ? 11 : 10)};
-  transform: ${(p) => (p.visible ? 'scale(100%)' : 'scale(80%)')};
+  z-index: ${(p) => (p.$visible ? 11 : 10)};
+  transform: ${(p) => (p.$visible ? 'scale(100%)' : 'scale(80%)')};
   align-items: baseline;
   padding: 45px 15px 0 15px;
   box-sizing: border-box;
   transition: transform 0.5s ease, opacity 0.3s ease;
-  opacity: ${(p) => (p.visible ? '1' : '0')};
+  opacity: ${(p) => (p.$visible ? '1' : '0')};
 `;
 
 export const ExitSettings = styled.div`
@@ -60,11 +60,11 @@ export const Label = styled.p`
   user-select: none;
 `;
 
-export const Checkbox = styled.div<{ enabled: boolean }>`
+export const Checkbox = styled.div<{ $enabled: boolean }>`
   width: 35px;
   height: 15px;
   border-radius: 15px;
-  background-color: ${(p) => (p.enabled ? 'rgb(41, 193, 117)' : 'rgb(22, 22, 22)')};
+  background-color: ${(p) => (p.$enabled ? 'rgb(41, 193, 117)' : 'rgb(22, 22, 22)')};
   box-sizing: border-box;
   transition: background-color 0.2s ease;
   cursor: pointer;
@@ -73,17 +73,17 @@ export const Checkbox = styled.div<{ enabled: boolean }>`
   justify-content: center;
 
   :hover {
-    background-color: ${(p) => (p.enabled ? 'rgb(29, 149, 89)' : 'rgb(66, 66, 66)')};
+    background-color: ${(p) => (p.$enabled ? 'rgb(29, 149, 89)' : 'rgb(66, 66, 66)')};
   }
 `;
 
-export const Switch = styled.div<{ enabled: boolean }>`
+export const Switch = styled.div<{ $enabled: boolean }>`
   height: 20px;
   width: 20px;
   border-radius: 100%;
-  background-color: ${(p) => (p.enabled ? 'white' : '#858585')};
+  background-color: ${(p) => (p.$enabled ? 'white' : '#858585')};
   position: relative;
-  transform: translateX(${(p) => (p.enabled ? '35%' : '-35%')});
+  transform: translateX(${(p) => (p.$enabled ? '35%' : '-35%')});
   transition: transform 0.2s ease;
   display: flex;
   -webkit-box-pack: center;
@@ -97,7 +97,7 @@ export const Switch = styled.div<{ enabled: boolean }>`
   }
 
   :active {
-    transform: ${(p) => (p.enabled ? 'translateX(50%)' : 'translateX(-50%)')};
+    transform: ${(p) => (p.$enabled ? 'translateX(50%)' : 'translateX(-50%)')};
   }
 `;
 

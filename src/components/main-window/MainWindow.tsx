@@ -20,6 +20,7 @@ import StreamersView from '../streamers-view/StreamersView';
 import useNotify from '../../hooks/use-notify';
 import useMode from '../../hooks/use-mode';
 import Logo from '../../svg/Logo';
+import { match } from 'ts-pattern';
 
 const MainWindow = () => {
   const state = useSelector((state: RootState) => state.state.state);
@@ -79,22 +80,27 @@ const MainWindow = () => {
             </MissingToken>
           )}
           <Notifications />
-          <Settings
-            hideSearchBar={hideSearchBar}
-            toggleSearchBar={toggleSearchBar}
-            hideOffline={hideOffline}
-            toggleOffline={toggleOffline}
-            setTokenMissing={setTokenMissing}
-            visible={state === State.settings}
-          />
-          <NotificationsView />
-          <StreamersView
-            hideSearchBar={hideSearchBar}
-            toggleSearchBar={() => toggleSearchBar((b: boolean) => !b)}
-            search={search}
-            setSearch={setSearch}
-            tokenMissing={tokenMissing}
-          />
+          {
+            match(state)
+              .with(State.settings, () =>
+                <Settings
+                  hideSearchBar={hideSearchBar}
+                  toggleSearchBar={toggleSearchBar}
+                  hideOffline={hideOffline}
+                  toggleOffline={toggleOffline}
+                  setTokenMissing={setTokenMissing}
+                  visible={state === State.settings}
+                />)
+              .with(State.notifications, () => <NotificationsView />)
+              .with(State.main, State.search, () =>
+                <StreamersView
+                  hideSearchBar={hideSearchBar}
+                  toggleSearchBar={() => toggleSearchBar((b: boolean) => !b)}
+                  search={search}
+                  setSearch={setSearch}
+                  tokenMissing={tokenMissing}
+                />
+              ).exhaustive()}
         </ContentArea>
       </Main>
     </StyledMainWindow>

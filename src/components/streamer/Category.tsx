@@ -19,7 +19,7 @@ const Category = (props: Props) => {
   const { hover, live, category, categoryChanged } = props;
 
   if (!live) {
-    return <StyledCategory offline>Offline</StyledCategory>;
+    return <StyledCategory $offline>Offline</StyledCategory>;
   }
 
   if (!category) {
@@ -32,7 +32,7 @@ const Category = (props: Props) => {
 
   return (
     <StyledCategory
-      categoryChanged={categoryChanged}
+      $categoryChanged={categoryChanged}
       onMouseEnter={() => hover(true)}
       onMouseLeave={() => hover(false)}
     >

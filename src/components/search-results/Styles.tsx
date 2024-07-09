@@ -2,14 +2,15 @@ import styled from 'styled-components';
 
 export const Container = styled.div<{ visible: boolean }>`
   width: 100%;
-  height: max-content;
+  height: calc(100% - 70px);
   display: ${(p) => (p.visible ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 10px;
-  margin-top: 10px;
-  overflow-y: hidden;
+  padding-top: 10px;
+  overflow-y: auto;
+  box-sizing: border-box;
 `;
 
 /*
@@ -51,13 +52,13 @@ export const StyledName = styled.h1`
   user-select: none;
 `;
 
-export const StyledAdd = styled.h2<{ saved: boolean }>`
-  color: ${(p) => (p.saved ? '#00ef76' : '#dddddd')};
+export const StyledAdd = styled.h2<{ $saved: boolean }>`
+  color: ${(p) => (p.$saved ? '#00ef76' : '#dddddd')};
   font-size: 18px;
   font-family: system-ui;
   position: absolute;
   right: 15px;
-  cursor: ${(p) => (p.saved ? 'default' : 'pointer')};
+  cursor: ${(p) => (p.$saved ? 'default' : 'pointer')};
   user-select: none;
 
   :hover {

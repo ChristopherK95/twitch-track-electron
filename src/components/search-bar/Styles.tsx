@@ -53,7 +53,7 @@ export const Input = styled.input`
   outline: none;
   color: white;
   padding: 5px 10px 5px 10px;
-  background-color: #999999;
+  background-color: #2e2e2e;
   border: none;
   width: -webkit-fill-available;
   height: 40px;
@@ -77,9 +77,8 @@ export const Input = styled.input`
 export const Cross = styled.div<{ visible: boolean; slide: boolean }>`
   visibility: ${(p) => (p.visible ? 'visible' : 'hidden')};
   position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%) translateX(${(p) => (p.slide ? '-50px' : '0')});
+  right: 5px;
+  top: 8px;
   height: 20px;
   width: 20px;
   cursor: pointer;
@@ -150,10 +149,15 @@ export const ModeContainer = styled.div`
   }
 `
 
-export const ModeButton = styled.div<{ toggled: boolean }>`
+export const ModeButton = styled.div<{ $toggled: boolean }>`
   box-sizing: border-box;
   width: 40px;
   height: 40px;
   padding: 10px;
-  background-color: ${p => p.toggled ? '#505050' : '#303030'};
+  background-color: ${p => p.$toggled ? '#505050' : '#303030'};
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${p => p.$toggled ? '#606060' : '#404040'};
+  }
 `

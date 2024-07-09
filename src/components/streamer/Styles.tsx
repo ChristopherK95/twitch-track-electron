@@ -51,13 +51,13 @@ export const TimeElapsed = styled.p`
   cursor: default;
 `;
 
-export const StyledCategory = styled.h2<{ offline?: boolean; categoryChanged?: boolean }>`
+export const StyledCategory = styled.h2<{ $offline?: boolean; $categoryChanged?: boolean }>`
   margin: 0;
   padding: 0;
   text-align: left;
-  font-size: ${(p) => (p.offline ? '14px' : '16px')};
+  font-size: ${(p) => (p.$offline ? '14px' : '16px')};
   font-family: system-ui;
-  color: ${(p) => (p.offline ? 'rgb(92, 92, 92)' : 'rgb(150, 150, 150)')};
+  color: ${(p) => (p.$offline ? 'rgb(92, 92, 92)' : 'rgb(150, 150, 150)')};
   height: 24px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -66,7 +66,7 @@ export const StyledCategory = styled.h2<{ offline?: boolean; categoryChanged?: b
   transform-origin: left;
   transition: transform 0.5s ease, color 0.5s ease;
   user-select: none;
-  ${(p) => p.categoryChanged && 'transform: scale(1.3); color: white;'}
+  ${(p) => p.$categoryChanged && 'transform: scale(1.3); color: white;'}
 `;
 
 export const StyledImg = styled.img`
