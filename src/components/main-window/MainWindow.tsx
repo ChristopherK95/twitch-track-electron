@@ -80,27 +80,28 @@ const MainWindow = () => {
             </MissingToken>
           )}
           <Notifications />
-          {
-            match(state)
-              .with(State.settings, () =>
-                <Settings
-                  hideSearchBar={hideSearchBar}
-                  toggleSearchBar={toggleSearchBar}
-                  hideOffline={hideOffline}
-                  toggleOffline={toggleOffline}
-                  setTokenMissing={setTokenMissing}
-                  visible={state === State.settings}
-                />)
-              .with(State.notifications, () => <NotificationsView />)
-              .with(State.main, State.search, () =>
-                <StreamersView
-                  hideSearchBar={hideSearchBar}
-                  toggleSearchBar={() => toggleSearchBar((b: boolean) => !b)}
-                  search={search}
-                  setSearch={setSearch}
-                  tokenMissing={tokenMissing}
-                />
-              ).exhaustive()}
+          {match(state)
+            .with(State.settings, () => (
+              <Settings
+                hideSearchBar={hideSearchBar}
+                toggleSearchBar={toggleSearchBar}
+                hideOffline={hideOffline}
+                toggleOffline={toggleOffline}
+                setTokenMissing={setTokenMissing}
+                visible={state === State.settings}
+              />
+            ))
+            .with(State.notifications, () => <NotificationsView />)
+            .with(State.main, State.search, () => (
+              <StreamersView
+                hideSearchBar={hideSearchBar}
+                toggleSearchBar={() => toggleSearchBar((b: boolean) => !b)}
+                search={search}
+                setSearch={setSearch}
+                tokenMissing={tokenMissing}
+              />
+            ))
+            .exhaustive()}
         </ContentArea>
       </Main>
     </StyledMainWindow>

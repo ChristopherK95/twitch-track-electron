@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Icon = (props: {color: string}) => {
+const Icon = (props: { color: string }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.6 143.17">
       <path

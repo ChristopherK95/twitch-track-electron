@@ -32,14 +32,14 @@ const StreamersView = (props: {
     const response = await window.api.fetchChannels('fetchChannels', name);
     response.sort((a, b) => {
       if (a.name.toLowerCase() === name.toLowerCase()) {
-        return -1
+        return -1;
       }
       if (b.name.toLowerCase() === name.toLowerCase()) {
-        return 1
+        return 1;
       }
 
-      return 0
-    })
+      return 0;
+    });
     setResultArr(response);
   };
 
@@ -105,11 +105,10 @@ const StreamersView = (props: {
 
   useEffect(() => {
     window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
-      const wasOnline = streamers.filter(s => s.live).map(s => s.id)
-      const updated: Streamer[] = data.map(s =>
-        !s.live &&
-          wasOnline.includes(s.id)
-          ? ({ ...s, ended: new Date().getTime() }) : s)
+      const wasOnline = streamers.filter((s) => s.live).map((s) => s.id);
+      const updated: Streamer[] = data.map((s) =>
+        !s.live && wasOnline.includes(s.id) ? { ...s, ended: new Date().getTime() } : s
+      );
       setStreamers(updated);
 
       setTimeout(() => {

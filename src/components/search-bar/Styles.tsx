@@ -147,17 +147,17 @@ export const ModeContainer = styled.div`
   :last-child {
     border-radius: 0 3px 3px 0;
   }
-`
+`;
 
 export const ModeButton = styled.div<{ $toggled: boolean }>`
   box-sizing: border-box;
   width: 40px;
   height: 40px;
   padding: 10px;
-  background-color: ${p => p.$toggled ? '#505050' : '#303030'};
+  background-color: ${(p) => (p.$toggled ? '#505050' : '#303030')};
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: ${p => p.$toggled ? '#606060' : '#404040'};
+    background-color: ${(p) => (p.$toggled ? '#606060' : '#404040')};
   }
-`
+`;

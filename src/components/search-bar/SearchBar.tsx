@@ -13,7 +13,7 @@ const SearchBar = (props: {
   tokenMissing: boolean;
 }) => {
   const { hideSearchBar, search, setSearch, fetch, tokenMissing } = props;
-  const { mode } = useMode()
+  const { mode } = useMode();
 
   //const clearProgress = () => {
   //  setProgress(undefined);

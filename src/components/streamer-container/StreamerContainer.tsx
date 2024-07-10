@@ -21,22 +21,22 @@ import WentOnline from './WentOnline';
 import WentOffline from './WentOffline';
 
 function wentLive(date: string) {
-  const now = new Date().getTime()
-  const start = new Date(date).getTime()
+  const now = new Date().getTime();
+  const start = new Date(date).getTime();
 
   // Return true if time since live is less than 1 minute.
-  return ((now - start) / 1000 / 60) < 1
+  return (now - start) / 1000 / 60 < 1;
 }
 
 function wentOffline(date?: number) {
   if (!date) {
-    return false
+    return false;
   }
 
-  const now = new Date().getTime()
+  const now = new Date().getTime();
 
   // Return true if time since live is less than 1 minute.
-  return ((date - now) / 1000 / 60) < 1
+  return (date - now) / 1000 / 60 < 1;
 }
 
 const StreamerContainer = (props: {
@@ -47,13 +47,12 @@ const StreamerContainer = (props: {
   fetching: boolean;
   toggleSearchBar: () => void;
 }) => {
-  const { hideOffline, toggleOffline, streamers, setStreamers, fetching, toggleSearchBar } =
-    props;
+  const { hideOffline, toggleOffline, streamers, setStreamers, fetching, toggleSearchBar } = props;
   const state = useSelector((state: RootState) => state.state.state);
-  const recentlyLive = streamers.filter(s => s.live && wentLive(s.started))
-  const recentlyOffline = streamers.filter(s => !s.live && wentOffline(s.ended))
-  const live = streamers.filter(s => s.live && !wentLive(s.started))
-  const offline = streamers.filter(s => !s.live && !wentOffline(s.ended))
+  const recentlyLive = streamers.filter((s) => s.live && wentLive(s.started));
+  const recentlyOffline = streamers.filter((s) => !s.live && wentOffline(s.ended));
+  const live = streamers.filter((s) => s.live && !wentLive(s.started));
+  const offline = streamers.filter((s) => !s.live && !wentOffline(s.ended));
 
   const onToggleOffline = () => {
     toggleOffline(!hideOffline);
@@ -138,21 +137,20 @@ const StreamerContainer = (props: {
               Offline{' '}
               <Count onClick={onToggleOffline}>
                 {`(${getCount('offline')})`}
-                <Toggle>{hideOffline ? <Plus color='#eeeeee' /> : <Dash />}</Toggle>
+                <Toggle>{hideOffline ? <Plus color="#eeeeee" /> : <Dash />}</Toggle>
               </Count>
             </Section>
             {!hideOffline &&
-              offline
-                .map((streamer) => (
-                  <Streamer
-                    key={streamer.id}
-                    id={streamer.id}
-                    name={streamer.name}
-                    imgUrl={streamer.imgUrl}
-                    live={false}
-                    deleteStreamer={deleteStreamer}
-                  />
-                ))}
+              offline.map((streamer) => (
+                <Streamer
+                  key={streamer.id}
+                  id={streamer.id}
+                  name={streamer.name}
+                  imgUrl={streamer.imgUrl}
+                  live={false}
+                  deleteStreamer={deleteStreamer}
+                />
+              ))}
           </Container>
         </SectionContainer>
       ) : (

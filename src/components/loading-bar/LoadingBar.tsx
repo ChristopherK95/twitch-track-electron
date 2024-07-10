@@ -7,29 +7,22 @@ const LoadingBar = () => {
   useEffect(() => {
     const updateProgress = () => {
       window.api.progress('progress', (p: { progress: number; max: number }) => {
-        const percentage = (p.progress / p.max) * 100
+        const percentage = (p.progress / p.max) * 100;
         if (percentage === 100) {
-          setProgress(100)
-          setTimeout(() => setProgress(0), 500)
+          setProgress(100);
+          setTimeout(() => setProgress(0), 500);
         } else {
           setProgress(percentage);
         }
-      })
+      });
     };
 
-    return updateProgress()
+    return updateProgress();
   }, []);
 
   if (!progress) {
     return null;
   }
-
-  //useEffect(() => {
-  //  if (progress === 100) {
-  //    console.log('done')
-  //    clearProgress();
-  //  }
-  //}, [progress])
 
   return <Bar $progress={progress} />;
 };
