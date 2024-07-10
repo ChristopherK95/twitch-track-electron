@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Streamer, StreamerResult } from '../../interfaces/StreamerContext';
+import React from 'react';
+import { StreamerResult } from '../../interfaces/StreamerContext';
 import { StyledAdd, StyledImg, StyledName, StyledResult } from './Styles';
+import Check from '../../svg/Check';
 
 const SearchResult = (props: {
   result: StreamerResult;
@@ -26,7 +27,11 @@ const SearchResult = (props: {
       <StyledImg src={result.imgUrl} alt="" />
       <StyledName>{result.name}</StyledName>
       <StyledAdd $saved={added} onClick={handleAdd}>
-        {added ? 'Added' : 'Add'}
+        {added ? (
+          <Check size={{ w: 20, h: 20 }} color={'rgb(56,255,155)'} style={{ marginRight: '5px' }} />
+        ) : (
+          'Add to list'
+        )}
       </StyledAdd>
     </StyledResult>
   );
