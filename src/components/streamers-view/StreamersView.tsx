@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux';
 import { State, Streamer, StreamerResult } from '../../interfaces/StreamerContext';
 import { RootState } from '../../reduxStore';
 import { StyledStreamersView } from './Styles';
-import SearchBar from '../search-bar/SearchBar';
+import TopBar from '../search-bar/TopBar';
 import SearchResults from '../search-results/SearchResults';
 import NotifFx from '../../audio/NotificationSound.wav';
 import useNotify from '../../hooks/use-notify';
 import StreamerContainer from '../streamer-container/StreamerContainer';
+import { useStreamerContext } from './StreamerContext';
 
 const StreamersView = (props: {
   tokenMissing: boolean;
@@ -17,9 +18,10 @@ const StreamersView = (props: {
   setSearch: (s: string) => void;
 }) => {
   const { hideSearchBar, toggleSearchBar, search, setSearch, tokenMissing } = props;
-  const [streamers, setStreamers] = useState<Streamer[]>([]);
+  const {streamers, isFetching} = useStreamerContext()
+  //const [streamers, setStreamers] = useState<Streamer[]>([]);
   const [oldStreamers, setOldStreamers] = useState<Streamer[]>([]);
-  const [fetching, setFetching] = useState(false);
+  //const [fetching, setFetching] = useState(false);
   const { notify } = useNotify();
   const state = useSelector((state: RootState) => state.state.state);
   const [resultArr, setResultArr] = useState<StreamerResult[]>([]);
@@ -103,50 +105,30 @@ const StreamersView = (props: {
     setOldStreamers(streamers);
   }, [streamers]);
 
-  useEffect(() => {
-    window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
-      const wasOnline = streamers.filter((s) => s.live).map((s) => s.id);
-      const updated: Streamer[] = data.map((s) =>
-        !s.live && wasOnline.includes(s.id) ? { ...s, ended: new Date().getTime() } : s
-      );
-      setStreamers(updated);
-
-      setTimeout(() => {
-        setFetching(false);
-      }, 2000);
-    });
-
-    window.api.fetching('fetching', () => setFetching(true));
-
-    window.api.rendererReady('rendererReady');
-  }, []);
-
   return (
-    <StyledStreamersView $visible={state === State.main || state === State.search}>
-      <SearchBar
-        fetch={fetchStreamers}
-        tokenMissing={tokenMissing}
-        hideSearchBar={hideSearchBar}
-        search={search}
-        setSearch={setSearch}
-      />
-      <>
-        <StreamerContainer
-          hideOffline={hideOffline}
-          toggleOffline={toggleOffline}
-          streamers={streamers}
-          setStreamers={(s) => setStreamers(s)}
-          fetching={fetching}
-          toggleSearchBar={toggleSearchBar}
+      <StyledStreamersView $visible={state === State.main || state === State.search}>
+        <TopBar
+          fetch={fetchStreamers}
+          tokenMissing={tokenMissing}
+          hideSearchBar={hideSearchBar}
+          search={search}
+          setSearch={setSearch}
         />
-        <SearchResults
-          searchResults={resultArr}
-          savedStreamers={savedStreamers}
-          saveStreamer={setSavedStreamers}
-          streamers={streamers}
-        />
-      </>
-    </StyledStreamersView>
+        <>
+          <StreamerContainer
+            hideOffline={hideOffline}
+            toggleOffline={toggleOffline}
+            fetching={isFetching}
+            toggleSearchBar={toggleSearchBar}
+          />
+          <SearchResults
+            searchResults={resultArr}
+            savedStreamers={savedStreamers}
+            saveStreamer={setSavedStreamers}
+            streamers={streamers}
+          />
+        </>
+      </StyledStreamersView>
   );
 };
 

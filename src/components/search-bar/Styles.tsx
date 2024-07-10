@@ -1,17 +1,50 @@
 import styled from 'styled-components';
 
-export const StyledSearchBar = styled.div`
+export const StyledTopBar = styled.div`
   height: 70px;
   width: 100%;
-  padding: 0 0 0 20px;
+  padding: 0 20px 0 20px;
   background-color: #121212;
   position: relative;
   display: flex;
   gap: 10px;
   transition: background-color 0.3s, transform 0.5s ease-in-out;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   transform: translateX(0);
+  box-sizing: border-box;
+`;
+
+export const MiscContainer = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  transition: background-color 0.3s;
+  top: 0px;
+  right: 0px;
+`;
+
+export const MiscBtn = styled.button`
+  position: relative;
+  border: none;
+  background-color: transparent;
+  font-family: system-ui;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+  z-index: 100;
+  transition: scale 0.3s;
+
+  &:hover > :first-child {
+    animation-play-state: running;
+    fill: white;
+    transform: scale(1.1);
+  }
 `;
 
 export const Form = styled.form<{ $hide: boolean }>`

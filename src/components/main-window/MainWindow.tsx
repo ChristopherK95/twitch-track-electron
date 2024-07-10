@@ -21,6 +21,7 @@ import useNotify from '../../hooks/use-notify';
 import useMode from '../../hooks/use-mode';
 import Logo from '../../svg/Logo';
 import { match } from 'ts-pattern';
+import { StreamerContextProvider } from '../streamers-view/StreamerContext';
 
 const MainWindow = () => {
   const state = useSelector((state: RootState) => state.state.state);
@@ -55,56 +56,58 @@ const MainWindow = () => {
   }, []);
 
   return (
-    <StyledMainWindow>
-      {platform === Platform.windows && (
-        <TopBar>
-          <TitleBar>
-            <Logo />
-          </TitleBar>
-          <TitleBarBtns>
-            <MinimizeBtn onClick={() => window.api.minimizeApp('minimizeApp')}>
-              <div />
-            </MinimizeBtn>
-            <CloseBtn onClick={() => window.api.closeApp('closeApp')}>
-              <div />
-              <div />
-            </CloseBtn>
-          </TitleBarBtns>
-        </TopBar>
-      )}
-      <Main>
-        <ContentArea>
-          {tokenMissing && state === State.main && (
-            <MissingToken onClick={() => changeMode(State.settings)}>
-              OAuth token is either empty or expired
-            </MissingToken>
-          )}
-          <Notifications />
-          {match(state)
-            .with(State.settings, () => (
-              <Settings
-                hideSearchBar={hideSearchBar}
-                toggleSearchBar={toggleSearchBar}
-                hideOffline={hideOffline}
-                toggleOffline={toggleOffline}
-                setTokenMissing={setTokenMissing}
-                visible={state === State.settings}
-              />
-            ))
-            .with(State.notifications, () => <NotificationsView />)
-            .with(State.main, State.search, () => (
-              <StreamersView
-                hideSearchBar={hideSearchBar}
-                toggleSearchBar={() => toggleSearchBar((b: boolean) => !b)}
-                search={search}
-                setSearch={setSearch}
-                tokenMissing={tokenMissing}
-              />
-            ))
-            .exhaustive()}
-        </ContentArea>
-      </Main>
-    </StyledMainWindow>
+    <StreamerContextProvider>
+      <StyledMainWindow>
+        {platform === Platform.windows && (
+          <TopBar>
+            <TitleBar>
+              <Logo />
+            </TitleBar>
+            <TitleBarBtns>
+              <MinimizeBtn onClick={() => window.api.minimizeApp('minimizeApp')}>
+                <div />
+              </MinimizeBtn>
+              <CloseBtn onClick={() => window.api.closeApp('closeApp')}>
+                <div />
+                <div />
+              </CloseBtn>
+            </TitleBarBtns>
+          </TopBar>
+        )}
+        <Main>
+          <ContentArea>
+            {tokenMissing && state === State.main && (
+              <MissingToken onClick={() => changeMode(State.settings)}>
+                OAuth token is either empty or expired
+              </MissingToken>
+            )}
+            <Notifications />
+            {match(state)
+              .with(State.settings, () => (
+                <Settings
+                  hideSearchBar={hideSearchBar}
+                  toggleSearchBar={toggleSearchBar}
+                  hideOffline={hideOffline}
+                  toggleOffline={toggleOffline}
+                  setTokenMissing={setTokenMissing}
+                  visible={state === State.settings}
+                />
+              ))
+              .with(State.notifications, () => <NotificationsView />)
+              .with(State.main, State.search, () => (
+                <StreamersView
+                  hideSearchBar={hideSearchBar}
+                  toggleSearchBar={() => toggleSearchBar((b: boolean) => !b)}
+                  search={search}
+                  setSearch={setSearch}
+                  tokenMissing={tokenMissing}
+                />
+              ))
+              .exhaustive()}
+          </ContentArea>
+        </Main>
+      </StyledMainWindow>
+    </StreamerContextProvider>
   );
 };
 

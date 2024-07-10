@@ -108,6 +108,7 @@ export const CloseBtn = styled.button`
 `;
 
 export const Main = styled.div`
+  height: 100vh;
   display: flex;
   overflow-y: hidden;
   position: relative;
