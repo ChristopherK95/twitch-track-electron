@@ -123,7 +123,7 @@ const StreamersView = (props: {
   }, []);
 
   return (
-    <StyledStreamersView visible={state === State.main || state === State.search}>
+    <StyledStreamersView $visible={state === State.main || state === State.search}>
       <SearchBar
         fetch={fetchStreamers}
         tokenMissing={tokenMissing}

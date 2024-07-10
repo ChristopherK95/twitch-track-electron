@@ -14,8 +14,8 @@ export const StyledSearchBar = styled.div`
   transform: translateX(0);
 `;
 
-export const Form = styled.form<{ hide: boolean }>`
-  display: ${(p) => (p.hide ? 'none' : 'flex')};
+export const Form = styled.form<{ $hide: boolean }>`
+  display: ${(p) => (p.$hide ? 'none' : 'flex')};
   justify-content: flex-start;
   z-index: 1;
   position: relative;
@@ -74,8 +74,8 @@ export const Input = styled.input`
   }
 `;
 
-export const Cross = styled.div<{ visible: boolean; slide: boolean }>`
-  visibility: ${(p) => (p.visible ? 'visible' : 'hidden')};
+export const Cross = styled.div<{ $visible: boolean; $slide: boolean }>`
+  visibility: ${(p) => (p.$visible ? 'visible' : 'hidden')};
   position: absolute;
   right: 5px;
   top: 8px;

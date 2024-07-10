@@ -121,7 +121,7 @@ export const DeleteContainer = styled.div`
   pointer-events: none;
 `;
 
-export const Delete = styled.div<{ visible: boolean }>`
+export const Delete = styled.div<{ $visible: boolean }>`
   background-color: #ff3d3d;
   width: 100px;
   height: 100%;
@@ -130,8 +130,8 @@ export const Delete = styled.div<{ visible: boolean }>`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transform: ${(p) => (p.visible ? 'translateX(0px)' : 'translateX(75px)')};
-  opacity: ${(p) => (p.visible ? 1 : 0)};
-  pointer-events: ${(p) => (p.visible ? 'initial' : 'none')};
+  transform: ${(p) => (p.$visible ? 'translateX(0px)' : 'translateX(75px)')};
+  opacity: ${(p) => (p.$visible ? 1 : 0)};
+  pointer-events: ${(p) => (p.$visible ? 'initial' : 'none')};
   transition: transform 0.2s ease, opacity 0.2s ease;
 `;

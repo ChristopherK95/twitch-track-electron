@@ -77,7 +77,7 @@ const StreamerContainer = (props: {
   };
 
   return (
-    <StyledStreamerContainer visible={state === State.main}>
+    <StyledStreamerContainer $visible={state === State.main}>
       {streamers.length > 0 ? (
         <SectionContainer>
           {Boolean(recentlyLive.length) && (

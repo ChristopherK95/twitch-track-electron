@@ -33,9 +33,9 @@ const SearchBar = (props: {
     <StyledSearchBar>
       <ModeToggle />
       {mode === State.search && (
-        <Form hide={hideSearchBar} onSubmit={submit}>
+        <Form $hide={hideSearchBar} onSubmit={submit}>
           <Input type="text" placeholder="Search ..." value={search} onChange={onChange} disabled={tokenMissing} />
-          <Cross visible={search.length > 0} slide={mode === State.search} onClick={() => setSearch('')}>
+          <Cross $visible={search.length > 0} $slide={mode === State.search} onClick={() => setSearch('')}>
             <div />
             <div />
           </Cross>

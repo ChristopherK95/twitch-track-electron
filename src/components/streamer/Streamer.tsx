@@ -102,8 +102,8 @@ const Streamer = (
         {deleteStreamer && (
           <DeleteContainer>
             <Delete
+              $visible={showDelete}
               onClick={() => deleteStreamer(id)}
-              visible={showDelete}
               onMouseEnter={() => setDeleteHover(true)}
               onMouseLeave={() => setDeleteHover(false)}
             >
@@ -126,7 +126,7 @@ const Streamer = (
         <DeleteContainer>
           <Delete
             onClick={() => deleteStreamer(id)}
-            visible={showDelete}
+            $visible={showDelete}
             onMouseEnter={() => setDeleteHover(true)}
             onMouseLeave={() => setDeleteHover(false)}
           >

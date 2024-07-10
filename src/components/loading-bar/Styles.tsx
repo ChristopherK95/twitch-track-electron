@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Bar = styled.div<{ progress: number }>`
+export const Bar = styled.div<{ $progress: number }>`
   position: absolute;
   border-radius: 0 0 2px 2px;
   width: 100%;
@@ -20,7 +20,7 @@ export const Bar = styled.div<{ progress: number }>`
     height: 4px;
     border-radius: 0 0 2px 2px;
     background-color: #29db64;
-    transform: scaleX(${(p) => p.progress}%);
+    transform: scaleX(${(p) => p.$progress}%);
     transform-origin: left;
     transition: transform 0.2s linear;
     box-shadow: 0 0 10px 1px #11e758;

@@ -7,7 +7,7 @@ const Tooltip = (props: { category: string; title: string; visible: boolean }) =
   const titleRef = useRef({} as HTMLParagraphElement);
 
   return (
-    <Container ref={tooltipRef} visible={visible}>
+    <Container ref={tooltipRef} $visible={visible}>
       <Category>{category}</Category>
       <TitleContainer>
         <Title

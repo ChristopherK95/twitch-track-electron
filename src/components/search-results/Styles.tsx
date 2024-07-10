@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{ visible: boolean }>`
+export const Container = styled.div<{ $visible: boolean }>`
   width: 100%;
   height: calc(100% - 70px);
-  display: ${(p) => (p.visible ? 'flex' : 'none')};
+  display: ${(p) => (p.$visible ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;

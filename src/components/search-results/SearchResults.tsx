@@ -1,9 +1,8 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 import { State, Streamer, StreamerResult } from '../../interfaces/StreamerContext';
 import { Container } from './Styles';
 import SearchResult from './SearchResult';
-import { RootState } from '../../reduxStore';
+import useMode from '../../hooks/use-mode';
 
 const SearchResults = (props: {
   searchResults: StreamerResult[];
@@ -12,10 +11,11 @@ const SearchResults = (props: {
   streamers: Streamer[];
 }) => {
   const { searchResults, savedStreamers, saveStreamer, streamers } = props;
-  const state = useSelector((state: RootState) => state.state.state);
+  const { mode } = useMode()
+  useEffect(() => console.log('new arr'), [searchResults])
 
   return (
-    <Container visible={state === State.search}>
+    <Container $visible={mode === State.search}>
       {searchResults.map((result: StreamerResult, index: number) => {
         return (
           <SearchResult

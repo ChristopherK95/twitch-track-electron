@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Streamer, StreamerResult } from '../../interfaces/StreamerContext';
 import { StyledAdd, StyledImg, StyledName, StyledResult } from './Styles';
 
@@ -9,7 +9,7 @@ const SearchResult = (props: {
   streamers: Streamer[];
 }) => {
   const { result, savedStreamers, saveStreamer, streamers } = props;
-  const [saved, setSaved] = useState<boolean>(streamers.some(str => str.id === result.id));
+  const [saved, setSaved] = useState<boolean>(Boolean(streamers.find(str => str.id === result.id)));
 
   function handleSave() {
     if (saved) {
@@ -22,6 +22,9 @@ const SearchResult = (props: {
     window.api.saveStreamer('saveStreamer', savedStreamers);
     window.api.askStatus('askStatus', result);
   }
+
+  useEffect(() => console.log(saved, result.id), [saved])
+  useEffect(() => console.log('Update'), [])
 
   return (
     <StyledResult>

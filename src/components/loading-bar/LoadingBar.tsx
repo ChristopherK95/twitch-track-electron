@@ -5,15 +5,19 @@ const LoadingBar = () => {
   const [progress, setProgress] = useState<number>();
 
   useEffect(() => {
-    window.api.progress('progress', (p: { progress: number; max: number }) => {
-      const percentage = (p.progress / p.max) * 100
-      if (percentage === 100) {
-        setProgress(100)
-        setTimeout(() => setProgress(0), 500)
-      } else {
-        setProgress(percentage);
-      }
-    });
+    const updateProgress = () => {
+      window.api.progress('progress', (p: { progress: number; max: number }) => {
+        const percentage = (p.progress / p.max) * 100
+        if (percentage === 100) {
+          setProgress(100)
+          setTimeout(() => setProgress(0), 500)
+        } else {
+          setProgress(percentage);
+        }
+      })
+    };
+
+    return updateProgress()
   }, []);
 
   if (!progress) {
@@ -27,7 +31,7 @@ const LoadingBar = () => {
   //  }
   //}, [progress])
 
-  return <Bar progress={progress} />;
+  return <Bar $progress={progress} />;
 };
 
 export default LoadingBar;

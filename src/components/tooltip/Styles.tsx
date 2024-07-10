@@ -1,6 +1,6 @@
 import styled, { css, keyframes } from 'styled-components';
 
-export const Container = styled.div<{ visible: boolean }>`
+export const Container = styled.div<{ $visible: boolean }>`
   width: fit-content;
   height: fit-content;
   padding: 6px;
@@ -11,13 +11,13 @@ export const Container = styled.div<{ visible: boolean }>`
   position: absolute;
   bottom: 30px;
   left: 70px;
-  visibility: ${(p) => (p.visible ? 'visible' : 'hidden')};
-  opacity: ${(p) => (p.visible ? 1 : 0)};
-  transform: ${(p) => (p.visible ? 'translateY(0)' : 'translateY(30px)')};
+  visibility: ${(p) => (p.$visible ? 'visible' : 'hidden')};
+  opacity: ${(p) => (p.$visible ? 1 : 0)};
+  transform: ${(p) => (p.$visible ? 'translateY(0)' : 'translateY(30px)')};
   pointer-events: none;
   z-index: 1000;
 
-  ${(p) => p.visible && 'transition: opacity 0.2s ease 0.3s, transform 0.2s ease 0.3s;'}
+  ${(p) => p.$visible && 'transition: opacity 0.2s ease 0.3s, transform 0.2s ease 0.3s;'}
 `;
 
 export const Category = styled.p`
