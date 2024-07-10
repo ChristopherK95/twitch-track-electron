@@ -19,7 +19,7 @@
   },
   "productName": "TwitchTrack",
   "scripts": {
-    "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
+    "dev": "concurrently \"yarn dev:vite\" \"yarn dev:electron\"",
     "dev:vite": "vite",
     "dev:electron": "npm run build:electron && electron .",
     "build": "npm run build:vite && npm run build:electron",
@@ -51,7 +51,7 @@
     "styled-components": "^6.0.0",
     "stylis": "^4.0.0",
     "ts-pattern": "^5.2.0",
-    "vite": "^2.8.6"
+    "vite": "^5.3.3"
   },
   "devDependencies": {
     "@types/auto-launch": "^5.0.2",
@@ -62,7 +62,7 @@
     "@typescript-eslint/eslint-plugin": "5.16.0",
     "@typescript-eslint/parser": "5.16.0",
     "autoprefixer": "^10.4.4",
-    "concurrently": "^7.0.0",
+    "concurrently": "^8.2.2",
     "electron": "^17.1.2",
     "electron-builder": "^23.6.0",
     "electron-packager": "^15.5.1",
