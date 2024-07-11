@@ -1,24 +1,24 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { Streamer } from "../../interfaces/StreamerContext";
-import React from "react";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Streamer } from '../../interfaces/StreamerContext';
+import React from 'react';
 
 interface IStreamerContext {
-  streamers: Streamer[]
-  isFetching: boolean
-  deleteStreamer: (id: string) => void
-  getCount: (type: 'live' | 'offline') => number
+  streamers: Streamer[];
+  isFetching: boolean;
+  deleteStreamer: (id: string) => void;
+  getCount: (type: 'live' | 'offline') => number;
 }
 
 const StreamerContext = createContext<IStreamerContext>({
   streamers: [],
   isFetching: false,
-  deleteStreamer: () => { },
+  deleteStreamer: () => {},
   getCount: () => 0
-})
+});
 
 export const StreamerContextProvider = (props: { children: React.ReactNode }) => {
-  const [streamers, setStreamers] = useState<Streamer[]>([])
-  const [isFetching, setFetching] = useState<boolean>(false)
+  const [streamers, setStreamers] = useState<Streamer[]>([]);
+  const [isFetching, setFetching] = useState<boolean>(false);
 
   const deleteStreamer = (id: string) => {
     // Checks if streamer is currently live and removes them from liveStreamers first if true.
@@ -29,8 +29,7 @@ export const StreamerContextProvider = (props: { children: React.ReactNode }) =>
     }
   };
 
-  const getCount = (type: 'live' | 'offline') => 
-    streamers.filter(s => type === 'live' ? s.live : !s.live).length
+  const getCount = (type: 'live' | 'offline') => streamers.filter((s) => (type === 'live' ? s.live : !s.live)).length;
 
   useEffect(() => {
     window.api.loadStreamers('loadStreamers', (data: Streamer[]) => {
@@ -50,16 +49,22 @@ export const StreamerContextProvider = (props: { children: React.ReactNode }) =>
     window.api.rendererReady('rendererReady');
   }, []);
 
-  return <StreamerContext.Provider value={{
-    streamers,
-    isFetching,
-    deleteStreamer,
-    getCount,
-  }}>{props.children}</StreamerContext.Provider>
-}
+  return (
+    <StreamerContext.Provider
+      value={{
+        streamers,
+        isFetching,
+        deleteStreamer,
+        getCount
+      }}
+    >
+      {props.children}
+    </StreamerContext.Provider>
+  );
+};
 
 export const useStreamerContext = () => {
-  const context = useContext(StreamerContext)
+  const context = useContext(StreamerContext);
 
-  return context
-}
+  return context;
+};

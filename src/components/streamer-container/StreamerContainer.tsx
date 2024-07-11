@@ -46,7 +46,7 @@ const StreamerContainer = (props: {
   fetching: boolean;
   toggleSearchBar: () => void;
 }) => {
-  return <LayoutWrapper layout='column' />
+  return <LayoutWrapper layout="column" />;
 
   //return (
   //  <StyledStreamerContainer $visible={mode === State.main}>

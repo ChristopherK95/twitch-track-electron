@@ -18,7 +18,7 @@ const StreamersView = (props: {
   setSearch: (s: string) => void;
 }) => {
   const { hideSearchBar, toggleSearchBar, search, setSearch, tokenMissing } = props;
-  const {streamers, isFetching} = useStreamerContext()
+  const { streamers, isFetching } = useStreamerContext();
   //const [streamers, setStreamers] = useState<Streamer[]>([]);
   const [oldStreamers, setOldStreamers] = useState<Streamer[]>([]);
   //const [fetching, setFetching] = useState(false);
@@ -106,29 +106,29 @@ const StreamersView = (props: {
   }, [streamers]);
 
   return (
-      <StyledStreamersView $visible={state === State.main || state === State.search}>
-        <TopBar
-          fetch={fetchStreamers}
-          tokenMissing={tokenMissing}
-          hideSearchBar={hideSearchBar}
-          search={search}
-          setSearch={setSearch}
+    <StyledStreamersView $visible={state === State.main || state === State.search}>
+      <TopBar
+        fetch={fetchStreamers}
+        tokenMissing={tokenMissing}
+        hideSearchBar={hideSearchBar}
+        search={search}
+        setSearch={setSearch}
+      />
+      <>
+        <StreamerContainer
+          hideOffline={hideOffline}
+          toggleOffline={toggleOffline}
+          fetching={isFetching}
+          toggleSearchBar={toggleSearchBar}
         />
-        <>
-          <StreamerContainer
-            hideOffline={hideOffline}
-            toggleOffline={toggleOffline}
-            fetching={isFetching}
-            toggleSearchBar={toggleSearchBar}
-          />
-          <SearchResults
-            searchResults={resultArr}
-            savedStreamers={savedStreamers}
-            saveStreamer={setSavedStreamers}
-            streamers={streamers}
-          />
-        </>
-      </StyledStreamersView>
+        <SearchResults
+          searchResults={resultArr}
+          savedStreamers={savedStreamers}
+          saveStreamer={setSavedStreamers}
+          streamers={streamers}
+        />
+      </>
+    </StyledStreamersView>
   );
 };
 

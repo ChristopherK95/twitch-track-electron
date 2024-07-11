@@ -6,7 +6,9 @@ export const StyledStreamersView = styled.div<{ $visible: boolean }>`
   overflow-y: hidden;
   z-index: ${(p) => (p.$visible ? 11 : 10)};
   background: #262626;
-  transition: transform 0.5s ease, opacity 0.3s ease;
+  transition:
+    transform 0.5s ease,
+    opacity 0.3s ease;
   transform: ${(p) => (p.$visible ? 'scale(100%)' : 'scale(80%)')};
   opacity: ${(p) => (p.$visible ? '1' : '0')};
   overflow-x: hidden;
@@ -56,7 +58,9 @@ export const StyledSearch = styled.i`
   width: 16px;
   height: 24px;
   fill: #aaaaaa;
-  transition: stroke 0.3s ease, transform 0.3s ease;
+  transition:
+    stroke 0.3s ease,
+    transform 0.3s ease;
 
   :hover {
     svg {
@@ -73,7 +77,9 @@ export const StyledCog = styled.i`
   width: 16px;
   height: 24px;
   fill: #aaaaaa;
-  transition: fill 0.3s ease, transform 0.3s ease;
+  transition:
+    fill 0.3s ease,
+    transform 0.3s ease;
 `;
 
 export const StyledBell = styled.i`
@@ -82,7 +88,9 @@ export const StyledBell = styled.i`
   width: 15px;
   height: 24px;
   fill: #aaaaaa;
-  transition: fill 0.3s ease, transform 0.3s ease;
+  transition:
+    fill 0.3s ease,
+    transform 0.3s ease;
 `;
 
 export const StyledAddButton = styled.button`

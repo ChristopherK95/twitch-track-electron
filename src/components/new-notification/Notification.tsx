@@ -18,9 +18,12 @@ const Notification = (props: { name: string; online: boolean; index: number; tot
         i > 0 ? 5000 + (index - i) * 1000 : 5000 + 1000 * index
       );
     }
-    setTimeout(() => {
-      dispatch(deleteNotif(id));
-    }, 6000 + 1000 * index);
+    setTimeout(
+      () => {
+        dispatch(deleteNotif(id));
+      },
+      6000 + 1000 * index
+    );
   }, []);
 
   return (

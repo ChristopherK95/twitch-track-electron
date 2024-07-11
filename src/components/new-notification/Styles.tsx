@@ -36,7 +36,9 @@ export const StyledNotification = styled.div<{
   text-overflow: ellipsis;
   white-space: nowrap;
   justify-content: flex-start;
-  transition: top 0.5s ease 0.3s, right 0.3s ease 0.2s;
+  transition:
+    top 0.5s ease 0.3s,
+    right 0.3s ease 0.2s;
 `;
 
 export const StyledText = styled.p`

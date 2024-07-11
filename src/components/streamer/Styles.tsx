@@ -64,7 +64,9 @@ export const StyledCategory = styled.h2<{ $offline?: boolean; $categoryChanged?:
   overflow-x: hidden;
   cursor: default;
   transform-origin: left;
-  transition: transform 0.5s ease, color 0.5s ease;
+  transition:
+    transform 0.5s ease,
+    color 0.5s ease;
   user-select: none;
   ${(p) => p.$categoryChanged && 'transform: scale(1.3); color: white;'}
 `;
@@ -133,5 +135,7 @@ export const Delete = styled.div<{ $visible: boolean }>`
   transform: ${(p) => (p.$visible ? 'translateX(0px)' : 'translateX(75px)')};
   opacity: ${(p) => (p.$visible ? 1 : 0)};
   pointer-events: ${(p) => (p.$visible ? 'initial' : 'none')};
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 `;

@@ -15,12 +15,10 @@ const Miscellaneous = (props: { fetching: boolean }) => {
     <Misc>
       {fetching && <Spinner />}
       <TopbarBtn onClick={() => changeMode(State.settings)}>
-        <StyledCog>
-        </StyledCog>
+        <StyledCog></StyledCog>
       </TopbarBtn>
       <TopbarBtn onClick={() => changeMode(State.notifications)}>
-        <StyledBell>
-        </StyledBell>
+        <StyledBell></StyledBell>
       </TopbarBtn>
     </Misc>
   );

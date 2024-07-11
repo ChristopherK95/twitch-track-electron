@@ -1,21 +1,21 @@
-import React from "react";
-import { Container, Count, GuideDiv, Section, SectionContainer, StyledStreamerContainer, Text1, Text2 } from "./Styles";
-import WentOnline from "../WentOnline";
-import WentOffline from "../WentOffline";
-import Miscellaneous from "../../streamers-view/Misc";
-import Streamer from "../../streamer/Streamer";
-import { useStreamerContext } from "../../streamers-view/StreamerContext";
-import { filterLive, filterOffline, filterRecentlyLive, filterRecentlyOffline } from "../utils";
-import useMode from "../../../hooks/use-mode";
-import { State } from "../../../interfaces/StreamerContext";
+import React from 'react';
+import { Container, Count, GuideDiv, Section, SectionContainer, StyledStreamerContainer, Text1, Text2 } from './Styles';
+import WentOnline from '../WentOnline';
+import WentOffline from '../WentOffline';
+import Miscellaneous from '../../streamers-view/Misc';
+import Streamer from '../../streamer/Streamer';
+import { useStreamerContext } from '../../streamers-view/StreamerContext';
+import { filterLive, filterOffline, filterRecentlyLive, filterRecentlyOffline } from '../utils';
+import useMode from '../../../hooks/use-mode';
+import { State } from '../../../interfaces/StreamerContext';
 
 const ColumnLayout = () => {
-  const { mode } = useMode()
-  const { streamers, isFetching, deleteStreamer, getCount } = useStreamerContext()
-  const recentlyLive = filterRecentlyLive(streamers)
-  const recentlyOffline = filterRecentlyOffline(streamers)
-  const live = filterLive(streamers)
-  const offline = filterOffline(streamers)
+  const { mode } = useMode();
+  const { streamers, isFetching, deleteStreamer, getCount } = useStreamerContext();
+  const recentlyLive = filterRecentlyLive(streamers);
+  const recentlyOffline = filterRecentlyOffline(streamers);
+  const live = filterLive(streamers);
+  const offline = filterOffline(streamers);
 
   return (
     <StyledStreamerContainer $visible={mode === State.main}>
@@ -75,22 +75,18 @@ const ColumnLayout = () => {
           </Container>
           <Container>
             <Section>
-              Offline{' '}
-              <Count>
-                {`(${getCount('offline')})`}
-              </Count>
+              Offline <Count>{`(${getCount('offline')})`}</Count>
             </Section>
-            {
-              offline.map((streamer) => (
-                <Streamer
-                  key={streamer.id}
-                  id={streamer.id}
-                  name={streamer.name}
-                  imgUrl={streamer.imgUrl}
-                  live={false}
-                  deleteStreamer={deleteStreamer}
-                />
-              ))}
+            {offline.map((streamer) => (
+              <Streamer
+                key={streamer.id}
+                id={streamer.id}
+                name={streamer.name}
+                imgUrl={streamer.imgUrl}
+                live={false}
+                deleteStreamer={deleteStreamer}
+              />
+            ))}
           </Container>
         </SectionContainer>
       ) : (
@@ -104,6 +100,6 @@ const ColumnLayout = () => {
       )}
     </StyledStreamerContainer>
   );
-}
+};
 
-export default ColumnLayout
+export default ColumnLayout;

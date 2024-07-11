@@ -19,7 +19,9 @@ export const StyledNotificationsView = styled.div<{ visible: boolean }>`
   left: 0;
   background-color: #262626;
   z-index: ${(p) => (p.visible ? 11 : 10)};
-  transition: transform 0.5s ease, opacity 0.3s ease;
+  transition:
+    transform 0.5s ease,
+    opacity 0.3s ease;
   transform: ${(p) => (p.visible ? 'scale(100%)' : 'scale(80%)')};
   opacity: ${(p) => (p.visible ? '1' : '0')};
 `;
@@ -85,7 +87,9 @@ export const DeleteAll = styled.i<{ disabled: boolean }>`
     opacity: 0;
     user-select: none;
     pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
     box-shadow: -4px 4px 4px 0px rgb(0 0 0 / 50%);
   }
 `;

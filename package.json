@@ -32,7 +32,8 @@
     "type-check": "tsc",
     "lint": "eslint 'src/**/*.ts?(x)' 'electron/*.ts'",
     "lint-fix": "yarn lint --fix",
-    "prettier-fix": "prettier --write \"**/*.*\""
+    "prettier-fix": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "prettier-check": "prettier --check \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.2",

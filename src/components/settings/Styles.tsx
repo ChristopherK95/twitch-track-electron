@@ -12,7 +12,9 @@ export const StyledSettings = styled.div<{ $visible: boolean }>`
   align-items: baseline;
   padding: 45px 15px 0 15px;
   box-sizing: border-box;
-  transition: transform 0.5s ease, opacity 0.3s ease;
+  transition:
+    transform 0.5s ease,
+    opacity 0.3s ease;
   opacity: ${(p) => (p.$visible ? '1' : '0')};
 `;
 
@@ -107,7 +109,9 @@ export const SwitchCross = styled.path<{ enabled: boolean }>`
   fill: none;
   stroke-dasharray: 35;
   stroke-dashoffset: ${(p) => (p.enabled ? -25 : 21)};
-  transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+  transition:
+    stroke-dashoffset 0.5s ease,
+    stroke 0.5s ease;
 `;
 
 export const Token = styled.p`
@@ -161,14 +165,20 @@ export const Token = styled.p`
     background-color: rgb(66, 66, 66);
 
     :before {
-      transition: opacity 0.3s 0.3s, top 0.3s 0.3s, visibility 0s 0.2s;
+      transition:
+        opacity 0.3s 0.3s,
+        top 0.3s 0.3s,
+        visibility 0s 0.2s;
       opacity: 1;
       top: -3px;
       visibility: visible;
     }
 
     :after {
-      transition: opacity 0.3s 0.3s, top 0.3s 0.3s, visibility 0s 0.2s;
+      transition:
+        opacity 0.3s 0.3s,
+        top 0.3s 0.3s,
+        visibility 0s 0.2s;
       opacity: 1;
       top: -10px;
       visibility: visible;

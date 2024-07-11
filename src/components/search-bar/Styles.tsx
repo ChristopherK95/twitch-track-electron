@@ -8,7 +8,9 @@ export const StyledTopBar = styled.div`
   position: relative;
   display: flex;
   gap: 10px;
-  transition: background-color 0.3s, transform 0.5s ease-in-out;
+  transition:
+    background-color 0.3s,
+    transform 0.5s ease-in-out;
   justify-content: space-between;
   align-items: center;
   transform: translateX(0);

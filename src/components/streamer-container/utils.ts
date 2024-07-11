@@ -1,4 +1,4 @@
-import { Streamer } from "../../interfaces/StreamerContext";
+import { Streamer } from '../../interfaces/StreamerContext';
 
 export function wentLive(date: string) {
   const now = new Date().getTime();
@@ -20,6 +20,7 @@ export function wentOffline(date?: number) {
 }
 
 export const filterRecentlyLive = (streamers: Streamer[]) => streamers.filter((s) => s.live && wentLive(s.started));
-export const filterRecentlyOffline = (streamers: Streamer[]) => streamers.filter((s) => !s.live && wentOffline(s.ended));
+export const filterRecentlyOffline = (streamers: Streamer[]) =>
+  streamers.filter((s) => !s.live && wentOffline(s.ended));
 export const filterLive = (streamers: Streamer[]) => streamers.filter((s) => s.live && !wentLive(s.started));
 export const filterOffline = (streamers: Streamer[]) => streamers.filter((s) => !s.live && !wentOffline(s.ended));
